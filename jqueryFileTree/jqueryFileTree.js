@@ -1,7 +1,6 @@
 // jQuery File Tree Plugin
 //
-// Version 1.01
-// + Modified by potsky to make it work with Wordpress plugin s2member-files-browser
+// Version 1.03
 //
 // Cory S.N. LaViska
 // A Beautiful Site (http://abeautifulsite.net/)
@@ -22,7 +21,8 @@
 //           loadmessage    - Message to display while initial tree loads (can be HTML)
 //
 // History:
-//
+// 1.03 - Modified by potsky : LI are now triggerable (2012/12/30)
+// 1.02 - Modified by potsky : work with Wordpress plugin s2member-files-browser (2012/12/24)
 // 1.01 - updated to work with foreign characters in directory/file names (12 April 2008)
 // 1.00 - released (24 March 2008)
 //
@@ -34,7 +34,9 @@
 if(jQuery) (function($){
 
 	$.extend($.fn, {
+
 		fileTree: function(o, h) {
+
 			// Defaults
 			if( !o ) var o = {};
 			if( o.script === undefined ) o.script = s2memberFilesBrowser.ajaxurl;
@@ -44,15 +46,20 @@ if(jQuery) (function($){
 			if( o.expandeasing === undefined ) o.expandeasing = null;
 			if( o.collapseeasing === undefined ) o.collapseeasing = null;
 			if( o.multifolder === undefined ) o.multifolder = true;
+			if( o.openrecursive === undefined ) o.openrecursive = '0';
 			if( o.loadmessage === undefined ) o.loadmessage = '';
 			if( o.hidden === undefined ) o.hidden = '0';
 			if( o.dirfirst === undefined ) o.dirfirst = '1';
 			if( o.names === undefined ) o.names = '';
-			o.root = '/';
+			if( o.dirbase === undefined ) o.dirbase = '';
+			if( o.filterfile === undefined ) o.filterfile = '';
+			if( o.filterdir === undefined ) o.filterdir = '';
+
+			o.root          = '/';
 			o.collapsespeed = parseInt(o.collapsespeed,10);
 			o.expandspeed   = parseInt(o.expandspeed,10);
-			if (o.multifolder=="0") o.multifolder = false;
-
+			o.multifolder   = (o.multifolder=="0") ? false : true;
+			o.openrecursive = (o.openrecursive=="1") ? "1" : "0";
 
 			$(this).each( function() {
 
@@ -64,6 +71,10 @@ if(jQuery) (function($){
 										hidden: o.hidden,
 										dirfirst: o.dirfirst,
 										names: o.names,
+										filterfile: o.filterfile,
+										filterdir: o.filterdir,
+										dirbase: o.dirbase,
+										openrecursive: o.openrecursive,
 										nonce: s2memberFilesBrowser.nonce}, function(data) {
 						$(c).find('.start').html('');
 						$(c).removeClass('wait').append(data);
@@ -78,33 +89,43 @@ if(jQuery) (function($){
 				}
 
 				function bindTree(t) {
-					$(t).find('LI A').bind(o.folderevent, function() {
-						if( $(this).parent().hasClass('directory') ) {
-							if( $(this).parent().hasClass('collapsed') ) {
+
+					// Bind the LI
+					$(t).find('LI').bind(o.folderevent, function() {
+						if( $(this).hasClass('directory') ) {
+							if( $(this).hasClass('collapsed') ) {
 								// Expand
 								if( !o.multifolder ) {
-									$(this).parent().parent().find('UL').slideUp({ duration: o.collapsespeed, easing: o.collapseeasing });
-									$(this).parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
+									$(this).parent().find('UL').slideUp({ duration: o.collapsespeed, easing: o.collapseeasing });
+									$(this).parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
 								}
-								$(this).parent().find('UL').remove(); // cleanup
-								showTree( $(this).parent(), escape($(this).attr('rel').match( /.*\// )) );
-								$(this).parent().removeClass('collapsed').addClass('expanded');
+								$(this).find('UL').remove(); // cleanup
+								showTree( $(this), escape($(this).find('A').attr('rel').match( /.*\// )) );
+								$(this).removeClass('collapsed').addClass('expanded');
 							} else {
 								// Collapse
-								$(this).parent().find('UL').slideUp({ duration: o.collapsespeed, easing: o.collapseeasing });
-								$(this).parent().removeClass('expanded').addClass('collapsed');
+								$(this).find('UL').slideUp({ duration: o.collapsespeed, easing: o.collapseeasing });
+								$(this).removeClass('expanded').addClass('collapsed');
 							}
 						}
 						else {
-							h($(this).attr('rel'));
+							h($(this).find('A').attr('rel'));
 						}
 						return false;
 					});
+
+					// Bind the A
+					$(t).find('LI A').bind(o.folderevent, function() {
+						return $(this).parent().trigger(o.folderevent);
+					});
+
 					// Prevent A from triggering the # on non-click events
 					if( o.folderevent.toLowerCase != 'click' ) $(t).find('LI A').bind('click', function() { return false; });
 				}
+
 				// Loading message
 				$(this).html('<ul class="jqueryFileTree start"><li class="wait">' + o.loadmessage + '<li></ul>');
+
 				// Get the initial file list
 				showTree( $(this), escape(o.root) );
 			});
