@@ -14,9 +14,11 @@ Description: A plugin for browsing files from the secure-files location of the s
 			 - collapsespeed  - default = 500 (ms); use -1 for no animation
              - collapseeasing - easing function to use on collapse - default is "swing" or "linear"
 			 - multifolder    - whether or not to limit the browser to one subfolder at a time - default yes "1" ; "0" to display only one open directory at a time
-			eg: [s2member_secure_files_browser folderevent="click" expandeasing="linear" expandspeed="200" collapseeasing="swing" collapsespeed="200" multifolder="1" dirbase="/" hidden="1" dirfirst="0" names="access-s2member-level0:General|access-s2member-level1:User files|access-s2member-level2:Developer files|access-s2member-level3:Partner files|access-s2member-level4:Platinium files|access-s2member-level2:Developers|access-s2member-ccap-video:Videos" /]
-Version: 0.1
-Date: 2012-12-25
+			 - openrecursive  - whether or not to open all subdirectories when opening a directory - default no 0 ; "1" to open recursively subdirectories when opening a directory
+			 - filterdir      - a full regexp directories have to match to be displayed (regexp format http://www.php.net/manual/en/pcre.pattern.php, preg_match is used) - eg: /(access|user)/i
+			 - filterfile     - a full regexp files have to match to be displayed (regexp format http://www.php.net/manual/en/pcre.pattern.php, preg_match is used) - eg: /\.(png|jpe?g|gif|zip)$/i
+Version: 0.2.1
+Date: 2012-12-29
 Author: potsky
 Author URI: http://www.potsky.com/about/
 
@@ -39,13 +41,19 @@ along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licens
 class s2memberFilesBrowser
 {
 	private static $instance             = 0;
-	private $root_directory              = '';
+	private $openrecursive               = false;
 	private $display_hidden_files        = false;
 	private $display_directory_first     = true;
 	private $display_directory_names     = '';
 	private $displayed_directory_names   = array();
 	private $directory_s2_ccap           = 'access-s2member-ccap-';
 	private $directory_s2_ccap_to_rights = 'access_s2member_ccap_';
+	private $s2member_files_dir          = 's2member-files';
+	private $s2member_files_path         = '';
+	private $root_directory              = '';
+	private $filterfile                  = '';
+	private $filterdir                   = '';
+
 
 	private $directory_s2_level = array(
 		'access-s2member-level0',
@@ -63,6 +71,7 @@ class s2memberFilesBrowser
 		'access-s2member-level4' => 'access_s2member_level4',
 	);
 
+
 	public function __construct()
 	{
 		if ( is_admin() ) {
@@ -72,7 +81,8 @@ class s2memberFilesBrowser
 		add_action( 'init', array( &$this, 'init' ) );
  		add_action( 'wp_enqueue_scripts', array( &$this, 'init_css' ) );
 
-		$this->root_directory = WP_PLUGIN_DIR.'/s2member-files';
+		$this->root_directory      = WP_PLUGIN_DIR.'/'.$this->s2member_files_dir;
+		$this->s2member_files_path = realpath(WP_PLUGIN_DIR.'/'.$this->s2member_files_dir);
 	}
 
 
@@ -83,6 +93,15 @@ class s2memberFilesBrowser
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce('s2member-files-browser-nonce'),
 		) );
+
+		// Retrieve default s2member level names set in Admin Panel prefs
+		$this->directory_s2_level_friendly = array(
+			'access-s2member-level0' => S2MEMBER_LEVEL0_LABEL,
+			'access-s2member-level1' => S2MEMBER_LEVEL1_LABEL,
+			'access-s2member-level2' => S2MEMBER_LEVEL2_LABEL,
+			'access-s2member-level3' => S2MEMBER_LEVEL3_LABEL,
+			'access-s2member-level4' => S2MEMBER_LEVEL4_LABEL,
+		);
 	}
 
 
@@ -100,43 +119,54 @@ class s2memberFilesBrowser
 	}
 
 
+	private function is_directory_allowed($directory) {
+		$child = realpath($directory);
+		return (substr($child,0,strlen($this->s2member_files_path))==$this->s2member_files_path);
+	}
+
+
 	public function ajax_call()
 	{
 		if (!isset($_POST['nonce']) || !check_ajax_referer('s2member-files-browser-nonce','nonce',false)) die ('Invalid nonce');
-		if (!isset($_POST['dir'])) die ('Invalid parameters');
-
+		if (!isset($_POST['dir'])) die ('invalid parameters');
 
 		// Retrieve shortcode parameters and overwrite defaults
 		//
-		$this->root_directory         .= strpos(@$_POST['dirbase'],'..') ? '' : '/'.@$_POST['dirbase'];
-		$this->display_directory_names = @$_POST['names'];
-		if (@$_POST['hidden']=='1')		$this->display_hidden_files = true;
-		if (@$_POST['dirfirst']=='0')	$this->display_directory_first = false;
+		$current = $this->root_directory . '/' . @$_POST['dirbase'];
+		if ($this->is_directory_allowed($current)) $this->root_directory = $current;
 
+		if (@$_POST['hidden']=='1')			$this->display_hidden_files    = true;
+		if (@$_POST['dirfirst']=='0')		$this->display_directory_first = false;
+		if (@$_POST['openrecursive']=='1')	$this->openrecursive           = true;
+
+		$this->display_directory_names = @$_POST['names'];
+		$this->filterfile              = @$_POST['filterfile'];
+		$this->filterdir               = @$_POST['filterdir'];
 
 		// Retrieve current directory
 		//
-		$dir_rel      = urldecode($_POST['dir']);
-		$dir          = strpos($dir_rel,'..') ? $this->root_directory : $this->root_directory . $dir_rel;
+		$dir_rel = urldecode($_POST['dir']);
+
+		echo $this->recursive_directory($dir_rel);
+		die();
+
+	}
 
 
-		// Lets go
-		//
+
+	private function recursive_directory($dir_rel)
+	{
+		$dir = $this->root_directory . $dir_rel;
+
 		if( file_exists($dir) ) {
-
 			$result  = array();
 			$resultf = array();
 			$resultd = array();
 
-			// Retrieve default s2member level names set in Admin Panel prefs
+
+			// Check if this directory is below $this->root_directory
 			//
-			$directory_s2_level_friendly = array(
-				'access-s2member-level0' => S2MEMBER_LEVEL0_LABEL,
-				'access-s2member-level1' => S2MEMBER_LEVEL1_LABEL,
-				'access-s2member-level2' => S2MEMBER_LEVEL2_LABEL,
-				'access-s2member-level3' => S2MEMBER_LEVEL3_LABEL,
-				'access-s2member-level4' => S2MEMBER_LEVEL4_LABEL,
-			);
+			if (!$this->is_directory_allowed($dir)) return "Permission denied";
 
 
 			// Compute the user associative file names array
@@ -144,7 +174,7 @@ class s2memberFilesBrowser
 			$this->displayed_directory_names = array();
 			$tmp = explode('|',$this->display_directory_names);
 			foreach ($tmp as $keyval) {
-				list($key,$val) = explode(':',$keyval);
+				@list($key,$val) = @explode(':',$keyval);
 				$this->displayed_directory_names[$key] = $val;
 			}
 
@@ -166,6 +196,22 @@ class s2memberFilesBrowser
 				if ($file=='.htaccess') continue;
 				if (!$this->display_hidden_files && (substr($file,0,1)=='.')) continue;
 
+
+				// Check for filter
+				//
+				$isdir = is_dir($dir . $file);
+				if ($isdir) {
+					if ($this->filterdir!='') {
+						 if (!preg_match($this->filterdir,$file)) continue;
+					}
+				}
+				else {
+					if ($this->filterfile!='') {
+						 if (!preg_match($this->filterfile,$file)) continue;
+					}
+				}
+
+
 				// Check if the file is allowed by s2member level
 				//
 				if (in_array($file,$this->directory_s2_level)) {
@@ -183,8 +229,8 @@ class s2memberFilesBrowser
 				if (isset($this->displayed_directory_names[$file])) {
 					$d = $this->displayed_directory_names[$file];
 				}
-				else if (isset($directory_s2_level_friendly[$file])) {
-					$d = $directory_s2_level_friendly[$file];
+				else if (isset($this->directory_s2_level_friendly[$file])) {
+					$d = $this->directory_s2_level_friendly[$file];
 				}
 				else {
 					$d = $file;
@@ -194,14 +240,20 @@ class s2memberFilesBrowser
 
 				// Return html
 				//
-				if(is_dir($dir . $file)) {
+				if($isdir) {
+					$returnd = "<li class=\"directory ";
+					$returnd.= ($this->openrecursive) ? "expanded" : "collapsed";
+					$returnd.= "\"><a href=\"#\" rel=\"" . htmlentities($dir_rel . $file) . "/\">" . $d . "</a>";
+					$returnd.= ($this->openrecursive) ? $this->recursive_directory($dir_rel.$file.'/') : '';
+					$returnd.= "</li>";
 					if ($this->display_directory_first) {
-						$resultd[$d] = "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . htmlentities($dir_rel . $file) . "/\">" . $d . "</a></li>";
+						$resultd[$d] = $returnd;
 					}
 					else {
-						$result[$d] = "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . htmlentities($dir_rel . $file) . "/\">" . $d . "</a></li>";
+						$result[$d] = $returnd;
 					}
 				}
+
 				else {
 					$ext  = preg_replace('/^.*\./', '', $file);
 					$link = s2member_file_download_url(array("file_download" => $dir_rel.$file));
@@ -228,13 +280,13 @@ class s2memberFilesBrowser
 				$ar = $result;
 			}
 
-			echo "<ul class=\"jqueryFileTree\" style=\"display: none;\">";
-			foreach ($ar as $html) echo $html;
-			echo "</ul>";
-
+			$return = "<ul class=\"jqueryFileTree\" style=\"display: none;\">";
+			foreach ($ar as $html) $return.=$html;
+			$return.= "</ul>";
 		}
-		die();
+		return $return;
 	}
+
 
 
 	function shortcode_func($atts) {
@@ -243,8 +295,10 @@ class s2memberFilesBrowser
 			jQuery(document).ready(function(){
 			    jQuery("#s2memberFilesBrowser'.$i.'").fileTree({root:"/"';
 
-		foreach ($atts as $param=>$value) {
-			$rt.= ','.$param.':"'.str_replace('"','\"',$value).'" ';
+		if (is_array($atts)) {
+			foreach ($atts as $param=>$value) {
+				$rt.= ','.$param.':"'.str_replace('"','\"',$value).'" ';
+			}
 		}
 
 		$rt.= '}, function(link) {
@@ -255,7 +309,9 @@ class s2memberFilesBrowser
 		';
 		return $rt;
 	}
+
 }
+
 
 $s2memberFilesBrowser = new s2memberFilesBrowser();
 

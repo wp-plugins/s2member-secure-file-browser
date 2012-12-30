@@ -4,7 +4,7 @@ Donate link:
 Tags: s2member, file, browser
 Requires at least: 3.2
 Tested up to: 3.5
-Stable tag: 0.1
+Stable tag: 0.2.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -69,6 +69,16 @@ Clicking on a file will launch the download according to the s2member files acce
 > default yes 1  
 > set to 0 to display only one open directory at a time  
 
+* `openrecursive` : whether or not to open all subdirectories when opening a directory  
+> default no 0  
+> set to 1 to open recursively subdirectories when opening a directory (then all directories will be open at initialization)  
+
+* `filterdir` : a full regexp directories have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
+> eg: `/(access|user)/i`  
+
+* `filterfile` : a full regexp files have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
+> eg: `/\.(png|jpe?g|gif|zip)$/i`  
+
 
 **Example** (*A shortcode has to be defined on one line, here is on several lines below only for better understanding*) :  
 
@@ -79,9 +89,13 @@ Clicking on a file will launch the download according to the s2member files acce
     collapseeasing="swing"  
     collapsespeed="200"  
     multifolder="0"  
+    openrecursive="1"  
     dirbase="/"  
     hidden="1"  
-    dirfirst="0"   
+    dirfirst="0"  
+    openrecursive="1"  
+    filterdir="/(access|user)/i"  
+    filterfile="/\.(png|jpe?g|gif|zip)$/i"  
     names="access-s2member-level0:General|access-s2member-ccap-video:Videos"  
 /]`  
 
@@ -111,5 +125,26 @@ It is recommended to add a `deny from all` directive in your `httpd.conf` for yo
 
 == Changelog ==
 
+= 0.2.1 =
+* Publishing fix
+
+= 0.2 =
+* Enhancement : file and directories icons are now clickable
+* New feature : shortag option filterdir
+* New feature : shortag option filterfile
+* New feature : shortag option openrecursive
+* Security fix : real path check perform to forbid browsing above s2member-files directory
+* Bug fix : dirbase now works as expected
+
 = 0.1 =
 * First release
+
+== Upgrade Notice ==
+
+= 0.2.1 =
+This version fixes a security related bug.  Upgrade immediately.
+
+
+
+
+
