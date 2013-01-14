@@ -19,7 +19,7 @@ Description: A plugin for browsing files from the secure-files location of the s
 			 - filterfile     - a full regexp files have to match to be displayed (regexp format http://www.php.net/manual/en/pcre.pattern.php, preg_match is used) - eg: /\.(png|jpe?g|gif|zip)$/i
 Version: 0.2.1
 Date: 2012-12-29
-Author: potsky
+Author: Potsky
 Author URI: http://www.potsky.com/about/
 
 Copyright © 2012 Raphael Barbate (potsky) <potsky@me.com> [http://www.potsky.com]

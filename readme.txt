@@ -1,5 +1,5 @@
 === s2member Secure File Browser ===
-Contributors: potsky
+Contributors: Potsky
 Donate link: 
 Tags: s2member, file, browser
 Requires at least: 3.2
