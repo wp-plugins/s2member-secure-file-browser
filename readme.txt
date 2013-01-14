@@ -1,6 +1,6 @@
 === s2member Secure File Browser ===
-Contributors: potsky
-Donate link: 
+Contributors: Potsky
+Donate link: https://www.potsky.com/donate/
 Tags: s2member, file, browser
 Requires at least: 3.2
 Tested up to: 3.5
