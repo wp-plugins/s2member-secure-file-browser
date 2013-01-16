@@ -1,17 +1,19 @@
 === s2member Secure File Browser ===
 Contributors: Potsky
-Donate link: https://www.potsky.com/donate/
-Tags: s2member, file, browser
-Requires at least: 3.2
+Donate link: http://www.potsky.com/donate/
+Tags: s2member, file, browser, shortcode, upload, manager, files
+Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.2.1
+Stable tag: 0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 A plugin for browsing files from the secure-files location of the s2member WordPress Membership plugin.
 == Description ==
 
-s2member Secure File Browser is a wordpress plugin for browsing files from the secure-files location of the s2member WordPress Membership plugin.
+s2Member Secure File Browser is a wordpress plugin for browsing files from the secure-files location of the [s2Member® WordPress Memberships](http://wordpress.org/extend/plugins/s2member/ "s2Member") plugin.
+
+**Shortcode**
 
 You can display the file browser via the shortcode `[s2member_secure_files_browser /]`.
 
@@ -25,9 +27,14 @@ The shortcode can handle :
 * `access-s2member-level3` directory for level #3 and more users
 * `access-s2member-level4` directory for level #4 and more users
 * `access-s2member-ccap-*` custom capabilities directories for according users
-* any directory for all users
+* any directory for all users in read only (unable to download)
+
+All these featured folders can be located anywhere and they can be used several times.
 
 Clicking on a file will launch the download according to the s2member files access control.
+
+Please use the shortcode generator in the *Dashboard > s2Member Menu > Secure File Browser* to generate complex values.
+
 
 **Available shortcode options**
 
@@ -74,10 +81,13 @@ Clicking on a file will launch the download according to the s2member files acce
 > set to 1 to open recursively subdirectories when opening a directory (then all directories will be open at initialization)  
 
 * `filterdir` : a full regexp directories have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
-> eg: `/(access|user)/i`  
+> eg: `/(access|user)/i` or `%2F(access%7Ctata)%2Fi` when escaped  
 
 * `filterfile` : a full regexp files have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
-> eg: `/\.(png|jpe?g|gif|zip)$/i`  
+> eg: `/\.(png|jpe?g|gif|zip)$/i` or `%2F%5C.(png%7Cjpe%3Fg%7Cgif%7Czip)%24%2Fi` when escaped  
+
+All informations about these options are well documented in the `Dashboard > s2Member > Secure File Browser` panel
+
 
 
 **Example** (*A shortcode has to be defined on one line, here is on several lines below only for better understanding*) :  
@@ -94,27 +104,45 @@ Clicking on a file will launch the download according to the s2member files acce
     hidden="1"  
     dirfirst="0"  
     openrecursive="1"  
-    filterdir="/(access|user)/i"  
-    filterfile="/\.(png|jpe?g|gif|zip)$/i"  
+    filterdir="%2F(access%7Ctata)%2Fi"
+    filterfile="%2F%5C.(png%7Cjpe%3Fg%7Cgif%7Czip)%24%2Fi"
     names="access-s2member-level0:General|access-s2member-ccap-video:Videos"  
 /]`  
 
+You can generate a shortcode with complex options with the `Shortcode Generator` in the `Dashboard > s2Member > Secure File Browser` panel
+
+
+
+**Dashboard**
+
+The admin panel is reachable via the *Dashboard > s2Member Menu > Secure File Browser* menu.
+
+Available features are :
+
+* Statistics : display all downloads, sort and apply filters by date, user, file, IP Address, ...
+* Statistics : display current s2Member accounting, sort and apply filters by date, user, file and file
+* File Browser : Rename and delete files and folders
+* Shortcode generator
+* Shortcode documentation
+* Settings : Received an email each time a user downloads a file
+* Settings : How many logs you want to keep ?
 
 
 Don't hesitate to ask me new features or report bugs on [potsky.com](https://www.potsky.com/code/wordpress-plugins/s2member-secure-file-browser/ "Plugin page") !  
-You can join me on [GitHub](https://github.com/potsky/WordPressS2MemberFileBrowser/ "GitHub") to add feature, fix bugs,... !  
 
 
 == Installation ==
 
+**Requirement** : you need to install first the wonderful and free s2Member® plugin [available here](http://wordpress.org/extend/plugins/s2member/ "s2Member")  
+
 **s2member Secure File Browser** is very easy to install (instructions) :  
 * Upload the `/s2member-secure-file-browser` folder to your `/wp-content/plugins/` directory.  
 * Activate the plugin through the Plugins menu in WordPress®.  
-* Use the shortcode `[s2member_secure_files_browser/]` in your pages, enjoy!  
+
 
 == Frequently asked questions ==
 
-= s2member secure files are always directly downloadable, how can I protect them by forcing php handling ? =
+= s2Member secure files are always directly downloadable, how can I protect them by forcing php handling ? =
 
 It is recommended to add a `deny from all` directive in your `httpd.conf` for your s2member-files directory in order to avoid people directly access your protected files. Do not put the `deny` directive in the `s2member-files/.htaccess` because this file is always regenerated by s2member and your modifications are always overwritten.
 
@@ -122,11 +150,50 @@ It is recommended to add a `deny from all` directive in your `httpd.conf` for yo
 
 Even if you set shortcode option `hidden` to `1`, `.htaccess` will never been displayed.
 
+= Are directories `access-s2member-level*` protected if they are not in the root directory ? =
+
+Yes ! `And access-s2member-ccap*` too !
+
+
+== What's next? ==
+
+All futures requests are handled on [GitHub](https://github.com/potsky/WordPressS2MemberFileBrowser/issues?sort=comments&state=open "GitHub")
+
+Available in upcoming version 0.4 :
+
+* Upload any file in the `s2member-files` directory
+* Move, copy files and folders
+* Create directories
+* Notification daily reports
+* Manage rights for stats and browser panel
+
+
 == Screenshots ==
 
 1. File browser in action
+2. Admin > File browser in action
+3. Admin > File browser in action when deleting a directory
+4. Admin > File browser in action when renaming a directory
+5. Admin > Download statistics
+6. Admin > Shortcode generator
+7. Admin > Shortcode documentation
+8. Admin > General settings for logs management
+9. Admin > Notification settings for email reporting
 
 == Changelog ==
+
+= 0.3 =
+* New language : french
+* New feature : display file size
+* New feature : admin : Statistics - display all downloads, sort and apply filters by date, user, file, IP Address, ...
+* New feature : admin : Statistics - display current s2Member accounting, sort and apply filters by date, user, file and file
+* New feature : admin : File Browser - Rename and delete files and folders
+* New feature : admin : Shortcode generator
+* New feature : admin : Shortcode documentation
+* New feature : admin : Settings - Received an email each time a user downloads a file
+* New feature : admin : Settings - How many logs you want to keep ?
+* Bug fix : dirbase could not work as expected sometimes
+* Enhancement : total plugin rewriting for best performance, practices and security
 
 = 0.2.1 =
 * Publishing fix
@@ -144,8 +211,11 @@ Even if you set shortcode option `hidden` to `1`, `.htaccess` will never been di
 
 == Upgrade Notice ==
 
+= 0.3 =
+This version adds improvements and admin features. Plugin is fully optimized now, upgrade immediately!
+
 = 0.2.1 =
-This version fixes a security related bug.  Upgrade immediately.
+This version fixes a security related bug. Upgrade immediately.
 
 
 
