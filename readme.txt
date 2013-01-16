@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.3.1
+Stable tag: 0.3.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,12 @@ Available in upcoming version 0.4 :
 
 == Changelog ==
 
+= 0.3.2 =
+* Hotfix for recursive browsing
+
+= 0.3.1 =
+* Publishing fix
+
 = 0.3 =
 * New language : french
 * New feature : display file size
@@ -210,6 +216,9 @@ Available in upcoming version 0.4 :
 * First release
 
 == Upgrade Notice ==
+
+= 0.3.2 =
+This version fixes a serious browsing bug. Upgrade immediately.
 
 = 0.3 =
 This version adds improvements and admin features. Plugin is fully optimized now, upgrade immediately!

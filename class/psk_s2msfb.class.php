@@ -364,6 +364,10 @@ class PSK_S2MSFB
 	 */
 	private static function recursive_directory( $current , $dirbase , $dir_rel )
 	{
+error_log($current);
+error_log($dirbase);
+error_log($dir_rel);
+
 		$dir = $current . $dir_rel;
 
 		if( file_exists($dir) ) {
@@ -450,7 +454,7 @@ class PSK_S2MSFB
 					$li = '<li class="directory ';
 					$li.= (self::$openrecursive) ? "expanded" : "collapsed";
 					$li.= '" data-s="-1"><div class="jftctn">';
-					$li.= '<a href="#" class="link" rel="' . PSK_Tools::rel_literal($filepathrel) . '">' . $d . '</a>';
+					$li.= '<a href="#" class="link" rel="' . PSK_Tools::rel_literal($filepathrel) . '/">' . $d . '</a>';
 					$li.= '<span class="size d">&nbsp;</span>';
 					$li.= ( self::$is_admin === true ) ? '<a href="javascript:psk_sfb_rename_dir('. PSK_Tools::js_literal($filepathrelbase) .')" class="d"><i class="icon-pencil"></i></a>&nbsp;&nbsp;' : '';
 					$li.= ( self::$is_admin === true ) ? '<a href="javascript:psk_sfb_remove_dir('. PSK_Tools::js_literal($filepathrelbase) .')" class="d"><i class="icon-remove-sign"></i></a>&nbsp;&nbsp;' : '';
