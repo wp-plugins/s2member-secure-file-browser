@@ -1,0 +1,580 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: s2member Secure File Browser\n"
+"POT-Creation-Date: 2013-01-15 17:35+0100\n"
+"PO-Revision-Date: 2013-01-15 17:35+0100\n"
+"Last-Translator: potsky <potsky@me.com>\n"
+"Language-Team: potsky <potsky@me.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: gettext;gettext_noop;_x;_e;__;esc_attr__;esc_attr_e;"
+"esc_html__;esc_html_e;_ex;esc_attr_x;esc_html_x;_n;_nx;_n_noop;_nx_noop\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class/psk_s2msfb.admin.class.php:144
+msgid "Statistics"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:146
+msgid "All downloads"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:147
+msgid "Current s2member Accounting"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:152
+msgid "Browser"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:154
+msgid "Manage files"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:156
+msgid "Tools"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:157
+msgid "Shortcode generator"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:159
+msgid "Documentation"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:160
+msgid "Shortcode options"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:168
+msgid "Settings"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:170
+msgid "General"
+msgstr ""
+
+#: class/psk_s2msfb.admin.class.php:171
+msgid "Notification"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:75
+msgid "initial directory from the s2member-files directory"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:83
+msgid "show hidden files or not"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:86
+msgid "do not show hidden files"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:87
+msgid "set to <code>1</code> to display"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:91
+msgid "show directories above files"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:94
+msgid "show directories first"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:95
+msgid "set to <code>0</code> to display directories with files"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:99
+msgid "replace files name with custom values"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:100
+msgid ""
+"Syntax : <code>realfilename_1:Custom File Name #1|...|realfilename_n:Custom "
+"File Name #n</code>"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:103
+msgid ""
+"<code>access-s2member-level#</code> will be automatically renamed with your "
+"s2member level custom labels."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:107
+msgid "event to trigger expand/collapse"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:110
+msgid "user has to click to toggle directories, download files, ..."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:111
+msgid "can be any javascript event like <code>mouseover</code>, ..."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:115
+msgid "speed of the expand folder action in ms"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:119
+#: class/psk_s2msfb.admin.manager.class.php:135
+msgid "use <code>-1</code> for no animation"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:123
+msgid "easing function to use on expand"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:127
+#: class/psk_s2msfb.admin.manager.class.php:143
+msgid "can be set to <code>linear</code>"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:131
+msgid "speed of the collapse folder action in ms"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:139
+msgid "easing function to use on collapse"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:147
+msgid "whether or not to limit the browser to one subfolder at a time"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:151
+msgid "set to <code>0</code> to display only one open directory at a time"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:155
+msgid "whether or not to open all subdirectories when opening a directory"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:158
+msgid "user has to open directories himself"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:159
+msgid ""
+"set to <code>1</code> to open recursively subdirectories when opening a "
+"directory (then all directories will be open at initialization)"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:163
+msgid "a full regexp directories have to match to be displayed"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:164
+#: class/psk_s2msfb.admin.manager.class.php:172
+msgid "Syntax available here"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:164
+#: class/psk_s2msfb.admin.manager.class.php:172
+msgid "<code>preg_match</code> PHP function is used"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:167
+msgid "eg: <code>/(access|user)/i</code>"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:171
+msgid "a full regexp files have to match to be displayed"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:175
+msgid "eg: <code>/\\.(png|jpe?g|gif|zip)$/i</code>"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:188
+msgid ""
+"It seems you have xebug installed and try to delete a very deep directory."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:189
+#: class/psk_s2msfb.admin.settings.class.php:56
+#: class/psk_s2msfb.admin.stats.class.php:63
+msgid "An error occurs"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:190
+msgid "Please wait..."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:191
+msgid "Rename Directory"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:192
+msgid "Rename File"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:193
+msgid "Rename"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:194
+msgid ""
+"Directory and all children will be deleted.<br/>You can not undo this action."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:195
+msgid "File will be deleted.<br/>You can not undo this action."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:196
+msgid "Delete"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:197
+msgid "Delete Directory"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:198
+msgid "Delete File"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:199
+msgid "File has been successfully renamed"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:200
+msgid "Directory has been successfully renamed"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:201
+msgid "File has been successfully deleted"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:202
+msgid "Directory has been successfully deleted"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:203
+#: class/psk_s2msfb.admin.manager.class.php:270
+#: class/psk_s2msfb.admin.settings.class.php:57
+#: class/psk_s2msfb.admin.settings.class.php:193
+#: class/psk_s2msfb.admin.settings.class.php:205
+#: class/psk_s2msfb.admin.stats.class.php:64
+msgid "Error!"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:204
+#: class/psk_s2msfb.admin.manager.class.php:271
+#: class/psk_s2msfb.admin.settings.class.php:58
+#: class/psk_s2msfb.admin.settings.class.php:104
+#: class/psk_s2msfb.admin.settings.class.php:218
+#: class/psk_s2msfb.admin.stats.class.php:65
+msgid "Success!"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:205
+#: class/psk_s2msfb.admin.manager.class.php:272
+#: class/psk_s2msfb.admin.settings.class.php:59
+#: class/psk_s2msfb.admin.settings.class.php:116
+#: class/psk_s2msfb.admin.settings.class.php:118
+#: class/psk_s2msfb.admin.stats.class.php:66
+msgid "Info!"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:206
+#: class/psk_s2msfb.admin.manager.class.php:273
+#: class/psk_s2msfb.admin.settings.class.php:60
+#: class/psk_s2msfb.admin.settings.class.php:112
+#: class/psk_s2msfb.admin.stats.class.php:67
+msgid "Warning!"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:211 class/psk_s2msfb.class.php:515
+msgid "Please wait while loading..."
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:230
+#: class/psk_s2msfb.admin.manager.class.php:281
+msgid "Tag"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:231
+#: class/psk_s2msfb.admin.manager.class.php:282
+msgid "Description"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:232
+msgid "Default value"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:233
+msgid "Comment"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:283
+msgid "Value"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:305
+msgid "Yes"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:308
+msgid "No"
+msgstr ""
+
+#: class/psk_s2msfb.admin.manager.class.php:364
+msgid "Copy paste this shortcode in pages :"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:72
+msgid "Do not delete"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:73
+msgid "Keep 1 week"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:74
+msgid "Keep 1 month"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:75
+msgid "Keep 3 months"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:76
+msgid "Keep 6 months"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:77
+msgid "Keep 1 year"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:78
+msgid "Keep 2 years"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:104
+msgid "General settings saved"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:112
+msgid "Download logs limit and retention disabled"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:116
+msgid "Download logs limit disabled"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:118
+msgid "Download logs retention disabled"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:128
+msgid "Main settings"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:131
+msgid "Logs limit"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:134
+msgid ""
+"When download records count has reach this limit, older records are deleted"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:139
+msgid "Logs retention"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:147
+msgid "Older download records are deleted"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:154
+#: class/psk_s2msfb.admin.settings.class.php:271
+msgid "Save Changes"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:193
+#, php-format
+msgid "From email address %s is invalid"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:205
+#, php-format
+msgid "Notify email address %s is invalid"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:218
+msgid "Notification settings saved"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:232
+msgid "Real-time notification"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:234
+msgid "Notify by email"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:240
+msgid "From email address"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:246
+msgid "Notify email address"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:249
+msgid "Separate multiple email address with a comma (,)"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:253
+msgid "Email subject"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:256
+msgid "You can use variable %blogname%"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:262
+msgid "Notification reports"
+msgstr ""
+
+#: class/psk_s2msfb.admin.settings.class.php:265
+msgid "Soon available"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:90
+msgid "No download"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:95
+#: class/psk_s2msfb.admin.stats.class.php:102
+#: class/psk_s2msfb.admin.stats.class.php:193
+#: class/psk_s2msfb.admin.stats.class.php:199
+msgid "When"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:96
+#: class/psk_s2msfb.admin.stats.class.php:103
+msgid "File"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:97
+#: class/psk_s2msfb.admin.stats.class.php:104
+msgid "User"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:98
+#: class/psk_s2msfb.admin.stats.class.php:105
+msgid "IP Address"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:183
+msgid "No current download"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:194
+#: class/psk_s2msfb.admin.stats.class.php:200
+msgid "What"
+msgstr ""
+
+#: class/psk_s2msfb.admin.stats.class.php:195
+#: class/psk_s2msfb.admin.stats.class.php:201
+msgid "Who"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:372
+msgid "Permission denied"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:467 inc/tools.class.php:118
+#: inc/tools.class.php:120
+msgid "B"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:579
+msgid "A file has been downloaded"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:581
+msgid "Download Time"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:582
+msgid "File downloaded"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:583
+msgid "User ID"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:584
+msgid "User Login"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:585
+msgid "User Email"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:586
+msgid "User Nice name"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:587
+msgid "User Display name"
+msgstr ""
+
+#: class/psk_s2msfb.class.php:588
+msgid "User IP"
+msgstr ""
+
+#: inc/define.php:76
+msgid "%blogname% : file downloaded"
+msgstr ""
+
+#: inc/tools.class.php:118
+msgid "KB"
+msgstr ""
+
+#: inc/tools.class.php:118
+msgid "MB"
+msgstr ""
+
+#: inc/tools.class.php:118
+msgid "GB"
+msgstr ""
+
+#: inc/tools.class.php:118
+msgid "TB"
+msgstr ""
+
+#: inc/tools.class.php:118
+msgid "PB"
+msgstr ""
+
+#: inc/tools.class.php:120
+msgid "KiB"
+msgstr ""
+
+#: inc/tools.class.php:120
+msgid "MiB"
+msgstr ""
+
+#: inc/tools.class.php:120
+msgid "GiB"
+msgstr ""
+
+#: inc/tools.class.php:120
+msgid "TiB"
+msgstr ""
+
+#: inc/tools.class.php:120
+msgid "PiB"
+msgstr ""
