@@ -43,6 +43,18 @@
 		}
 	})
 
+	$("table.sortn").tablesorter({
+	    theme : "bootstrap", // this will
+	    widthFixed: true,
+	    headerTemplate : "{content} {icon}", // new in v2.7. Needed to add the bootstrap icon!
+	    widgets : [ "uitheme","filter","zebra"],
+	    widgetOptions : {
+			zebra : ["even", "odd"],
+			filter_reset : ".reset",
+			uitheme : "bootstrap"
+		}
+	})
+
 	.tablesorterPager({
 		container: $(".pager"),
 		cssGoto  : ".pagenum",

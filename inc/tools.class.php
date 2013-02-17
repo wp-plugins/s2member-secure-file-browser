@@ -25,13 +25,129 @@ class PSK_Tools
 {
 
 	/**
+	 * Return the avatar url of a user
+	 *
+	 * @param       string  $string      a user id or user email
+	 * @return      string               the url of the gravatar
+	 */
+	public static function get_avatar_url($user){
+	    preg_match("/src='(.*?)'/i", get_avatar( $user ) , $matches);
+	    return $matches[1];
+	}
+
+
+	/**
+	 * Return file name in the /img directory of the file icon acording to its extension
+	 *
+	 * @param       string  $string      a file name, file path...
+	 * @return      string               the icon file name
+	 */
+	public static function get_file_icon($file_path) {
+		$extensions = array(
+			'3gp'   => 'film.png',
+			'afp'   => 'code.png',
+			'afpa'  => 'code.png',
+			'asp'   => 'code.png',
+			'aspx'  => 'code.png',
+			'avi'   => 'film.png',
+			'bat'   => 'application.png',
+			'bmp'   => 'picture.png',
+			'c'     => 'code.png',
+			'cfm'   => 'code.png',
+			'cgi'   => 'code.png',
+			'com'   => 'application.png',
+			'cpp'   => 'code.png',
+			'css'   => 'css.png',
+			'doc'   => 'doc.png',
+			'exe'   => 'application.png',
+			'gif'   => 'picture.png',
+			'fla'   => 'flash.png',
+			'h'     => 'code.png',
+			'htm'   => 'html.png',
+			'html'  => 'html.png',
+			'jar'   => 'java.png',
+			'jpg'   => 'picture.png',
+			'jpeg'  => 'picture.png',
+			'js'    => 'script.png',
+			'lasso' => 'code.png',
+			'log'   => 'txt.png',
+			'm4p'   => 'music.png',
+			'mov'   => 'film.png',
+			'mp3'   => 'music.png',
+			'mp4'   => 'film.png',
+			'mpg'   => 'film.png',
+			'mpeg'  => 'film.png',
+			'mpeg4' => 'film.png',
+			'ogg'   => 'music.png',
+			'pcx'   => 'picture.png',
+			'pdf'   => 'pdf.png',
+			'php'   => 'php.png',
+			'png'   => 'picture.png',
+			'ppt'   => 'ppt.png',
+			'pps'   => 'ppt.png',
+			'psd'   => 'psd.png',
+			'pl'    => 'script.png',
+			'py'    => 'script.png',
+			'rb'    => 'ruby.png',
+			'rbx'   => 'ruby.png',
+			'rhtml' => 'ruby.png',
+			'rpm'   => 'linux.png',
+			'ruby'  => 'ruby.png',
+			'sql'   => 'db.png',
+			'swf'   => 'flash.png',
+			'tif'   => 'picture.png',
+			'tiff'  => 'picture.png',
+			'txt'   => 'txt.png',
+			'vb'    => 'code.png',
+			'wav'   => 'music.png',
+			'wmv'   => 'film.png',
+			'xls'   => 'xls.png',
+			'xml'   => 'code.png',
+			'zip'   => 'zip.png',
+			'rar'   => 'zip.png',
+			'bz2'   => 'zip.png',
+			'tar'   => 'zip.png',
+			'gz'    => 'zip.png',
+		);
+
+		$ext = trim ( strtolower( substr( $file_path , strrpos( $file_path , '.' ) + 1 ) ) );
+		if (array_key_exists($ext,$extensions)) {
+			return $extensions[ $ext ];
+		}
+		else {
+			return 'file.png';
+		}
+	}
+
+
+
+	/**
+	 * current_user_cans is a current_user_can with several capablities separated by coma
+	 *
+	 * @param       string  $string      the list of capabilities separated by coma
+	 * @return      false                if access not granted
+	 * @return      string               a granted capability
+	 */
+	public static function current_user_cans($capablities) {
+		$caps = array_unique( explode( ',' , $capablities ) );
+		foreach ($caps as $cap) {
+			$c = strtolower( trim( $cap ) );
+			if ( current_user_can( $c ) ) {
+				return $c;
+			}
+		}
+		return false;
+	}
+
+
+	/**
 	 * return true if a $string starts with $start
 	 *
 	 * @param       string  $string      the haystack
 	 * @param       string  $start       the start needle
 	 * @return      boolean
 	 */
-	public function starts_with($string,$start) {
+	public static function starts_with($string,$start) {
 		return ( substr($string , 0 , strlen($start) ) == $start );
 	}
 
@@ -89,13 +205,13 @@ class PSK_Tools
 			}
 
 			if (!self::is_directory_allowed($filepath))
-				throw new Exception( $filepath . DIRECTORY_SEPARATOR . $sf . ' could not be deleted.');
+				throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.');
 
 			return rmdir($filepath);
 		}
 
 		if (!self::is_directory_allowed($filepath))
-			throw new Exception( $filepath . DIRECTORY_SEPARATOR . $sf . ' could not be deleted.');
+			throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.');
 
 		return unlink($filepath);
 	}
@@ -138,7 +254,7 @@ class PSK_Tools
 	 * @param       string  $str         the value to escape
 	 * @return      string               the escaped value
 	 */
-	function rel_literal($str) {
+	public static function rel_literal($str) {
 		//return htmlspecialchars($str,ENT_COMPAT|ENT_HTML401,'UTF-8'|); // Only for PHP >= 5.4
 		return htmlspecialchars($str,ENT_COMPAT,'UTF-8');
 	}
@@ -150,7 +266,7 @@ class PSK_Tools
 	 * @param       string  $str         the value to escape
 	 * @return      string               the escaped value
 	 */
-	function html_entities($str) {
+	public static function html_entities($str) {
 		//return htmlentities($str,ENT_COMPAT|ENT_HTML401,'UTF-8'|); // Only for PHP >= 5.4
 		return htmlentities($str,ENT_COMPAT,'UTF-8');
 	}
@@ -161,9 +277,26 @@ class PSK_Tools
 	 * @param       string  $str         the value
 	 * @return      string               the literalized value
 	 */
-	function js_literal($str) {
+	public static function js_literal($str) {
 		//return htmlentities('\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$str)).'\'',ENT_COMPAT|ENT_HTML401,'UTF-8'); // Only for PHP >= 5.4
 		return htmlentities('\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$str)).'\'',ENT_COMPAT,'UTF-8');
+	}
+
+
+	/**
+	 * Return an utf8 html_entities value
+	 *
+	 * @param       string  $str         the value to escape
+	 * @return      string               the escaped value
+	 */
+	public static function mb_html_entities($str, $encoding = 'utf-8') {
+	    mb_regex_encoding($encoding);
+	    $pattern = array('<', '>', '"', '\'');
+	    $replacement = array('&lt;', '&gt;', '&quot;', '&#39;');
+	    for ($i=0; $i<sizeof($pattern); $i++) {
+	        $str = mb_ereg_replace($pattern[$i], $replacement[$i], $str);
+	    }
+	    return $str;
 	}
 
 
@@ -174,7 +307,7 @@ class PSK_Tools
 	 * psk_sfb_alert('Success!','File has been deleted','success');
 	 * psk_sfb_alert('Warning!','File has been deleted');
 	 */
-	function get_js_alert($title, $message, $alert='info', $time=5000) {
+	public static function get_js_alert($title, $message, $alert='info', $time=5000) {
 		$time = (int)$time;
 		$ret = '<script>psk_sfb_alert('.self::js_literal($title).', '.self::js_literal($message).', '.self::js_literal($alert).', '.self::js_literal($time).');</script>';
 		return $ret;

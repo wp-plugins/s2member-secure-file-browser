@@ -25,3 +25,14 @@ PSK_S2MSFB::db_uninstall();
  */
 delete_option( PSK_S2MSFB_OPT_SETTINGS_NOTIFY );
 delete_option( PSK_S2MSFB_OPT_SETTINGS_GENERAL );
+
+
+/*
+ * Delete transients
+ */
+delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_LATEST_ID );
+delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP0_ID );
+delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP1_ID );
+delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP7_ID );
+delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP31_ID );
+delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP365_ID );

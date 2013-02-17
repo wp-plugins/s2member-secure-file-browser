@@ -61,6 +61,7 @@
 				if( o.dirbase === undefined ) o.dirbase = '';
 				if( o.filterfile === undefined ) o.filterfile = '';
 				if( o.filterdir === undefined ) o.filterdir = '';
+				if( o.displayall === undefined ) o.displayall = '';
 				o.root          = '/';
 				o.collapsespeed = parseInt(o.collapsespeed,10);
 				o.expandspeed   = parseInt(o.expandspeed,10);
@@ -79,6 +80,7 @@
 										names: o.names,
 										filterfile: o.filterfile,
 										filterdir: o.filterdir,
+										displayall: o.displayall,
 										dirbase: o.dirbase,
 										openrecursive: o.openrecursive,
 										nonce: PSK_S2MSFB.nonce}, function(data) {
@@ -129,3 +131,8 @@
 		}
 	});
 }(jQuery));
+
+
+
+
+

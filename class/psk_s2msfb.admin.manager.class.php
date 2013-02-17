@@ -71,96 +71,64 @@ class PSK_S2MSFBAdminManager
 	public static function init_shortcode_options() {
 		self::$shortcode_options = array(
 			array(
+				'name'     => 'collapseeasing',
+				'desc'     => __('Easing function to use on collapse',PSK_S2MSFB_ID),
+				'descm'    => '',
+				'default'  => 'swing',
+				'defaultm' => '',
+				'more'     => __('Can be set to <code>linear</code>',PSK_S2MSFB_ID),
+			),
+			array(
+				'name'     => 'collapsespeed',
+				'desc'     => __('Speed of the collapse folder action in ms',PSK_S2MSFB_ID),
+				'descm'    => '',
+				'default'  => '500',
+				'defaultm' => '',
+				'more'     => __('Use <code>-1</code> for no animation',PSK_S2MSFB_ID),
+			),
+			array(
 				'name'     => 'dirbase',
-				'desc'     => __('initial directory from the s2member-files directory',PSK_S2MSFB_ID),
+				'desc'     => __('Initial directory from the s2member-files directory',PSK_S2MSFB_ID),
 				'descm'    => '',
 				'default'  => '/',
 				'defaultm' => '',
 				'more'     => '',
 			),
 			array(
-				'name'     => 'hidden',
-				'desc'     => __('show hidden files or not',PSK_S2MSFB_ID),
-				'descm'    => '',
-				'default'  => '0',
-				'defaultm' => __('do not show hidden files',PSK_S2MSFB_ID),
-				'more'     => __('set to <code>1</code> to display',PSK_S2MSFB_ID),
-			),
-			array(
 				'name'     => 'dirfirst',
-				'desc'     => __('show directories above files',PSK_S2MSFB_ID),
+				'desc'     => __('Show directories above files',PSK_S2MSFB_ID),
 				'descm'    => '',
 				'default'  => '1',
-				'defaultm' => __('show directories first',PSK_S2MSFB_ID),
-				'more'     => __('set to <code>0</code> to display directories with files',PSK_S2MSFB_ID),
+				'defaultm' => __('Show directories first',PSK_S2MSFB_ID),
+				'more'     => __('Set to <code>0</code> to display directories with files',PSK_S2MSFB_ID),
 			),
 			array(
-				'name'     => 'names',
-				'desc'     => __('replace files name with custom values',PSK_S2MSFB_ID),
-				'descm'    => __('Syntax : <code>realfilename_1:Custom File Name #1|...|realfilename_n:Custom File Name #n</code>',PSK_S2MSFB_ID),
-				'default'  => '',
-				'defaultm' => '',
-				'more'     => __('<code>access-s2member-level#</code> will be automatically renamed with your s2member level custom labels.',PSK_S2MSFB_ID),
-			),
-			array(
-				'name'     => 'folderevent',
-				'desc'     => __('event to trigger expand/collapse',PSK_S2MSFB_ID),
-				'descm'    => '',
-				'default'  => 'click',
-				'defaultm' => __('user has to click to toggle directories, download files, ...',PSK_S2MSFB_ID),
-				'more'     => __('can be any javascript event like <code>mouseover</code>, ...',PSK_S2MSFB_ID),
-			),
-			array(
-				'name'     => 'expandspeed',
-				'desc'     => __('speed of the expand folder action in ms',PSK_S2MSFB_ID),
-				'descm'    => '',
-				'default'  => '500',
-				'defaultm' => '',
-				'more'     => __('use <code>-1</code> for no animation',PSK_S2MSFB_ID),
+				'name'     => 'displayall',
+				'desc'     => __('Display all items without checking if user is granted to download them',PSK_S2MSFB_ID),
+				'descm'    => __('If the user downloads an unauthorized file, it will be redirected to the s2member Membership Page',PSK_S2MSFB_ID),
+				'default'  => '0',
+				'defaultm' => __('Only allowed directories are displayed',PSK_S2MSFB_ID),
+				'more'     => __('Set to <code>1</code> to display all directories',PSK_S2MSFB_ID),
 			),
 			array(
 				'name'     => 'expandeasing',
-				'desc'     => __('easing function to use on expand',PSK_S2MSFB_ID),
+				'desc'     => __('Easing function to use on expand',PSK_S2MSFB_ID),
 				'descm'    => '',
 				'default'  => 'swing',
 				'defaultm' => '',
-				'more'     => __('can be set to <code>linear</code>',PSK_S2MSFB_ID),
+				'more'     => __('Can be set to <code>linear</code>',PSK_S2MSFB_ID),
 			),
 			array(
-				'name'     => 'collapsespeed',
-				'desc'     => __('speed of the collapse folder action in ms',PSK_S2MSFB_ID),
+				'name'     => 'expandspeed',
+				'desc'     => __('Speed of the expand folder action in ms',PSK_S2MSFB_ID),
 				'descm'    => '',
 				'default'  => '500',
 				'defaultm' => '',
-				'more'     => __('use <code>-1</code> for no animation',PSK_S2MSFB_ID),
-			),
-			array(
-				'name'     => 'collapseeasing',
-				'desc'     => __('easing function to use on collapse',PSK_S2MSFB_ID),
-				'descm'    => '',
-				'default'  => 'swing',
-				'defaultm' => '',
-				'more'     => __('can be set to <code>linear</code>',PSK_S2MSFB_ID),
-			),
-			array(
-				'name'     => 'multifolder',
-				'desc'     => __('whether or not to limit the browser to one subfolder at a time',PSK_S2MSFB_ID),
-				'descm'    => '',
-				'default'  => '1',
-				'defaultm' => '',
-				'more'     => __('set to <code>0</code> to display only one open directory at a time',PSK_S2MSFB_ID),
-			),
-			array(
-				'name'     => 'openrecursive',
-				'desc'     => __('whether or not to open all subdirectories when opening a directory',PSK_S2MSFB_ID),
-				'descm'    => '',
-				'default'  => '0',
-				'defaultm' => __('user has to open directories himself',PSK_S2MSFB_ID),
-				'more'     => __('set to <code>1</code> to open recursively subdirectories when opening a directory (then all directories will be open at initialization)',PSK_S2MSFB_ID),
+				'more'     => __('Use <code>-1</code> for no animation',PSK_S2MSFB_ID),
 			),
 			array(
 				'name'     => 'filterdir',
-				'desc'     => __('a full regexp directories have to match to be displayed',PSK_S2MSFB_ID),
+				'desc'     => __('A full regexp directories have to match to be displayed',PSK_S2MSFB_ID),
 				'descm'    => __('Syntax available here',PSK_S2MSFB_ID) . ' <a href="http://www.php.net/manual/en/pcre.pattern.php">http://www.php.net/manual/en/pcre.pattern.php</a>' . '<br/>' . __('<code>preg_match</code> PHP function is used',PSK_S2MSFB_ID),
 				'default'  => '',
 				'defaultm' => '',
@@ -168,12 +136,61 @@ class PSK_S2MSFBAdminManager
 			),
 			array(
 				'name'     => 'filterfile',
-				'desc'     => __('a full regexp files have to match to be displayed',PSK_S2MSFB_ID),
+				'desc'     => __('A full regexp files have to match to be displayed',PSK_S2MSFB_ID),
 				'descm'    => __('Syntax available here',PSK_S2MSFB_ID) . ' <a href="http://www.php.net/manual/en/pcre.pattern.php">http://www.php.net/manual/en/pcre.pattern.php</a>' . '<br/>' . __('<code>preg_match</code> PHP function is used',PSK_S2MSFB_ID),
 				'default'  => '',
 				'defaultm' => '',
 				'more'     => __('eg: <code>/\.(png|jpe?g|gif|zip)$/i</code>',PSK_S2MSFB_ID),
 			),
+			array(
+				'name'     => 'folderevent',
+				'desc'     => __('Event to trigger expand/collapse',PSK_S2MSFB_ID),
+				'descm'    => '',
+				'default'  => 'click',
+				'defaultm' => __('User has to click to toggle directories, download files, ...',PSK_S2MSFB_ID),
+				'more'     => __('Can be any javascript event like <code>mouseover</code>, ...',PSK_S2MSFB_ID),
+			),
+			array(
+				'name'     => 'hidden',
+				'desc'     => __('Show hidden files or not',PSK_S2MSFB_ID),
+				'descm'    => '',
+				'default'  => '0',
+				'defaultm' => __('Do not show hidden files',PSK_S2MSFB_ID),
+				'more'     => __('Set to <code>1</code> to display',PSK_S2MSFB_ID),
+			),
+			array(
+				'name'     => 'multifolder',
+				'desc'     => __('Whether or not to limit the browser to one subfolder at a time',PSK_S2MSFB_ID),
+				'descm'    => '',
+				'default'  => '1',
+				'defaultm' => '',
+				'more'     => __('Set to <code>0</code> to display only one open directory at a time',PSK_S2MSFB_ID),
+			),
+			array(
+				'name'     => 'names',
+				'desc'     => __('Replace files name with custom values',PSK_S2MSFB_ID),
+				'descm'    => __('Syntax : <code>realfilename_1:Custom File Name #1|...|realfilename_n:Custom File Name #n</code>',PSK_S2MSFB_ID),
+				'default'  => '',
+				'defaultm' => '',
+				'more'     => __('<code>access-s2member-level#</code> will be automatically renamed with your s2member level custom labels.',PSK_S2MSFB_ID),
+			),
+			array(
+				'name'     => 'openrecursive',
+				'desc'     => __('Whether or not to open all subdirectories when opening a directory',PSK_S2MSFB_ID),
+				'descm'    => '',
+				'default'  => '0',
+				'defaultm' => __('User has to open directories himself',PSK_S2MSFB_ID),
+				'more'     => __('Set to <code>1</code> to open recursively subdirectories when opening a directory (then all directories will be open at initialization)',PSK_S2MSFB_ID),
+			),
+			array(
+				'name'     => 's2alertbox',
+				'desc'     => __('Display the s2member confirmation box when a user tries to download a file',PSK_S2MSFB_ID),
+				'descm'    => '',
+				'default'  => '0',
+				'defaultm' => __('No confirmation box displayed',PSK_S2MSFB_ID),
+				'more'     => __('Set to <code>1</code> to display the confirmation box',PSK_S2MSFB_ID),
+			),
+
 		);
 	}
 
@@ -240,7 +257,7 @@ class PSK_S2MSFBAdminManager
 		foreach (self::$shortcode_options as $option) {
             echo '<tr>
               <td><code>' . $option['name'] . '</code></td>
-              <td>' . $option['desc'] . '<br/>' . $option['descm'] . '</td>
+              <td>' . $option['desc'] . '<br/><em class="muted">' . $option['descm'] . '</em></td>
               <td><code>'.$option['default'] . '</code><br/><em class="muted">' . $option['defaultm'] . '</em></td>
               <td>' . $option['more'] . '</td>
             </tr>';
@@ -294,6 +311,8 @@ class PSK_S2MSFBAdminManager
 
 			switch ($tagname) {
 
+				case 'displayall':
+				case 's2alertbox':
 				case 'dirfirst':
 				case 'hidden':
 				case 'multifolder':

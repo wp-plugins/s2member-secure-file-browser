@@ -23,7 +23,7 @@ if (( realpath (__FILE__) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( !de
 
 class PSK_S2MSFBAdmin
 {
-	private static $admin_menu_right = PSK_S2MSFB_ADMIN_HOME_ACCESS;
+	private static $admin_menu_right = PSK_S2MSFB_ADMIN_SETTINGS_ACCESS;
 	private static $admin_menu       = array();
 
 
@@ -132,39 +132,45 @@ class PSK_S2MSFBAdmin
 	/**
 	 * Menu Initialization
 	 * Set menu and submenus title and rights
-	 * 
+	 *
+ 	 * @param 			string      $settng			the right settings
 	 * @wp_action 		ws_plugin__s2member_during_add_admin_options_additional_pages
 	 */
-	public static function init_menu()
+	public static function init_menu( $settings )
 	{
 		self::$admin_menu = array(
 			'left' => array(
 				'stats' => array(
 					'class' => 'Stats',
+					'right' => ( @$settings['capstats'] == '' ) ? PSK_S2MSFB_ADMIN_SETTINGS_ACCESS : PSK_S2MSFB_ADMIN_SETTINGS_ACCESS . ',' . @$settings['capstats'],
 					'name' => __('Statistics',PSK_S2MSFB_ID),
 					'chil' => array(
 						'all' => array('name' => __('All downloads',PSK_S2MSFB_ID)),
+						'fil' => array('name' => __('Top files',PSK_S2MSFB_ID)),
+						'use' => array('name' => __('Top downloaders',PSK_S2MSFB_ID)),
+						'di2'		          => '',
 						'log' => array('name' => __('Current s2member Accounting',PSK_S2MSFB_ID)),
 					)
 				),
 				'manager' => array(
 					'class' => 'Manager',
+					'right' => PSK_S2MSFB_ADMIN_DOCUMENTATION_ACCESS,
 					'name' => __('Browser',PSK_S2MSFB_ID),
 					'chil' => array(
-						'browse'              => array('name' => __('Manage files',PSK_S2MSFB_ID)),
+						'browse'              => array('name' => __('Manage files',PSK_S2MSFB_ID), 'right' => ( @$settings['capmanager'] == '' ) ? PSK_S2MSFB_ADMIN_SETTINGS_ACCESS : PSK_S2MSFB_ADMIN_SETTINGS_ACCESS . ',' . @$settings['capmanager'] ),
 						'di1'                 => '',
 						'he1'                 => __('Tools',PSK_S2MSFB_ID),
-						'shortcodegenerator'  => array('name' => __('Shortcode generator',PSK_S2MSFB_ID)),
+						'shortcodegenerator'  => array('name' => __('Shortcode generator',PSK_S2MSFB_ID), 'rights' => PSK_S2MSFB_ADMIN_DOCUMENTATION_ACCESS ),
 						'di2'		          => '',
 						'he2'                 => __('Documentation',PSK_S2MSFB_ID),
-						'docshortcode'        => array('name' => __('Shortcode options',PSK_S2MSFB_ID)),
+						'docshortcode'        => array('name' => __('Shortcode options',PSK_S2MSFB_ID), 'rights' => PSK_S2MSFB_ADMIN_DOCUMENTATION_ACCESS ),
 					)
 				),
 			),
 			'right' => array(
 				'settings' => array(
 					'class' => 'Settings',
-					//'right' => 'edit_posts',
+					'right' => PSK_S2MSFB_ADMIN_SETTINGS_ACCESS,
 					'name' => __('Settings',PSK_S2MSFB_ID),
 					'chil' => array(
 						'main'          => array('name' => __('General',PSK_S2MSFB_ID)),
@@ -202,7 +208,6 @@ class PSK_S2MSFBAdmin
 	}
 
 
-
 	/**
 	 * Add menu pages according to rights
 	 *
@@ -210,9 +215,21 @@ class PSK_S2MSFBAdmin
 	 */
 	public static function admin_menu_items()
 	{
-		self::init_menu();
-		add_submenu_page('ws-plugin--s2member-start', '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'administrator', "#");
-		add_submenu_page('ws-plugin--s2member-start',PSK_S2MSFB_NAME,PSK_S2MSFB_MENUNAME,'administrator',PSK_S2MSFB_ID.'_home', array(__CLASS__,'admin_screen_home'));
+		$settings    = get_option( PSK_S2MSFB_OPT_SETTINGS_GENERAL );
+		$capablities = $settings['capstats'] . ',' . $settings['capmanager'] . ',' . PSK_S2MSFB_ADMIN_DOCUMENTATION_ACCESS;
+
+		self::init_menu( $settings );
+
+		if ( current_user_can( PSK_S2MSFB_ADMIN_SETTINGS_ACCESS ) ) {
+			add_submenu_page('ws-plugin--s2member-start' , '' , '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>' , 'administrator' , "#");
+			add_submenu_page('ws-plugin--s2member-start' , PSK_S2MSFB_NAME , PSK_S2MSFB_MENUNAME , 'administrator' , PSK_S2MSFB_ID.'_home' , array( __CLASS__ , 'admin_screen_home') );
+			$type = 'submenu';
+		}
+		else if ( PSK_Tools::current_user_cans( $capablities ) ) {
+			add_management_page( PSK_S2MSFB_NAME , PSK_S2MSFB_MENUNAME, 'read', PSK_S2MSFB_ID.'_home' , array(__CLASS__,'admin_screen_home'));
+			$type = 'management';
+		}
+
 		foreach (self::$admin_menu as $id=>$pos) {
 			if (is_array($pos)) {
 				foreach ($pos as $pid=>$parent) {
@@ -225,8 +242,15 @@ class PSK_S2MSFBAdmin
 								if (is_array($child)) {
 									$cname  = $pname.' &gt; '.$child['name'];
 									$cright = (isset($child['right'])) ? $child['right'] : $pright;
-									if (current_user_can($cright))
-										add_submenu_page('options.php',__($cname,PSK_S2MSFB_ID),'',$cright,PSK_S2MSFB_ID.'_'.$pid.'_'.$cid, array(__CLASS__.$pclass,'admin_screen_'.$pid.'_'.$cid));
+									if ( current_user_can( PSK_S2MSFB_ADMIN_SETTINGS_ACCESS ) ) {
+										add_submenu_page( 'options.php' , __($cname,PSK_S2MSFB_ID) , '' , PSK_S2MSFB_ADMIN_SETTINGS_ACCESS , PSK_S2MSFB_ID.'_'.$pid.'_'.$cid , array(__CLASS__.$pclass,'admin_screen_'.$pid.'_'.$cid) );
+									}
+									else {
+										$c = PSK_Tools::current_user_cans( $cright );
+										if ($c !== false) {
+											add_submenu_page( 'tools.php' , __($cname,PSK_S2MSFB_ID) , '' , $c , PSK_S2MSFB_ID.'_'.$pid.'_'.$cid , array(__CLASS__.$pclass,'admin_screen_'.$pid.'_'.$cid) );
+										}
+									}
 								}
 							}
 						}
@@ -256,14 +280,14 @@ class PSK_S2MSFBAdmin
 			$menu.='<ul'.$innerul.'>';
 			foreach ($pos as $pid=>$parent) {
 				$pright = (isset($parent['right'])) ? $parent['right'] : self::$admin_menu_right;
-				if (@current_user_can($pright)) {
+				if ( PSK_Tools::current_user_cans( $pright ) ) {
 		            $menu.='  <li class="dropdown">';
 		            $menu.='    <a id="'.PSK_S2MSFB_ID.$pid.'" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">'.__($parent['name'],PSK_S2MSFB_ID).'<b class="caret"></b></a>';
 		            $menu.='    <ul class="dropdown-menu" role="menu" aria-labelledby="'.PSK_S2MSFB_ID.$pid.'">';
 					foreach ($parent['chil'] as $cid=>$child) {
 						if (is_array($child)) {
 							$cright = (isset($child['right'])) ? $child['right'] : $pright;
-							if (current_user_can($cright)) {
+							if (  PSK_Tools::current_user_cans( $cright ) ) {
 								$menu.= '<li><a tabindex="-1" href="?page='.PSK_S2MSFB_ID.'_'.$pid.'_'.$cid.'">'.__($child['name'],PSK_S2MSFB_ID).'</a></li>';
 							}
 						}

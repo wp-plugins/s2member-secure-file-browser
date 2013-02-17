@@ -3,12 +3,13 @@ Contributors: Potsky
 Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
-Tested up to: 3.5
-Stable tag: 0.3.2
+Tested up to: 3.5.1
+Stable tag: 0.3.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 A plugin for browsing files from the secure-files location of the s2member WordPress Membership plugin.
+
 == Description ==
 
 s2Member Secure File Browser is a wordpress plugin for browsing files from the secure-files location of the [s2Member® WordPress Memberships](http://wordpress.org/extend/plugins/s2member/ "s2Member") plugin.
@@ -39,55 +40,25 @@ Please use the shortcode generator in the *Dashboard > s2Member Menu > Secure Fi
 **Available shortcode options**
 
 * `dirbase` : initial directory from the s2member-files directory  
-> default is /
-
 * `hidden` : show hidden files or not  
-> default is no 0  
-> set to 1 to display  
-
 * `dirfirst` : show directories above files  
-> default is yes 1  
-> set to 0 to display directories with files  
-
 * `names` : replace files name with custom values.  
-> Syntax : `realfilename_1:Custom File Name #1|...|realfilename_n:Custom File Name #n`  
-> `access-s2member-level#` will be automatically renamed with your s2member level custom labels.  
-
 * `folderevent` : event to trigger expand/collapse  
-> default is `click` (can be `mouseover`, …)  
-
 * `expandspeed` : speed of the expand folder action in ms  
-> default is `500` (ms)  
-> use `-1` for no animation  
-
 * `expandeasing` : easing function to use on expand  
-> default is `swing`  
-> can be set to `linear`  
-
 * `collapsespeed` : speed of the collapse folder action in ms  
-> default is `500` (ms)  
-> use `-1` for no animation  
-
 * `collapseeasing` : easing function to use on collapse  
-> default is `swing`  
-> can be set to `linear`  
-
 * `multifolder` : whether or not to limit the browser to one subfolder at a time  
-> default yes 1  
-> set to 0 to display only one open directory at a time  
-
 * `openrecursive` : whether or not to open all subdirectories when opening a directory  
-> default no 0  
-> set to 1 to open recursively subdirectories when opening a directory (then all directories will be open at initialization)  
-
 * `filterdir` : a full regexp directories have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
-> eg: `/(access|user)/i` or `%2F(access%7Ctata)%2Fi` when escaped  
-
 * `filterfile` : a full regexp files have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
-> eg: `/\.(png|jpe?g|gif|zip)$/i` or `%2F%5C.(png%7Cjpe%3Fg%7Cgif%7Czip)%24%2Fi` when escaped  
+* `displayall` : display all items without checking if user is granted to download them
+* `s2alertbox` : display the s2member confirmation box when a user tries to download a file
 
-All informations about these options are well documented in the `Dashboard > s2Member > Secure File Browser` panel
+All informations about these options are well documented in :
 
+* `Dashboard > s2Member > Secure File Browser` panel for admin (manage_options capability)
+* `Dashboard > Tools > Secure File Browser` panel for users
 
 
 **Example** (*A shortcode has to be defined on one line, here is on several lines below only for better understanding*) :  
@@ -112,6 +83,13 @@ All informations about these options are well documented in the `Dashboard > s2M
 You can generate a shortcode with complex options with the `Shortcode Generator` in the `Dashboard > s2Member > Secure File Browser` panel
 
 
+**Widgets**
+
+You can display a fully customizable widget for :
+
+* Top downloads
+* Latest downloads
+
 
 **Dashboard**
 
@@ -119,13 +97,15 @@ The admin panel is reachable via the *Dashboard > s2Member Menu > Secure File Br
 
 Available features are :
 
-* Statistics : display all downloads, sort and apply filters by date, user, file, IP Address, ...
+* Statistics : display all downloads/top downloads/top downloaders, sort and apply filters by date, user, file, IP Address, ...
 * Statistics : display current s2Member accounting, sort and apply filters by date, user, file and file
 * File Browser : Rename and delete files and folders
 * Shortcode generator
 * Shortcode documentation
 * Settings : Received an email each time a user downloads a file
+* Settings : Received scheduled reports
 * Settings : How many logs you want to keep ?
+* Settings : Give access to others users to some parts of the admin menu
 
 
 Don't hesitate to ask me new features or report bugs on [potsky.com](https://www.potsky.com/code/wordpress-plugins/s2member-secure-file-browser/ "Plugin page") !  
@@ -159,13 +139,11 @@ Yes ! `And access-s2member-ccap*` too !
 
 All futures requests are handled on [GitHub](https://github.com/potsky/WordPressS2MemberFileBrowser/issues?sort=comments&state=open "GitHub")
 
-Available in upcoming version 0.4 :
+Available in upcoming version 0.5 :
 
 * Upload any file in the `s2member-files` directory
 * Move, copy files and folders
 * Create directories
-* Notification daily reports
-* Manage rights for stats and browser panel
 
 
 == Screenshots ==
@@ -177,10 +155,22 @@ Available in upcoming version 0.4 :
 5. Admin > Download statistics
 6. Admin > Shortcode generator
 7. Admin > Shortcode documentation
-8. Admin > General settings for logs management
+8. Admin > General settings for logs management and access
 9. Admin > Notification settings for email reporting
+10. Widget
 
 == Changelog ==
+
+= 0.3.5 =
+* New feature : New admin submenu with top rated downloads, higher downloaders, ...
+* New feature : New shortcode option to display the s2member alert box before a download
+* New feature : New shortcode option to let people view directories but must be logged in to download
+* New feature : Add rights in settings for file manager and stats access
+* New feature : Widget for top downloads or latest downloads
+* New feature : Notification daily reports
+* Enhancement : HTML entities for email reports
+* Enhancement : Add WP and PHP version checks
+* Security fix : Protect plugin subdirectories
 
 = 0.3.2 =
 * Hotfix for recursive browsing
@@ -216,6 +206,9 @@ Available in upcoming version 0.4 :
 * First release
 
 == Upgrade Notice ==
+
+= 0.3.5 =
+A lot of new features ! Upgrade now, seriously, it rocks !
 
 = 0.3.2 =
 This version fixes a serious browsing bug. Upgrade immediately.

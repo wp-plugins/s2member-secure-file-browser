@@ -48,6 +48,8 @@ class PSK_S2MSFB
 	private static $displayed_directory_names    = array();
 	private static $filterfile                   = '';
 	private static $filterdir                    = '';
+	private static $display_all_levels           = '';
+	private static $display_s2alertbox           = '';
 
 	/**
 	* Initialization
@@ -70,6 +72,7 @@ class PSK_S2MSFB
 		add_action( PSK_S2MSFB_ID.'_enable_wp_cron_hook'			, array( __CLASS__ , 'enable_cron'       ) ); // Create a hook to enable cron
 		add_action( PSK_S2MSFB_ID.'_disable_wp_cron_hook'			, array( __CLASS__ , 'disable_cron'      ) ); // Create a hook to disable cron
 		add_action( PSK_S2MSFB_ID . '_cron_db_clean_download_hook'  , array( __CLASS__ , 'db_clean_download' ) ); // Create a hook to delete old logs
+		add_action( PSK_S2MSFB_ID . '_cron_report'                  , array( __CLASS__ , 'notify_report'     ) ); // Create a hook to send a report by email
 
 		add_action('init'									        , array( __CLASS__ , 'plugin_init'       ) );
 		add_action('plugins_loaded'									, array( __CLASS__ , 'plugins_loaded'    ) );
@@ -81,6 +84,8 @@ class PSK_S2MSFB
 		add_action('wp_ajax_admin_'.PSK_S2MSFB_ID.'_get_dir'  		, array( __CLASS__ , 'ajax_admin_get_directory' ) );  // dashboard
 		add_action('wp_ajax_admin_'.PSK_S2MSFB_ID.'_df'       		, array( __CLASS__ , 'ajax_admin_delete_file'   ) );  // dashboard
 		add_action('wp_ajax_admin_'.PSK_S2MSFB_ID.'_rf'       		, array( __CLASS__ , 'ajax_admin_rename_file'   ) );  // dashboard
+
+		add_action('widgets_init'                                   , create_function( '', 'register_widget( "PSK_S2MSFB_wdgt_download" );' ) );
 
 		// Create shortcodes
 		//
@@ -185,9 +190,46 @@ class PSK_S2MSFB
 	 */
 	static public function enable_cron()
 	{
+		// Report : send email
+		$settings = get_option( PSK_S2MSFB_OPT_SETTINGS_NOTIFY );
+		if ( @$settings['reportfrequency'] != '' ) {
+			if ( ! wp_next_scheduled( PSK_S2MSFB_ID . '_cron_report' ) ) {
+				$report_hour  = (int) @$settings['reporthour'];
+				switch ($settings['reportfrequency']) {
+					case 'm':
+						$when         = mktime( $report_hour , 0 , 0 , date("m")+1 , 1);
+						break;
+					case 'w':
+						$when         = strtotime('next monday '.$report_hour.' hour');
+						break;
+					default:
+						$report_today = mktime( $report_hour , 0 , 0 , date("m") , date("d") , date("Y") );
+						$now          = mktime() + get_option('gmt_offset') * 3600;
+						$when         = ( $now < $report_today ) ? $report_today : mktime( $report_hour , 0 , 0 , date("m") , date("d")+1 , date("Y") );
+						break;
+				}
+
+				//error_log("Report scheduled on ".date('r', $when));
+				$when -= get_option('gmt_offset') * 3600;
+				//error_log("Report scheduled on ".date('r', $when) . 'GMT');
+				wp_schedule_single_event( $when, PSK_S2MSFB_ID . '_cron_report' );
+			}
+			else {
+				//$when = wp_next_scheduled( PSK_S2MSFB_ID . '_cron_report' );
+				//error_log("Report already scheduled on ".date('r',$when).' GMT');
+				//$when += get_option('gmt_offset') * 3600;
+				//error_log("Report already scheduled on ".date('r',$when));
+			}
+		}
+		else {
+			//error_log("Report scheduled deactivated");
+		}
+
+		// DB : Clean downloads
 		if ( ! wp_next_scheduled( PSK_S2MSFB_ID . '_cron_db_clean_download_hook' ) ) {
 			wp_schedule_event( time(), 'hourly', PSK_S2MSFB_ID . '_cron_db_clean_download_hook');
 		}
+
 	}
 
 
@@ -201,6 +243,8 @@ class PSK_S2MSFB
 	{
 		$timestamp = wp_next_scheduled(  PSK_S2MSFB_ID . '_cron_db_clean_download_hook' );
 		wp_unschedule_event( $timestamp, PSK_S2MSFB_ID . '_cron_db_clean_download_hook' );
+		$timestamp = wp_next_scheduled(  PSK_S2MSFB_ID . '_cron_report' );
+		wp_unschedule_event( $timestamp, PSK_S2MSFB_ID . '_cron_report' );
 	}
 
 
@@ -333,6 +377,7 @@ class PSK_S2MSFB
 			$current = PSK_S2MSFB_S2MEMBER_FILES_FOLDER;
 		}
 
+		self::$display_all_levels        = (@$_POST['displayall']=='1') ? true : false;
 		self::$display_hidden_files      = (@$_POST['hidden']=='1') ? true : false;
 		self::$display_directory_first   = (@$_POST['dirfirst']=='0') ? false : true;
 		self::$openrecursive             = (@$_POST['openrecursive']=='1') ? true : false;
@@ -364,9 +409,9 @@ class PSK_S2MSFB
 	 */
 	private static function recursive_directory( $current , $dirbase , $dir_rel )
 	{
-error_log($current);
-error_log($dirbase);
-error_log($dir_rel);
+		//error_log($current);
+		//error_log($dirbase);
+		//error_log($dir_rel);
 
 		$dir = $current . $dir_rel;
 
@@ -417,16 +462,22 @@ error_log($dir_rel);
 				}
 
 
-				// Check if the file is allowed by s2member level
+				// Check for granted access only if with have to display all informations
 				//
-				if ( in_array( $file,self::$directory_s2_level ) ) {
-					if ( current_user_cannot(self::$directory_s2_level_to_rights[$file]) ) continue;
-				}
+				if ( ! self::$display_all_levels ) {
 
-				// Check if the file is allowed by s2member custom capability
-				//
-				if ( PSK_Tools::starts_with( $file , PSK_S2MSFB_S2MEMBER_CCAP_FOLDER ) ) {
-					if ( current_user_cannot( str_replace( PSK_S2MSFB_S2MEMBER_CCAP_FOLDER, PSK_S2MSFB_S2MEMBER_CCAP_RIGHTS , $file)) ) continue;
+					// Check if the file is allowed by s2member level
+					//
+					if ( in_array( $file , self::$directory_s2_level ) ) {
+						if ( current_user_cannot( self::$directory_s2_level_to_rights[$file] ) ) continue;
+					}
+
+					// Check if the file is allowed by s2member custom capability
+					//
+					if ( PSK_Tools::starts_with( $file , PSK_S2MSFB_S2MEMBER_CCAP_FOLDER ) ) {
+						if ( current_user_cannot( str_replace( PSK_S2MSFB_S2MEMBER_CCAP_FOLDER, PSK_S2MSFB_S2MEMBER_CCAP_RIGHTS , $file)) ) continue;
+					}
+
 				}
 
 				// Set the displayed name acoording to user shortcode parameters and next s2level names
@@ -467,8 +518,8 @@ error_log($dir_rel);
 				}
 
 				else {
+					$link  = PSK_Tools::rel_literal( s2member_file_download_url( array('file_download'=>$filepathrelbase) ) );
 					$ext   = PSK_Tools::rel_literal( preg_replace('/^.*\./', '', $file) );
-					$link  = PSK_Tools::rel_literal( s2member_file_download_url( array("file_download" => $filepathrelbase ) ) );
 					$size  = filesize( $filepath );
 					$hsize = PSK_Tools::size_readable( $size );
 					$size  = PSK_Tools::rel_literal( $size );
@@ -517,12 +568,12 @@ error_log($dir_rel);
 		$i = self::$shortcode_instance;
 		self::$shortcode_instance++;
 
-		$rt = '
-		<div id="'.PSK_S2MSFB_ID.$i.'" class="psk_jfiletree"></div>
-		<script type="text/javascript">
-		jQuery(document).ready(function(){jQuery("#'.PSK_S2MSFB_ID.$i.'").fileTree({
-			root:"'.DIRECTORY_SEPARATOR.'",
-			loadmessage:"'.esc_attr__("Please wait while loading...",PSK_S2MSFB_ID).'"';
+		$rt = '';
+		$rt.= '<div id="' . PSK_S2MSFB_ID . $i . '" class="psk_jfiletree"></div>';
+		$rt.= '<script type="text/javascript">';
+		$rt.= 'jQuery(document).ready(function($){$("#' . PSK_S2MSFB_ID . $i . '").fileTree({';
+		$rt.= '	root:"' . DIRECTORY_SEPARATOR . '",';
+		$rt.= '	loadmessage:"'.esc_attr__("Please wait while loading...", PSK_S2MSFB_ID ) . '"';
 
 		if (is_array($atts)) {
 			foreach ($atts as $param=>$value) {
@@ -530,19 +581,177 @@ error_log($dir_rel);
 			}
 		}
 
-		$rt.= '}, function(link) {document.location.href=link;});});
-		</script>';
+		$rt.= '}, function(link) {';
+
+		if ( @$atts['s2alertbox'] == '1' ) {
+			$rt.= 'var skipAllFileConfirmations = ( typeof ws_plugin__s2member_skip_all_file_confirmations !== "undefined" && ws_plugin__s2member_skip_all_file_confirmations) ? true : false;';
+			$rt.= 'var uniqueFilesDownloadedInPage = [];';
+			$rt.= 'if (S2MEMBER_CURRENT_USER_IS_LOGGED_IN && S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY < S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED && !skipAllFileConfirmations) {';
+			$rt.= '		var c = "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Confirm File Download —", "s2member-front", "s2member")) . '" + "\n\n";';
+			$rt.= '		c += $.sprintf ("' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`ve downloaded %s protected %s in the last %s.", "s2member-front", "s2member")) . '", S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY, (S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY === 1) ? "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("file", "s2member-front", "s2member")) . '" : "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("files", "s2member-front", "s2member")) . '", ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS === 1) ? "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("24 hours", "s2member-front", "s2member")). '" : $.sprintf ("' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("%s days", "s2member-front", "s2member")). '", S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS))) + "\n\n";';
+			$rt.= '		c += (S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED) ? "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to UNLIMITED downloads though ( so, no worries ).", "s2member-front", "s2member")). '" : $.sprintf ("' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to %s unique %s %s.", "s2member-front", "s2member")). '", S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED, ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED === 1) ? "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("download", "s2member-front", "s2member")). '" : "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("downloads", "s2member-front", "s2member")). '"), ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS === 1) ? "' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("each day", "s2member-front", "s2member")). '" : $.sprintf ("' . c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("every %s-day period", "s2member-front", "s2member")). '", S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS)));';
+			$rt.= '		if (confirm(c)) {';
+			$rt.= '			if ($.inArray (this.href, uniqueFilesDownloadedInPage) === -1) {';
+			$rt.= '				S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY++, uniqueFilesDownloadedInPage.push (this.href);';
+			$rt.= '			}';
+			$rt.= '			document.location.href = link;';
+			$rt.= '		}';
+			$rt.= '} else {';
+			$rt.= '		document.location.href = link;';
+			$rt.= '}';
+		}
+
+		else {
+			$rt.= 'document.location.href = link;';
+		}
+
+		$rt.= '}); });';
+		$rt.= '</script>';
 
 		if (is_admin()) {
-			$rt.='<div id="pskModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="pskModalLabel" aria-hidden="true">
-			  <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3 id="pskModalLabel"></h3></div>
-			  <div class="modal-body" id="pskModalBody"></div>
-			  <div class="modal-footer"><button class="btn" data-dismiss="modal" aria-hidden="true" id="pskModalCancel">Cancel</button><button class="btn btn-primary" id="pskModalSave"></button></div>
-			</div>';
+			$rt.= '<div id="pskModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="pskModalLabel" aria-hidden="true">';
+			$rt.= ' <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3 id="pskModalLabel"></h3></div>';
+			$rt.= ' <div class="modal-body" id="pskModalBody"></div>';
+			$rt.= ' <div class="modal-footer"><button class="btn" data-dismiss="modal" aria-hidden="true" id="pskModalCancel">Cancel</button><button class="btn btn-primary" id="pskModalSave"></button></div>';
+			$rt.= '</div>';
 		}
 
 		return $rt;
 	}
+
+
+
+
+
+
+	/**
+	 * This method is called when a report is sent by cron
+	 *
+	 * @return      void
+	 */
+	public static function notify_report()
+	{
+		global $wpdb;
+
+		$settings = get_option( PSK_S2MSFB_OPT_SETTINGS_NOTIFY );
+
+		if ( @$settings['reportfrequency'] != '' ) {
+
+			$emailfrom   = ( $settings['reportemailfrom'] =='' )  ? PSK_S2MSFB_DEFAULT_EMAIL_REPORT_FROM : $settings['emailfrom'];
+			$subject     = ( $settings['reportsubject'] =='' )    ? PSK_S2MSFB_DEFAULT_EMAIL_REPORT_SUBJECT : $settings['subject'];
+			$emailto     = ( $settings['reportemailto'] =='' )    ? PSK_S2MSFB_DEFAULT_EMAIL_REPORT_TO : $settings['emailto'];
+
+			$subject = str_replace('%blogname%',get_bloginfo('name'),$subject);
+			$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
+
+			$msg = '';
+
+			foreach (get_users() as $user)
+				$users[$user->ID] = $user->display_name;
+
+
+			// Block unnotified rows now
+			//
+			$now = date( 'Y-m-d H:i:s' );
+			$how = $wpdb->update(
+				$wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME,
+				array( 'notified' => $now ),
+				array( 'notified' => 0 ),
+				array( '%s' ),
+				array( '%d' )
+			);
+
+			if ($how>0) {
+
+				// Dates
+				//
+				$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+				$sql       = "SELECT timestamp(MIN(created)) A, timestamp(MAX(created)) B FROM $tablename WHERE notified='$now'";
+				$result    = $wpdb->get_row( $sql , ARRAY_N );
+
+				if ($result != null ) {
+
+					// From To
+					//
+					$msg .= '<h2>' . sprintf( __('Stats from %s to %s' , PSK_S2MSFB_ID) , $result[0] , $result[1]) . '</h2>';
+
+					// Top files
+					//
+					$msg      .= '<h3>' . __( 'Top files',PSK_S2MSFB_ID) . '</h3>';
+					$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+					$sql       = "SELECT filepath, COUNT(*) A FROM $tablename WHERE notified='$now' GROUP BY filepath ORDER BY A DESC";
+					$result    = $wpdb->get_results( $sql , ARRAY_A );
+					if (count($result)==0) {
+						$msg.= __("No download",S2MSFB_ID);
+					}
+					else {
+						$msg.= '<table border="1" cellpadding="2" cellspacing="0">';
+						$msg.= '<tr>';
+						$msg.= '  <th>' . __('File',PSK_S2MSFB_ID) . '</th>';
+						$msg.= '  <th>' . __('Count',PSK_S2MSFB_ID) . '</th>';
+						$msg.= '</tr>';
+						foreach($result as $row) {
+							$msg.= '<tr>';
+							$msg.= '  <td>' . PSK_Tools::mb_html_entities( $row['filepath'] ) . '</td>';
+							$msg.= '  <td>' . $row['A'] 		 . '</td>';
+							$msg.= '</tr>';
+							$total += (int)$row['A'];
+						}
+						$msg.= '</table>';
+					}
+
+
+					// Top downloaders
+					//
+					$msg      .= '<h3>' . __( 'Top downloaders',PSK_S2MSFB_ID) . '</h3>';
+					$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+					$sql       = "SELECT userid, COUNT(*) A FROM $tablename WHERE notified='$now' GROUP BY userid ORDER BY A DESC";
+					$result    = $wpdb->get_results( $sql , ARRAY_A );
+					if (count($result)==0) {
+						$msg.= __("No download",S2MSFB_ID);
+					}
+					else {
+						$msg.= '<table border="1" cellpadding="2" cellspacing="0">';
+						$msg.= '<tr>';
+						$msg.= '  <th>' . __('User',PSK_S2MSFB_ID) . '</th>';
+						$msg.= '  <th>' . __('Count',PSK_S2MSFB_ID) . '</th>';
+						$msg.= '</tr>';
+						foreach($result as $row) {
+							if (isset($users[$row['userid']])) {
+								$user = $users[$row['userid']];
+							} else {
+								$user = $row['useremail'].' - #'.$row['userid'];
+							}
+							$msg.= '<tr>';
+							$msg.= '  <td>' . $user     . '</td>';
+							$msg.= '  <td>' . $row['A'] . '</td>';
+							$msg.= '</tr>';
+							$total += (int)$row['A'];
+						}
+						$msg.= '</table>';
+					}
+				}
+				else {
+					$msg.= __( "No download" , S2MSFB_ID );
+				}
+			}
+
+			if ($msg=='') {
+				$msg = __( 'No data to report' , PSK_S2MSFB_ID );
+			}
+
+			$headers = 'From: '.$emailfrom.' <'.$emailfrom.'>' . "\r\n";
+			$headers.= 'Sender: '.$emailfrom.' <'.$emailfrom.'>' . "\r\n";
+			$headers.= "Content-type: text/html; charset=UTF-8;"."\r\n";
+
+			$tos = explode(',',$emailto);
+			foreach ($tos as $to) {
+				//error_log("Send email to ".$to);
+		        wp_mail($to,$subject,$msg,$headers);
+			}
+		}
+	}
+
 
 
 	/**
@@ -556,6 +765,13 @@ error_log($dir_rel);
 		global $wpdb;
 
 		if (isset($_GET["s2member_file_download"])) {
+
+			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_LATEST_ID );
+			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP0_ID );
+			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP1_ID );
+			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP7_ID );
+			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP31_ID );
+			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP365_ID );
 
 			$file    = stripslashes($_GET["s2member_file_download"]);
 			$user_id = $vars["user_id"];
@@ -579,9 +795,9 @@ error_log($dir_rel);
 			//
 			$settings = get_option( PSK_S2MSFB_OPT_SETTINGS_NOTIFY );
 			if ($settings['emailnotify']=='1') {
-				$emailfrom   = ($settings['emailfrom']=='') ? get_option('admin_email') : $settings['emailfrom'];
-				$emailto     = ($settings['emailto']=='') ? get_option('admin_email') : $settings['emailto'];
-				$subject     = ($settings['subject']=='') ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_SUBJECT : $settings['subject'];
+				$emailfrom   = ($settings['emailfrom']=='') ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_FROM    : $settings['emailfrom'];
+				$emailto     = ($settings['emailto']=='')   ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_TO      : $settings['emailto'];
+				$subject     = ($settings['subject']=='')   ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_SUBJECT : $settings['subject'];
 
 				$subject = str_replace('%blogname%',get_bloginfo('name'),$subject);
 				$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
@@ -591,12 +807,12 @@ error_log($dir_rel);
 				$msg = __( 'A file has been downloaded',PSK_S2MSFB_ID);
 				$msg.= '<table>';
 		    	$msg.= '<tr><th align="right">' . __( 'Download Time'     , PSK_S2MSFB_ID ) . ' : </th><td>' . $dt . '</td></tr>';
-		    	$msg.= '<tr><th align="right">' . __( 'File downloaded'   , PSK_S2MSFB_ID ) . ' : </th><td>' . $file . '</td></tr>';
+		    	$msg.= '<tr><th align="right">' . __( 'File downloaded'   , PSK_S2MSFB_ID ) . ' : </th><td>' . htmlentities( $file ) . '</td></tr>';
 		    	$msg.= '<tr><th align="right">' . __( 'User ID'           , PSK_S2MSFB_ID ) . ' : </th><td>' . $user->ID . '</td></tr>';
 				$msg.= '<tr><th align="right">' . __( 'User Login'        , PSK_S2MSFB_ID ) . ' : </th><td>' . $user->user_login . '</td></tr>';
-				$msg.= '<tr><th align="right">' . __( 'User Email'        , PSK_S2MSFB_ID ) . ' : </th><td>' . $user->user_email . '</td></tr>';
-				$msg.= '<tr><th align="right">' . __( 'User Nice name'    , PSK_S2MSFB_ID ) . ' : </th><td>' . $user->user_nicename . '</td></tr>';
-				$msg.= '<tr><th align="right">' . __( 'User Display name' , PSK_S2MSFB_ID ) . ' : </th><td>' . $user->display_name . '</td></tr>';
+				$msg.= '<tr><th align="right">' . __( 'User Email'        , PSK_S2MSFB_ID ) . ' : </th><td>' . htmlentities( $user->user_email ) . '</td></tr>';
+				$msg.= '<tr><th align="right">' . __( 'User Nice name'    , PSK_S2MSFB_ID ) . ' : </th><td>' . htmlentities( $user->user_nicename ) . '</td></tr>';
+				$msg.= '<tr><th align="right">' . __( 'User Display name' , PSK_S2MSFB_ID ) . ' : </th><td>' . htmlentities( $user->display_name ) . '</td></tr>';
 				$msg.= '<tr><th align="right">' . __( 'User IP'           , PSK_S2MSFB_ID ) . ' : </th><td>' . $ip . '</td></tr>';
 				$msg.= '</table>';
 
@@ -635,6 +851,7 @@ error_log($dir_rel);
 				useremail VARCHAR(100) NOT NULL,
 				ip VARCHAR(100) NOT NULL,
 				filepath VARCHAR(4000) NOT NULL,
+				notified TIMESTAMP,
 				PRIMARY KEY  (id)
 			) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
 

@@ -5,8 +5,8 @@ Plugin URI: http://www.potsky.com/code/wordpress-plugins/s2member-secure-file-br
 Description:	A plugin for browsing files from the secure-files location of the s2member WordPress Membership plugin.  
 				You can display the file browser via the shortcode [s2member_secure_files_browser /].  
 				You can manage files and get statistics in the Dashboard > s2Member > Secure File Browser  
-Version: 0.3.2
-Date: 2013-01-04
+Version: 0.3.5
+Date: 2013-02-17
 Author: Potsky
 Author URI: http://www.potsky.com/about/
 Licence:
@@ -26,9 +26,6 @@ Licence:
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//--> Wordpress 3.3 is required because we load javascripts and css from the shortcode directly
-
-
 if (( realpath (__FILE__) === realpath( $_SERVER["SCRIPT_FILENAME"] ) )
 	||
 	( !defined( 'ABSPATH' ) )
@@ -37,17 +34,30 @@ if (( realpath (__FILE__) === realpath( $_SERVER["SCRIPT_FILENAME"] ) )
 	exit;
 }
 
+// Verify if s2member is active
+//
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 if ( is_plugin_active( 's2member/s2member.php' ) ) {
 
 	define( 'PSK_S2MSFB_PLUGIN_FILE' , __FILE__ );
 	require( 'inc/define.php' );
-	require( PSK_S2MSFB_INCLUDES_FOLDER	. 'tools.class.php' );
 
-	require( PSK_S2MSFB_CLASSES_FOLDER	. 'psk_s2msfb.class.php' );
-
-	if (is_admin()) {
-		require( PSK_S2MSFB_CLASSES_FOLDER		. 'psk_s2msfb.admin.class.php' );
+	// Verify versions
+	//
+	if(!version_compare(PHP_VERSION, PSK_S2MSFB_MIN_PHP_VERSION, ">=")) {
+		add_action("all_admin_notices", create_function('', 'echo \'<div class="error fade"><p>You need PHP v\' . PSK_S2MSFB_MIN_PHP_VERSION . \'+ to use \' . PSK_S2MSFB_NAME . \'.</p></div>\';'));
+	}
+	else if(!version_compare(get_bloginfo("version"), PSK_S2MSFB_MIN_WP_VERSION, ">=")) {
+		add_action("all_admin_notices", create_function('', 'echo \'<div class="error fade"><p>You need WordPress® v\' . PSK_S2MSFB_MIN_WP_VERSION . \'+ to use \' . PSK_S2MSFB_NAME . \'.</p></div>\';'));
+	}
+	else {
+		require( PSK_S2MSFB_INCLUDES_FOLDER	. 'tools.class.php' );
+		require( PSK_S2MSFB_CLASSES_FOLDER	. 'psk_s2msfb.widgets.class.php' );
+		require( PSK_S2MSFB_CLASSES_FOLDER	. 'psk_s2msfb.class.php' );
+		if (is_admin()) {
+			require( PSK_S2MSFB_CLASSES_FOLDER		. 'psk_s2msfb.admin.class.php' );
+		}
 	}
 
 }
+

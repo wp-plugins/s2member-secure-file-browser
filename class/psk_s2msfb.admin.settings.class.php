@@ -68,7 +68,7 @@ class PSK_S2MSFBAdminSettings
 	 */
 	public static function admin_screen_settings_main() {
 
-		$days = array(
+		$retention_days = array(
 			0	=>	__('Do not delete'	, PSK_S2MSFB_ID ),
 			7	=>	__('Keep 1 week'	, PSK_S2MSFB_ID ),
 			31	=>	__('Keep 1 month'	, PSK_S2MSFB_ID ),
@@ -83,6 +83,8 @@ class PSK_S2MSFBAdminSettings
 		$settings   = get_option( PSK_S2MSFB_OPT_SETTINGS_GENERAL );
 		$maxcount   = (int)$settings['maxcount'];
 		$retention  = (int)$settings['retention'];
+		$capstats   = ( @$settings['capstats'] == '' ) ? PSK_S2MSFB_ADMIN_SETTINGS_ACCESS : @$settings['capstats'];
+		$capmanager = ( @$settings['capmanager'] == '' ) ? PSK_S2MSFB_ADMIN_SETTINGS_ACCESS : @$settings['capmanager'];
 
 		if (isset($_POST['action'])) {
 
@@ -91,6 +93,8 @@ class PSK_S2MSFBAdminSettings
 			$action     = $_POST['action'];
 			$maxcount   = (int)$_POST['maxcount'];
 			$retention  = (int)$_POST['retention'];
+			$capstats   = $_POST['capstats'];
+			$capmanager = $_POST['capmanager'];
 
 			switch ( $action ) {
 
@@ -100,6 +104,8 @@ class PSK_S2MSFBAdminSettings
 						update_option( PSK_S2MSFB_OPT_SETTINGS_GENERAL , array(
 							'maxcount'		=> $maxcount,
 							'retention'		=> $retention,
+							'capstats'		=> $capstats,
+							'capmanager'	=> $capmanager,
 						) );
 						echo PSK_Tools::get_js_alert( __('Success!',PSK_S2MSFB_ID) , __('General settings saved',PSK_S2MSFB_ID), 'success');
 					}
@@ -139,7 +145,7 @@ class PSK_S2MSFBAdminSettings
 		echo '      <label class="control-label" for="retention">'.__('Logs retention',PSK_S2MSFB_ID).'</label>';
 		echo '      <div class="controls">';
 		echo '        <select id="retention" name="retention">';
-		foreach ($days as $day=>$val) {
+		foreach ($retention_days as $day=>$val) {
 			$sel = ($retention==$day) ? ' selected="selected"' : "";
 			echo '			<option value="' . $day . '"' . $sel . '>' . $val . '</option>';
 		}
@@ -148,7 +154,38 @@ class PSK_S2MSFBAdminSettings
 		echo '      </div>';
 		echo '    </div>';
 
+		global $wpdb;
+		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+		$sql       = "SELECT COUNT(*) FROM $tablename";
+		$result    = $wpdb->get_row( $sql , ARRAY_N );
+		echo '  <span class="help-inline"><em>' . sprintf( __( 'There are %s records now' , PSK_S2MSFB_ID ) , $result[0] ) . '</em></span>';
+
   		echo '  </fieldset>';
+
+  		echo '<br/>';
+
+		echo '  <fieldset>';
+		echo '    <legend>'.__('Access settings',PSK_S2MSFB_ID).'</legend>';
+
+		echo '    <div class="control-group">';
+		echo '      <label class="control-label" for="capstats">'.__('Stats capabilities',PSK_S2MSFB_ID).'</label>';
+		echo '      <div class="controls">';
+		echo '        <input type="text"  name="capstats" id="capstats" placeholder="' . esc_attr(PSK_S2MSFB_ADMIN_SETTINGS_ACCESS) . '" value="' . esc_attr($capstats) . '" required="required" />';
+		echo '        <span class="help-inline"><em>' . __('Separate requested capabilities with coma',PSK_S2MSFB_ID) . ' (<a href="http://codex.wordpress.org/Roles_and_Capabilities#Capabilities">'. __( 'Available capabilities here', PSK_S2MSFB_ID ) .'</a>)</em></span>';
+		echo '      </div>';
+		echo '    </div>';
+
+		echo '    <div class="control-group">';
+		echo '      <label class="control-label" for="capmanager">'.__('File management capabilities',PSK_S2MSFB_ID).'</label>';
+		echo '      <div class="controls">';
+		echo '        <input type="text"  name="capmanager" id="capmanager" placeholder="' . esc_attr(PSK_S2MSFB_ADMIN_SETTINGS_ACCESS) . '" value="' . esc_attr($capmanager) . '" required="required" />';
+		echo '        <span class="help-inline"><em>' . __('Separate requested capabilities with coma',PSK_S2MSFB_ID) . ' (<a href="http://codex.wordpress.org/Roles_and_Capabilities#Capabilities">'. __( 'Available capabilities here', PSK_S2MSFB_ID ) .'</a>)</em></span>';
+		echo '      </div>';
+		echo '    </div>';
+
+  		echo '  </fieldset>';
+
+
 
   		echo '  <br/>';
 		echo '  <button type="submit" class="btn btn-primary">'.__('Save Changes',PSK_S2MSFB_ID).'</button>';
@@ -165,23 +202,40 @@ class PSK_S2MSFBAdminSettings
 	 */
 	public static function admin_screen_settings_notification() {
 
+		$report_frequencies = array(
+			"" 	=> __('Never',PSK_S2MSFB_ID),
+			"d"	=> __('Daily',PSK_S2MSFB_ID),
+			"w"	=> __('Weekly',PSK_S2MSFB_ID),
+			"m"	=> __('Monthly',PSK_S2MSFB_ID),
+		);
+
 		echo PSK_S2MSFBAdmin::get_admin_header(__METHOD__);
 
-		$settings    = get_option( PSK_S2MSFB_OPT_SETTINGS_NOTIFY );
-		$emailfrom   = ($settings['emailfrom']=='') ? get_option('admin_email') : $settings['emailfrom'];
-		$subject     = ($settings['subject']=='') ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_SUBJECT : $settings['subject'];
-		$emailto     = ($settings['emailto']=='') ? get_option('admin_email') : $settings['emailto'];
-		$emailnotify = ($settings['emailnotify']!='1') ? '0' : '1' ;
+		$settings          = get_option( PSK_S2MSFB_OPT_SETTINGS_NOTIFY );
+		$emailfrom         = ( $settings['emailfrom'] =='' )        ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_FROM : $settings['emailfrom'];
+		$subject           = ( $settings['subject'] =='' )          ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_SUBJECT : $settings['subject'];
+		$emailto           = ( $settings['emailto'] =='' )          ? PSK_S2MSFB_DEFAULT_EMAIL_DOWNLOAD_TO : $settings['emailto'];
+		$emailnotify       = ( $settings['emailnotify'] !='1' )     ? '0' : '1' ;
+		$reportemailfrom   = ( $settings['reportemailfrom'] =='' )  ? PSK_S2MSFB_DEFAULT_EMAIL_REPORT_FROM : $settings['emailfrom'];
+		$reportsubject     = ( $settings['reportsubject'] =='' )    ? PSK_S2MSFB_DEFAULT_EMAIL_REPORT_SUBJECT : $settings['subject'];
+		$reportemailto     = ( $settings['reportemailto'] =='' )    ? PSK_S2MSFB_DEFAULT_EMAIL_REPORT_TO : $settings['emailto'];
+		$reportfrequency   = @$settings['reportfrequency'];
+		$reporthour        = @$settings['reporthour'];
 
 		if (isset($_POST['action'])) {
 
 			check_admin_referer( __CLASS__.__METHOD__ );
 
-			$action      = $_POST['action'];
-			$emailfrom   = trim($_POST['emailfrom']);
-			$emailto     = trim($_POST['emailto']);
-			$emailnotify = $_POST['emailnotify'];
-			$subject     = $_POST['subject'];
+			$action            = $_POST['action'];
+			$emailfrom         = trim($_POST['emailfrom']);
+			$emailto           = trim($_POST['emailto']);
+			$emailnotify       = $_POST['emailnotify'];
+			$subject           = $_POST['subject'];
+			$reportemailfrom   = trim($_POST['reportemailfrom']);
+			$reportemailto     = trim($_POST['reportemailto']);
+			$reportfrequency   = $_POST['reportfrequency'];
+			$reporthour        = $_POST['reporthour'];
+			$reportsubject     = $_POST['reportsubject'];
 
 			switch ( $action ) {
 
@@ -207,22 +261,51 @@ class PSK_S2MSFBAdminSettings
 						}
 					}
 
+					if ( is_email($reportemailfrom) != $reportemailfrom ) {
+						echo PSK_Tools::get_js_alert( __('Error!',PSK_S2MSFB_ID) , sprintf( __('From report email address %s is invalid',PSK_S2MSFB_ID) , $reportemailfrom ) , 'error' , 60000 );
+						$form_is_valid = false;
+					}
+
+					$addresses = explode( ',' , $reportemailto );
+					$reportcleanaddr = array();
+					foreach ($addresses as $address) {
+						$address = trim($address);
+						if ( is_email( $address ) == $address ) {
+							$reportcleanaddr[] = $address;
+						}
+						else {
+							echo PSK_Tools::get_js_alert( __('Error!',PSK_S2MSFB_ID) , sprintf( __('Notify report email address %s is invalid',PSK_S2MSFB_ID) , $reportaddress ) , 'error' , 60000 );
+							$form_is_valid = false;
+						}
+					}
+
+
 					if ($form_is_valid===true) {
-						$emailto = implode(',',$cleanaddr);
+						$emailto       = implode( ',' , $cleanaddr );
+						$reportemailto = implode( ',' , $reportcleanaddr );
 						update_option( PSK_S2MSFB_OPT_SETTINGS_NOTIFY , array(
-							'subject'		=> $subject,
-							'emailfrom'		=> $emailfrom,
-							'emailto'		=> $emailto,
-							'emailnotify'	=> $emailnotify,
+							'subject'			=> $subject,
+							'emailfrom'			=> $emailfrom,
+							'emailto'			=> $emailto,
+							'emailnotify'		=> $emailnotify,
+							'reportsubject'		=> $reportsubject,
+							'reportemailfrom'	=> $reportemailfrom,
+							'reportemailto'		=> $reportemailto,
+							'reportfrequency'	=> $reportfrequency,
+							'reporthour'		=> $reporthour,
 						) );
 						echo PSK_Tools::get_js_alert( __('Success!',PSK_S2MSFB_ID) , __('Notification settings saved',PSK_S2MSFB_ID), 'success');
 					}
+
+					$timestamp = wp_next_scheduled(  PSK_S2MSFB_ID . '_cron_report' );
+					wp_unschedule_event( $timestamp, PSK_S2MSFB_ID . '_cron_report' );
+					PSK_S2MSFB::enable_cron();
+
 					break;
 			}
 		}
 
 		$emailnotify = ($emailnotify=='1') ? ' checked="checked"' : "";
-//;
 
 		echo '<form class="form-horizontal" action="" method="post">';
 		echo '  <input type="hidden" name="action" value="update"/>';
@@ -261,20 +344,62 @@ class PSK_S2MSFBAdminSettings
 		echo '  <fieldset>';
 		echo '    <legend>' . __('Notification reports',PSK_S2MSFB_ID) . '</legend>';
 		echo '    <div class="control-group">';
+		echo '      <label class="control-label" for="reportFrequency">' . __('Report Frequency',PSK_S2MSFB_ID) . '</label>';
 		echo '      <div class="controls">';
-		echo __('Soon available',PSK_S2MSFB_ID);
+		echo '          <select name="reportfrequency">';
+		foreach ($report_frequencies as $i=>$val) {
+            echo '<option value="' . $i . '"' . selected( $reportfrequency, $i , false ) . '>' .$val . '</option>';
+		}
+		echo '          </select>';
 		echo '      </div>';
 		echo '    </div>';
-  		echo '  </fieldset>';
+		echo '    <div class="control-group">';
+		echo '      <label class="control-label" for="reportHour">' . __('Delivery hour',PSK_S2MSFB_ID) . '</label>';
+		echo '      <div class="controls">';
+		echo '          <select name="reporthour">';
+        for ($i=0; $i<24; $i++) {
+            echo '<option value="' . $i . '"' . selected( $reporthour, $i , false ) . '>' . str_pad( $i , 2 , '0' , STR_PAD_LEFT) . ':00' . '</option>';
+        }
+		echo '          </select>';
+		echo '      </div>';
+		echo '    </div>';
 
+
+
+		echo '    <div class="control-group">';
+		echo '      <label class="control-label" for="reportemailFrom">' . __('From email address',PSK_S2MSFB_ID) . '</label>';
+		echo '      <div class="controls">';
+		echo '        <input type="email" name="reportemailfrom" id="reportemailFrom" value="' .  esc_attr($reportemailfrom) . '" placeholder="' . esc_attr(PSK_S2MSFB_DEFAULT_EMAIL_REPORT_FROM) . '" required="required" />';
+		echo '      </div>';
+		echo '    </div>';
+		echo '    <div class="control-group">';
+		echo '      <label class="control-label" for="reportemailTo">' . __('Notify email address',PSK_S2MSFB_ID) . '</label>';
+		echo '      <div class="controls">';
+		echo '        <input type="text"  name="reportemailto" id="reportemailTo" value="' . esc_attr($reportemailto) . '" placeholder="' . esc_attr(PSK_S2MSFB_DEFAULT_EMAIL_REPORT_TO) . '" required="required" />';
+		echo '        <span class="help-inline"><em>' . __('Separate multiple email address with a comma (,)') . '</em></span>';
+		echo '      </div>';
+		echo '    </div>';
+		echo '    <div class="control-group">';
+		echo '      <label class="control-label" for="reportsubject">' . __('Email subject',PSK_S2MSFB_ID) . '</label>';
+		echo '      <div class="controls">';
+		echo '        <input type="text"  name="reportsubject" id="reportsubject" value="' . esc_attr($reportsubject) . '" placeholder="' . esc_attr(PSK_S2MSFB_DEFAULT_EMAIL_REPORT_SUBJECT) . '" />';
+		echo '        <span class="help-inline"><em>' . __('You can use variable %blogname%') . '</em></span>';
+		echo '      </div>';
+		echo '    </div>';
+
+		$next = wp_next_scheduled(  PSK_S2MSFB_ID . '_cron_report' );
+		if ( $next !== false ) {
+			$next += get_option('gmt_offset') * 3600;
+			echo '<em>' . sprintf( __( 'Next report : %s' , PSK_S2MSFB_ID ) , date_i18n( sprintf( '%1$s - %2$s', get_option('date_format'), get_option('time_format') ) , $next ) ) . '</em>';
+		}
+
+  		echo '  </fieldset>';
   		echo '  <br/>';
 		echo '  <button type="submit" class="btn btn-primary">'.__('Save Changes',PSK_S2MSFB_ID).'</button>';
 		echo '</form>';
 
 		echo PSK_S2MSFBAdmin::get_admin_footer();
 	}
-
-
 
 }
 

@@ -140,6 +140,8 @@ function get_shortcode_val(tag) {
    	var val = "";
 
 	switch (tag) {
+		case 'displayall':
+		case 's2alertbox':
 		case 'dirfirst'      :
 		case 'hidden'        :
 		case 'multifolder'   :

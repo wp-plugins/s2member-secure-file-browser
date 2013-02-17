@@ -115,8 +115,8 @@ class PSK_S2MSFBAdminStats
 			echo '      <select class="pagesize" title="Select page size">';
 			echo '      	<option selected="selected" value="10">10</option>';
 			echo '      	<option value="20">20</option>';
-			echo '      	<option value="30">30</option>';
-			echo '      	<option value="40">40</option>';
+			echo '      	<option value="50">50</option>';
+			echo '      	<option value="100">100</option>';
 			echo '      </select>';
 			echo '      <select class="pagenum input-mini" title="Select page number"></select>';
 			echo '    </div>';
@@ -125,10 +125,11 @@ class PSK_S2MSFBAdminStats
 			echo '<tbody>';
 			foreach($result as $row) {
 				$time = (int)$row['UNIX_TIMESTAMP(created)'];
+				$time+=	get_option('gmt_offset') * 3600;
 				$dt   = date_i18n( sprintf( '%1$s - %2$s', get_option('date_format'), get_option('time_format') ) , $time);
 
 				if (isset($users[$row['userid']])) {
-					$user      = $users[$row['userid']];
+					$user      = '<a href="' . admin_url( 'user-edit.php?user_id=' . $row['userid']) . '">' . $users[$row['userid']] . '</a>';
 					$userclass = '';
 				} else {
 					$user      = $row['useremail'].' - #'.$row['userid'];
@@ -137,12 +138,182 @@ class PSK_S2MSFBAdminStats
 
 				echo '<tr>';
 				echo '  <td data-t="' . $time . '">' 	. $dt 				. '</td>';
-				echo '  <td>' 							. $row['filepath'] 	. '</td>';
+				echo '  <td>' 							. PSK_Tools::mb_html_entities($row['filepath']) . '</td>';
 				echo '  <td' . $userclass . '>' 		. $user 			. '</td>';
 				echo '  <td>' 							. $row['ip'] 		. '</td>';
 				echo '</tr>';
 			}
 			echo '</tbody>';
+			echo '</table>';
+		}
+
+		echo PSK_S2MSFBAdmin::get_admin_footer();
+	}
+
+
+
+	/**
+	 * Admin Screen : Stats > Top files
+	 *
+	 * @return 			void
+	 */
+	public static function admin_screen_stats_fil() {
+		echo PSK_S2MSFBAdmin::get_admin_header(__METHOD__);
+
+		global $wpdb;
+
+		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+		$where     = ( isset( $_GET['t'] ) ) ? 'WHERE created > NOW() - INTERVAL ' . (int) $_GET['t'] . ' DAY' : '';
+		$sql       = "SELECT filepath, COUNT(*) A FROM $tablename $where GROUP BY filepath ORDER BY A DESC";
+		$result    = $wpdb->get_results( $sql , ARRAY_A );
+		$total     = 0;
+		$link      = '?page=' . $_GET['page'];
+
+		if (count($result)==0) {
+			echo '<div class="alert alert-error">' . __("No download",S2MSFB_ID) . '</div>';
+		}
+
+		echo '<div class="btn-group">';
+        echo '    <button class="btn btn-primary btn-mini dropdown-toggle" data-toggle="dropdown">' . __( 'Display' , 'PSK_S2MSFB_ID' ).' <span class="caret"></span></button>';
+        echo '    <ul class="dropdown-menu">';
+        echo '    	<li><a href="' . $link . '">' . __('all records',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li class="divider"></li>';
+        echo '    	<li><a href="' . $link . '&t=1">' . __('one day',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=7">' . __('one week',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=31">' . __('one month',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=365">' . __('one year',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    </ul>';
+        echo '</div>';
+
+		if (count($result)>0) {
+			echo '<table class="table sortn table-bordered table-hover table-condensed">';
+			echo '<thead><tr>';
+			echo '  <th>' . __('File',PSK_S2MSFB_ID) . '</th>';
+			echo '  <th>' . __('Count',PSK_S2MSFB_ID) . '</th>';
+			echo '</tr></thead>';
+			echo '<tbody>';
+			foreach($result as $row) {
+				echo '<tr>';
+				echo '  <td>' . PSK_Tools::mb_html_entities( $row['filepath'] ) . '</td>';
+				echo '  <td>' . $row['A'] 		 . '</td>';
+				echo '</tr>';
+				$total += (int)$row['A'];
+			}
+			echo '</tbody>';
+			echo '<tfoot>';
+			echo '  <tr>';
+			echo '    <th> </th>';
+			echo '    <th>' . sprintf( __('Total : %s',PSK_S2MSFB_ID) , $total ) . '</th>';
+			echo '  </tr>';
+			echo '  <tr><th colspan="2" class="pager form-horizontal">';
+			echo '    <button class="reset btn btn-mini btn-primary" data-column="0" data-filter=""><i class="icon-white icon-refresh"></i> Reset filters</button>';
+			echo '    <div class="pull-right">';
+			echo '      <button class="btn btn-mini first"><i class="icon-step-backward"></i></button>';
+			echo '      <button class="btn btn-mini prev"><i class="icon-arrow-left"></i></button>';
+			echo '      <span class="pagedisplay"></span> <!-- this can be any element, including an input -->';
+			echo '      <button class="btn btn-mini next"><i class="icon-arrow-right"></i></button>';
+			echo '      <button class="btn btn-mini last"><i class="icon-step-forward"></i></button>';
+			echo '      <select class="pagesize" title="Select page size">';
+			echo '      	<option selected="selected" value="10">10</option>';
+			echo '      	<option value="20">20</option>';
+			echo '      	<option value="50">50</option>';
+			echo '      	<option value="100">100</option>';
+			echo '      </select>';
+			echo '      <select class="pagenum input-mini" title="Select page number"></select>';
+			echo '    </div>';
+			echo '  </th></tr>';
+			echo '</tfoot>';
+			echo '</table>';
+		}
+
+		echo PSK_S2MSFBAdmin::get_admin_footer();
+	}
+
+
+
+	/**
+	 * Admin Screen : Stats > Top downloaders
+	 *
+	 * @return 			void
+	 */
+	public static function admin_screen_stats_use() {
+		echo PSK_S2MSFBAdmin::get_admin_header(__METHOD__);
+
+		global $wpdb;
+
+		foreach (get_users() as $user)
+			$users[$user->ID] = $user->display_name;
+
+		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+		$where     = ( isset( $_GET['t'] ) ) ? 'WHERE created > NOW() - INTERVAL ' . (int) $_GET['t'] . ' DAY' : '';
+		$sql       = "SELECT userid, COUNT(*) A FROM $tablename $where GROUP BY userid ORDER BY A DESC";
+		$result    = $wpdb->get_results( $sql , ARRAY_A );
+		$total     = 0;
+		$link      = '?page=' . $_GET['page'];
+
+		if (count($result)==0) {
+			echo '<div class="alert alert-error">' . __("No download",S2MSFB_ID) . '</div>';
+		}
+
+		echo '<div class="btn-group">';
+        echo '    <button class="btn btn-primary btn-mini dropdown-toggle" data-toggle="dropdown">' . __( 'Display' , 'PSK_S2MSFB_ID' ).' <span class="caret"></span></button>';
+        echo '    <ul class="dropdown-menu">';
+        echo '    	<li><a href="' . $link . '">' . __('all records',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li class="divider"></li>';
+        echo '    	<li><a href="' . $link . '&t=1">' . __('one day',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=7">' . __('one week',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=31">' . __('one month',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=365">' . __('one year',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    </ul>';
+        echo '</div>';
+
+		if (count($result)>0) {
+			echo '<table class="table sortn table-bordered table-hover table-condensed">';
+			echo '<thead><tr>';
+			echo '  <th>' . __('User',PSK_S2MSFB_ID) . '</th>';
+			echo '  <th>' . __('Count',PSK_S2MSFB_ID) . '</th>';
+			echo '</tr></thead>';
+			echo '<tbody>';
+			foreach($result as $row) {
+				if (isset($users[$row['userid']])) {
+					$user      = '<a href="' . admin_url( 'user-edit.php?user_id=' . $row['userid']) . '">' . $users[$row['userid']] . '</a>';
+					$userclass = '';
+				} else {
+					$user      = $row['useremail'].' - #'.$row['userid'];
+					$userclass = ' class="deleted"';
+				}
+				echo '<tr>';
+				echo '  <td' . $userclass . '>' . $user 	. '</td>';
+				echo '  <td>'                   . $row['A'] . '</td>';
+				echo '</tr>';
+				$total += (int)$row['A'];
+			}
+
+
+			echo '</tbody>';
+			echo '<tfoot>';
+			echo '  <tr>';
+			echo '    <th> </th>';
+			echo '    <th>' . sprintf( __('Total : %s',PSK_S2MSFB_ID) , $total ) . '</th>';
+			echo '  </tr>';
+			echo '  <tr><th colspan="2" class="pager form-horizontal">';
+			echo '    <button class="reset btn btn-mini btn-primary" data-column="0" data-filter=""><i class="icon-white icon-refresh"></i> Reset filters</button>';
+			echo '    <div class="pull-right">';
+			echo '      <button class="btn btn-mini first"><i class="icon-step-backward"></i></button>';
+			echo '      <button class="btn btn-mini prev"><i class="icon-arrow-left"></i></button>';
+			echo '      <span class="pagedisplay"></span> <!-- this can be any element, including an input -->';
+			echo '      <button class="btn btn-mini next"><i class="icon-arrow-right"></i></button>';
+			echo '      <button class="btn btn-mini last"><i class="icon-step-forward"></i></button>';
+			echo '      <select class="pagesize" title="Select page size">';
+			echo '      	<option selected="selected" value="10">10</option>';
+			echo '      	<option value="20">20</option>';
+			echo '      	<option value="50">50</option>';
+			echo '      	<option value="100">100</option>';
+			echo '      </select>';
+			echo '      <select class="pagenum input-mini" title="Select page number"></select>';
+			echo '    </div>';
+			echo '  </th></tr>';
+			echo '</tfoot>';
 			echo '</table>';
 		}
 
@@ -211,8 +382,8 @@ class PSK_S2MSFBAdminStats
 			echo '      <select class="pagesize" title="Select page size">';
 			echo '      	<option selected="selected" value="10">10</option>';
 			echo '      	<option value="20">20</option>';
-			echo '      	<option value="30">30</option>';
-			echo '      	<option value="40">40</option>';
+			echo '      	<option value="50">50</option>';
+			echo '      	<option value="100">100</option>';
 			echo '      </select>';
 			echo '      <select class="pagenum input-mini" title="Select page number"></select>';
 			echo '    </div>';
