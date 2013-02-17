@@ -8,7 +8,7 @@ Stable tag: 0.3.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A plugin for browsing files from the secure-files location of the s2member WordPress Membership plugin.
+The best way to share files securely with your clients, customers, friends and community.
 
 == Description ==
 
