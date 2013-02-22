@@ -5,8 +5,8 @@ Plugin URI: http://www.potsky.com/code/wordpress-plugins/s2member-secure-file-br
 Description:	A plugin for browsing files from the secure-files location of the s2member WordPress Membership plugin.  
 				You can display the file browser via the shortcode [s2member_secure_files_browser /].  
 				You can manage files and get statistics in the Dashboard > s2Member > Secure File Browser  
-Version: 0.3.6
-Date: 2013-02-17
+Version: 0.3.7
+Date: 2013-02-22
 Author: Potsky
 Author URI: http://www.potsky.com/about/
 Licence:
