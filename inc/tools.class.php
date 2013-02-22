@@ -108,6 +108,7 @@ class PSK_Tools
 			'bz2'   => 'zip.png',
 			'tar'   => 'zip.png',
 			'gz'    => 'zip.png',
+			'vsa'    => 'vsa.png',
 		);
 
 		$ext = trim ( strtolower( substr( $file_path , strrpos( $file_path , '.' ) + 1 ) ) );

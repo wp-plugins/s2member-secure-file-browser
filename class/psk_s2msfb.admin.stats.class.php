@@ -78,18 +78,65 @@ class PSK_S2MSFBAdminStats
 		echo PSK_S2MSFBAdmin::get_admin_header(__METHOD__);
 
 		global $wpdb;
+
 		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
-		$sql       = "SELECT userid,useremail,ip,UNIX_TIMESTAMP(created),filepath FROM $tablename ORDER BY created DESC";
-		$result    = $wpdb->get_results( $sql , ARRAY_A );
+		$where     = ( isset( $_GET['t'] ) ) ? 'WHERE created > NOW() - INTERVAL ' . (int) $_GET['t'] . ' DAY' : '';
 
-		foreach (get_users() as $user)
-			$users[$user->ID] = $user->display_name;
+		$sql    = "SELECT COUNT(DISTINCT userid) FROM $tablename $where";
+		$duser  = $wpdb->get_row( $sql , ARRAY_N );
+		$duser  = $duser[0];
 
+		$sql    = "SELECT COUNT(DISTINCT filepath) FROM $tablename $where";
+		$dfile  = $wpdb->get_row( $sql , ARRAY_N );
+		$dfile  = $dfile[0];
 
-		if (count($result)==0) {
+		$sql    = "SELECT userid,useremail,ip,UNIX_TIMESTAMP(created),filepath FROM $tablename $where ORDER BY created DESC";
+		$result = $wpdb->get_results( $sql , ARRAY_A );
+		$cresul = count($result);
+
+		$link      = '?page=' . $_GET['page'];
+
+		if ( $cresul == 0 ) {
 			echo '<div class="alert alert-error">' . __("No download",S2MSFB_ID) . '</div>';
 		}
-		else {
+
+		echo '<div class="btn-group">';
+        echo '    <button class="btn btn-primary btn-mini dropdown-toggle" data-toggle="dropdown">' . __( 'Display' , 'PSK_S2MSFB_ID' ).' <span class="caret"></span></button>';
+        echo '    <ul class="dropdown-menu">';
+        echo '    	<li><a href="' . $link . '">' . __('all records',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li class="divider"></li>';
+        echo '    	<li><a href="' . $link . '&t=1">' . __('one day',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=7">' . __('one week',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=31">' . __('one month',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    	<li><a href="' . $link . '&t=365">' . __('one year',PSK_S2MSFB_ID) . '</a></li>';
+        echo '    </ul>';
+        echo '</div>';
+
+		if ( $cresul > 0 ) {
+
+			foreach (get_users() as $user)
+				$users[$user->ID] = $user->display_name;
+
+			echo '&nbsp;&nbsp;&nbsp;';
+			switch (@$_GET['t']) {
+				case '1':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for 24 hours' , PSK_S2MSFB_ID ) , $dfile, $cresul, $duser);
+					break;
+				case '7':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one week' , PSK_S2MSFB_ID ) , $dfile, $cresul, $duser);
+					break;
+				case '31':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one month' , PSK_S2MSFB_ID ) , $dfile, $cresul, $duser);
+					break;
+				case '365':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one year' , PSK_S2MSFB_ID ) , $dfile, $cresul, $duser);
+					break;
+				default:
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s)' , PSK_S2MSFB_ID ) , $dfile, $cresul, $duser);
+					break;
+			}
+			echo '<br/>';
+
 			echo '<table class="table sort table-bordered table-hover table-condensed">';
 			echo '<thead><tr>';
 			echo '  <th>' . __('When',PSK_S2MSFB_ID) . '</th>';
@@ -123,7 +170,9 @@ class PSK_S2MSFBAdminStats
 			echo '  </th></tr>';
 			echo '</tfoot>';
 			echo '<tbody>';
+
 			foreach($result as $row) {
+
 				$time = (int)$row['UNIX_TIMESTAMP(created)'];
 				$time+=	get_option('gmt_offset') * 3600;
 				$dt   = date_i18n( sprintf( '%1$s - %2$s', get_option('date_format'), get_option('time_format') ) , $time);
@@ -143,6 +192,7 @@ class PSK_S2MSFBAdminStats
 				echo '  <td>' 							. $row['ip'] 		. '</td>';
 				echo '</tr>';
 			}
+
 			echo '</tbody>';
 			echo '</table>';
 		}
@@ -164,12 +214,26 @@ class PSK_S2MSFBAdminStats
 
 		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
 		$where     = ( isset( $_GET['t'] ) ) ? 'WHERE created > NOW() - INTERVAL ' . (int) $_GET['t'] . ' DAY' : '';
+
+		$sql       = "SELECT COUNT(DISTINCT userid) FROM $tablename $where";
+		$duser     = $wpdb->get_row( $sql , ARRAY_N );
+		$duser     = $duser[0];
+
+		$sql       = "SELECT COUNT(DISTINCT filepath) FROM $tablename $where";
+		$dfile     = $wpdb->get_row( $sql , ARRAY_N );
+		$dfile     = $dfile[0];
+
+		$sql       = "SELECT COUNT(*) FROM $tablename $where";
+		$cresult   = $wpdb->get_row( $sql , ARRAY_N );
+		$cresult   = $cresult[0];
+
 		$sql       = "SELECT filepath, COUNT(*) A FROM $tablename $where GROUP BY filepath ORDER BY A DESC";
 		$result    = $wpdb->get_results( $sql , ARRAY_A );
+
 		$total     = 0;
 		$link      = '?page=' . $_GET['page'];
 
-		if (count($result)==0) {
+		if ( count($result) == 0 ) {
 			echo '<div class="alert alert-error">' . __("No download",S2MSFB_ID) . '</div>';
 		}
 
@@ -186,12 +250,34 @@ class PSK_S2MSFBAdminStats
         echo '</div>';
 
 		if (count($result)>0) {
+
+			echo '&nbsp;&nbsp;&nbsp;';
+			switch ($_GET['t']) {
+				case '1':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for 24 hours' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				case '7':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one week' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				case '31':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one month' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				case '365':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one year' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				default:
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s)' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+			}
+			echo '<br/>';
+
 			echo '<table class="table sortn table-bordered table-hover table-condensed">';
 			echo '<thead><tr>';
 			echo '  <th>' . __('File',PSK_S2MSFB_ID) . '</th>';
 			echo '  <th>' . __('Count',PSK_S2MSFB_ID) . '</th>';
 			echo '</tr></thead>';
 			echo '<tbody>';
+
 			foreach($result as $row) {
 				echo '<tr>';
 				echo '  <td>' . PSK_Tools::mb_html_entities( $row['filepath'] ) . '</td>';
@@ -199,6 +285,7 @@ class PSK_S2MSFBAdminStats
 				echo '</tr>';
 				$total += (int)$row['A'];
 			}
+
 			echo '</tbody>';
 			echo '<tfoot>';
 			echo '  <tr>';
@@ -241,13 +328,24 @@ class PSK_S2MSFBAdminStats
 
 		global $wpdb;
 
-		foreach (get_users() as $user)
-			$users[$user->ID] = $user->display_name;
-
 		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
 		$where     = ( isset( $_GET['t'] ) ) ? 'WHERE created > NOW() - INTERVAL ' . (int) $_GET['t'] . ' DAY' : '';
+
+		$sql       = "SELECT COUNT(DISTINCT userid) FROM $tablename $where";
+		$duser     = $wpdb->get_row( $sql , ARRAY_N );
+		$duser     = $duser[0];
+
+		$sql       = "SELECT COUNT(DISTINCT filepath) FROM $tablename $where";
+		$dfile     = $wpdb->get_row( $sql , ARRAY_N );
+		$dfile     = $dfile[0];
+
+		$sql       = "SELECT COUNT(*) FROM $tablename $where";
+		$cresult   = $wpdb->get_row( $sql , ARRAY_N );
+		$cresult   = $cresult[0];
+
 		$sql       = "SELECT userid, COUNT(*) A FROM $tablename $where GROUP BY userid ORDER BY A DESC";
 		$result    = $wpdb->get_results( $sql , ARRAY_A );
+
 		$total     = 0;
 		$link      = '?page=' . $_GET['page'];
 
@@ -268,12 +366,37 @@ class PSK_S2MSFBAdminStats
         echo '</div>';
 
 		if (count($result)>0) {
+
+			foreach (get_users() as $user)
+				$users[$user->ID] = $user->display_name;
+
+			echo '&nbsp;&nbsp;&nbsp;';
+			switch ($_GET['t']) {
+				case '1':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for 24 hours' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				case '7':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one week' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				case '31':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one month' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				case '365':
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s) for one year' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+				default:
+					echo sprintf( __( '%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s)' , PSK_S2MSFB_ID ) , $dfile, $cresult, $duser);
+					break;
+			}
+			echo '<br/>';
+
 			echo '<table class="table sortn table-bordered table-hover table-condensed">';
 			echo '<thead><tr>';
 			echo '  <th>' . __('User',PSK_S2MSFB_ID) . '</th>';
 			echo '  <th>' . __('Count',PSK_S2MSFB_ID) . '</th>';
 			echo '</tr></thead>';
 			echo '<tbody>';
+
 			foreach($result as $row) {
 				if (isset($users[$row['userid']])) {
 					$user      = '<a href="' . admin_url( 'user-edit.php?user_id=' . $row['userid']) . '">' . $users[$row['userid']] . '</a>';
@@ -288,7 +411,6 @@ class PSK_S2MSFBAdminStats
 				echo '</tr>';
 				$total += (int)$row['A'];
 			}
-
 
 			echo '</tbody>';
 			echo '<tfoot>';

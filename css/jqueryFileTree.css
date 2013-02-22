@@ -124,4 +124,5 @@ UL.jqueryFileTree input, UL.jqueryFileTree label {
 .jqueryFileTree LI.ext_bz2  A.link { background: url(../img/zip.png) left top no-repeat; }
 .jqueryFileTree LI.ext_tar  A.link { background: url(../img/zip.png) left top no-repeat; }
 .jqueryFileTree LI.ext_gz  A.link { background: url(../img/zip.png) left top no-repeat; }
+.jqueryFileTree LI.ext_vsa  A.link { background: url(../img/vsa.png) left top no-repeat; }
 

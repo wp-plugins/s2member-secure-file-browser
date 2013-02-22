@@ -441,7 +441,7 @@ class PSK_S2MSFB_wdgt_download extends WP_Widget {
                 $r.= '<li style="padding-top:4px;">';
                 $r.= ( $display_icon == 'u' ) ? '<img style="float:left;width:32px;height:32px;margin-right:5px;margin-top:5px;border:1px solid #888;" src="' . PSK_Tools::get_avatar_url($user_id,32) . '" />' : '';
                 $r.= ( $display_icon == 'f' ) ? '<img style="float:left;width:16px;height:16px;margin-right:5px;margin-top:2px;border:0;" src="' . PSK_S2MSFB_IMG_URL . PSK_Tools::get_file_icon($file_path) . '" />' : '';
-                $r.= '<span style="word-wrap:break-word;font-weight:bold;">';
+                $r.= '<span style="font-size:11px;word-wrap:break-word;font-weight:bold;">';
                 $r.= $file . '</span>';
                 $r.= ($show_filepath) ? '<br/><small>' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , $path ) . '</small>' : '';
                 $r.= ($show_username) ? '<br/><small>' . sprintf( __( 'by %s' , PSK_S2MSFB_ID ) , $users[$user_id] ) . '</small>' : '';
@@ -621,7 +621,7 @@ class PSK_S2MSFB_wdgt_download extends WP_Widget {
 
                 $r.= '<li style="padding-top:4px;">';
                 $r.= ( $display_icon == 'f' ) ? '<img style="float:left;width:16px;height:16px;margin-right:5px;margin-top:2px;border:0;" src="' . PSK_S2MSFB_IMG_URL . PSK_Tools::get_file_icon($file_path) . '" />' : '';
-                $r.= '<span style="word-wrap:break-word;font-weight:bold;">';
+                $r.= '<span style="font-size:11px;word-wrap:break-word;font-weight:bold;">';
                 $r.= $file . '</span>';
                 $r.= ($show_filepath) ? '<br/><small>' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , $path ) . '</small>' : '';
                 $r.= ($show_count) ? '<br/><small>' . $count . '</small>' : '';

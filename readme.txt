@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.3.5
+Stable tag: 0.3.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -134,6 +134,13 @@ Even if you set shortcode option `hidden` to `1`, `.htaccess` will never been di
 
 Yes ! `And access-s2member-ccap*` too !
 
+= The browser does not work, it displays `Invalid nonce` for registered users. =
+
+The authentication on your website is broken because of a plugin (AJAX requests not correctly handled).
+This behaviour is correct and it is protecting your files !
+It happens for example when your authentication is only performed in a HTTPS form and the navigation is done in HTTP.
+If you use the `Wordpress HTTP` plugin from http://mvied.com/projects/wordpress-https/ for example, you have to force HTTPS on each page which includes the s2member Secure File browser.
+
 
 == What's next? ==
 
@@ -160,6 +167,11 @@ Available in upcoming version 0.5 :
 10. Widget
 
 == Changelog ==
+
+= 0.3.6 =
+* Enhancement : Add admin statistics (total downloads, unique files and unique downloaders)
+* Enhancement : Add FAQ "Invalid Nonce"
+* Enhancement : Add vsa file extension
 
 = 0.3.5 =
 * New feature : New admin submenu with top rated downloads, higher downloaders, ...
