@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.3.7
+Stable tag: 0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -39,21 +39,29 @@ Please use the shortcode generator in the *Dashboard > s2Member Menu > Secure Fi
 
 **Available shortcode options**
 
-* `dirbase` : initial directory from the s2member-files directory  
-* `hidden` : show hidden files or not  
-* `dirfirst` : show directories above files  
-* `names` : replace files name with custom values.  
-* `folderevent` : event to trigger expand/collapse  
-* `expandspeed` : speed of the expand folder action in ms  
-* `expandeasing` : easing function to use on expand  
-* `collapsespeed` : speed of the collapse folder action in ms  
-* `collapseeasing` : easing function to use on collapse  
-* `multifolder` : whether or not to limit the browser to one subfolder at a time  
-* `openrecursive` : whether or not to open all subdirectories when opening a directory  
-* `filterdir` : a full regexp directories have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
-* `filterfile` : a full regexp files have to match to be displayed ([regexp format](http://www.php.net/manual/en/pcre.pattern.php "PCRE"), `preg_match` PHP function is used)  
-* `displayall` : display all items without checking if user is granted to download them
-* `s2alertbox` : display the s2member confirmation box when a user tries to download a file
+* `collapseeasing` : Easing function to use on collapse
+* `collapsespeed` : Speed of the collapse folder action in ms
+* `cutdirnames` : Truncate directory names to specific chars length
+* `cutfilenames` : Truncate file names to specific chars length
+* `dirbase` : Initial directory from the s2member-files directory
+* `dirfirst` : Show directories above files
+* `displayall` : Display all items without checking if user is granted to download them
+* `displaydownloaded` : Show if a file has already been downloaded
+* `displaysize` : Display files size
+* `dirzip` : Let directories be downloaded
+* `expandeasing` : Easing function to use on expand
+* `expandspeed` : Speed of the expand folder action in ms
+* `filterdir` : A full regexp directories have to match to be displayed
+* `filterfile` : A full regexp files have to match to be displayed
+* `folderevent` : Event to trigger expand/collapse
+* `hidden` : Show hidden files or not
+* `multifolder` : Whether or not to limit the browser to one subfolder at a time
+* `names` : Replace files name with custom values
+* `openrecursive` : Whether or not to open all subdirectories when opening a directory
+* `previewext` : Display file preview button for these extensions
+* `s2alertbox` : Display the s2member confirmation box when a user tries to download a file
+* `search` : Let user search files
+* `searchdisplay` : How to display search results
 
 All informations about these options are well documented in :
 
@@ -61,35 +69,37 @@ All informations about these options are well documented in :
 * `Dashboard > Tools > Secure File Browser` panel for users
 
 
-**Example** (*A shortcode has to be defined on one line, here is on several lines below only for better understanding*) :  
+**Example** (*A shortcode has to be defined on one line, here is on several lines below only for better understanding*) :
 
-`[s2member_secure_files_browser  
-    folderevent="mouseover"  
-    expandeasing="linear"  
-    expandspeed="200"   
-    collapseeasing="swing"  
-    collapsespeed="200"  
-    multifolder="0"  
-    openrecursive="1"  
-    dirbase="/"  
-    hidden="1"  
-    dirfirst="0"  
-    openrecursive="1"  
+`[s2member_secure_files_browser
+    folderevent="mouseover"
+    expandeasing="linear"
+    expandspeed="200"
+    collapseeasing="swing"
+    collapsespeed="200"
+    multifolder="0"
+    openrecursive="1"
+    dirbase="/"
+    hidden="1"
+    dirfirst="0"
+    openrecursive="1"
     filterdir="%2F(access%7Ctata)%2Fi"
     filterfile="%2F%5C.(png%7Cjpe%3Fg%7Cgif%7Czip)%24%2Fi"
-    names="access-s2member-level0:General|access-s2member-ccap-video:Videos"  
-/]`  
+    names="access-s2member-level0:General|access-s2member-ccap-video:Videos"
+    search="1"
+    searchdisplay="3"
+/]`
 
 You can generate a shortcode with complex options with the `Shortcode Generator` in the `Dashboard > s2Member > Secure File Browser` panel
 
 
 **Widgets**
 
-You can display a fully customizable widget for :
+You can display both fully customizable widgets for :
 
 * Top downloads
 * Latest downloads
-
+* Latest available files
 
 **Dashboard**
 
@@ -100,6 +110,7 @@ Available features are :
 * Statistics : display all downloads/top downloads/top downloaders, sort and apply filters by date, user, file, IP Address, ...
 * Statistics : display current s2Member accounting, sort and apply filters by date, user, file and file
 * File Browser : Rename and delete files and folders
+* Cache management : Rebuild file cache
 * Shortcode generator
 * Shortcode documentation
 * Settings : Received an email each time a user downloads a file
@@ -108,16 +119,16 @@ Available features are :
 * Settings : Give access to others users to some parts of the admin menu
 
 
-Don't hesitate to ask me new features or report bugs on [potsky.com](https://www.potsky.com/code/wordpress-plugins/s2member-secure-file-browser/ "Plugin page") !  
+Don't hesitate to ask me new features or report bugs on [potsky.com](https://www.potsky.com/code/wordpress-plugins/s2member-secure-file-browser/ "Plugin page") !
 
 
 == Installation ==
 
-**Requirement** : you need to install first the wonderful and free s2Member® plugin [available here](http://wordpress.org/extend/plugins/s2member/ "s2Member")  
+**Requirement** : you need to install first the wonderful and free s2Member® plugin [available here](http://wordpress.org/extend/plugins/s2member/ "s2Member")
 
-**s2member Secure File Browser** is very easy to install (instructions) :  
-* Upload the `/s2member-secure-file-browser` folder to your `/wp-content/plugins/` directory.  
-* Activate the plugin through the Plugins menu in WordPress®.  
+**s2member Secure File Browser** is very easy to install (instructions) :
+* Upload the `/s2member-secure-file-browser` folder to your `/wp-content/plugins/` directory.
+* Activate the plugin through the Plugins menu in WordPress®.
 
 
 == Frequently asked questions ==
@@ -167,6 +178,17 @@ Available in upcoming version 0.5 :
 10. Widget
 
 == Changelog ==
+
+= 0.4 =
+* New feature : cut filename shortcode option
+* New feature : already downloaded file warnings shortcode option
+* New feature : ability to download directories as zip files
+* New feature : search files
+* New feature : filesize display shortcode option
+* New feature : mp3 preview shortcode option
+* New feature : new widget for new and modified available files
+* New feature : file caching with new dashboard menu to manually update
+* Bug fix : french language fix
 
 = 0.3.7 =
 * Publishing fix
@@ -221,6 +243,9 @@ Available in upcoming version 0.5 :
 * First release
 
 == Upgrade Notice ==
+
+= 0.4 =
+This update includes the new file caching feature. **On first launch, it computes all files hash. It can last several minutes!**
 
 = 0.3.5 =
 A lot of new features ! Upgrade now, seriously, it rocks !

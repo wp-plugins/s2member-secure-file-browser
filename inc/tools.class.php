@@ -15,34 +15,38 @@
 	You should have received a copy of the GNU General Public License
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
-if (( realpath (__FILE__) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( !defined( 'ABSPATH' ) ) ) {
+if ( ( realpath( __FILE__ ) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
 	status_header( 404 );
 	exit;
 }
 
 
-class PSK_Tools
-{
+/**
+ * Class PSK_Tools
+ */
+class PSK_Tools {
 
 	/**
 	 * Return the avatar url of a user
 	 *
-	 * @param       string  $string      a user id or user email
+	 * @param       string $string      a user id or user email
+	 *
 	 * @return      string               the url of the gravatar
 	 */
-	public static function get_avatar_url($user){
-	    preg_match("/src='(.*?)'/i", get_avatar( $user ) , $matches);
-	    return $matches[1];
+	public static function get_avatar_url( $user ) {
+		preg_match( "/src='(.*?)'/i", get_avatar( $user ), $matches );
+		return $matches[1];
 	}
 
 
 	/**
 	 * Return file name in the /img directory of the file icon acording to its extension
 	 *
-	 * @param       string  $string      a file name, file path...
+	 * @param       string $string      a file name, file path...
+	 *
 	 * @return      string               the icon file name
 	 */
-	public static function get_file_icon($file_path) {
+	public static function get_file_icon( $file_path ) {
 		$extensions = array(
 			'3gp'   => 'film.png',
 			'afp'   => 'code.png',
@@ -108,30 +112,29 @@ class PSK_Tools
 			'bz2'   => 'zip.png',
 			'tar'   => 'zip.png',
 			'gz'    => 'zip.png',
-			'vsa'    => 'vsa.png',
+			'vsa'   => 'vsa.png',
 		);
 
-		$ext = trim ( strtolower( substr( $file_path , strrpos( $file_path , '.' ) + 1 ) ) );
-		if (array_key_exists($ext,$extensions)) {
-			return $extensions[ $ext ];
-		}
-		else {
+		$ext = trim( mb_strtolower( mb_substr( $file_path, mb_strrpos( $file_path, '.' ) + 1 ) ) );
+		if ( array_key_exists( $ext, $extensions ) ) {
+			return $extensions[$ext];
+		} else {
 			return 'file.png';
 		}
 	}
 
 
-
 	/**
 	 * current_user_cans is a current_user_can with several capablities separated by coma
 	 *
-	 * @param       string  $string      the list of capabilities separated by coma
+	 * @param       string $string      the list of capabilities separated by coma
+	 *
 	 * @return      false                if access not granted
 	 * @return      string               a granted capability
 	 */
-	public static function current_user_cans($capablities) {
-		$caps = array_unique( explode( ',' , $capablities ) );
-		foreach ($caps as $cap) {
+	public static function current_user_cans( $capablities ) {
+		$caps = array_unique( explode( ',', $capablities ) );
+		foreach ( $caps as $cap ) {
 			$c = strtolower( trim( $cap ) );
 			if ( current_user_can( $c ) ) {
 				return $c;
@@ -144,24 +147,37 @@ class PSK_Tools
 	/**
 	 * return true if a $string starts with $start
 	 *
-	 * @param       string  $string      the haystack
-	 * @param       string  $start       the start needle
+	 * @param       string $string      the haystack
+	 * @param       string $start       the start needle
+	 *
 	 * @return      boolean
 	 */
-	public static function starts_with($string,$start) {
-		return ( substr($string , 0 , strlen($start) ) == $start );
+	public static function starts_with( $string, $start ) {
+		return ( mb_substr( $string, 0, mb_strlen( $start ) ) == $start );
 	}
 
 
 	/**
-	 * Remove all trailing [anti]slashes at the end of a directory
+	 * Trim all [anti]slashes at the end and the beginning of a directory
 	 *
-	 * @param       string  $directory   the dirctory to check
+	 * @param string $directory  the directory to check
+	 * @param bool   $start      must begin by a slash
+	 * @param bool   $end        must end by a slash
+	 *
 	 * @return      boolean
 	 */
-	public static function sanitize_directory_path($directory)
-	{
-		while (substr($directory,-1,1)==DIRECTORY_SEPARATOR) $directory = substr($directory,0,-1);
+	public static function sanitize_directory_path( $directory , $start=false , $end=false ) {
+		while ( mb_substr( $directory, - 1, 1 ) == DIRECTORY_SEPARATOR ) {
+			$directory = mb_substr( $directory, 0, - 1 );
+		}
+		while ( mb_substr( $directory, 0, 1 ) == DIRECTORY_SEPARATOR ) {
+			$directory = mb_substr( $directory, 1 );
+		}
+		if ( $end )
+			$directory .= DIRECTORY_SEPARATOR;
+		if ( $start )
+			$directory = DIRECTORY_SEPARATOR . $directory;
+		$directory = str_replace( '//' , '/' , $directory );
 		return $directory;
 	}
 
@@ -169,52 +185,52 @@ class PSK_Tools
 	/**
 	 * Check if the specified directory is in s2member_files_path directory
 	 *
-	 * @param       string  $directory   the dirctory to check
+	 * @param       string $directory   the dirctory to check
+	 *
 	 * @return      boolean
 	 */
-	public static function is_directory_allowed($directory)
-	{
-		$child  = realpath($directory);
-		$parent = realpath(PSK_S2MSFB_S2MEMBER_FILES_FOLDER);
-		return self::starts_with($child,$parent);
+	public static function is_directory_allowed( $directory ) {
+		$child  = realpath( $directory );
+		$parent = realpath( PSK_S2MSFB_S2MEMBER_FILES_FOLDER );
+		return self::starts_with( $child, $parent );
 	}
 
 
 	/**
 	 * Remove recursively a direcory or a file with check if the specified file/dir is in s2member_files_path directory
 	 *
-	 * @param       string  $filepath   the directory or file to delete
+	 * @param       string $filepath   the directory or file to delete
+	 *
 	 * @return      boolean
 	 */
-	public static function rm_secure_recursive($filepath)
-	{
-		if ( is_dir($filepath) && !is_link($filepath) ) {
+	public static function rm_secure_recursive( $filepath ) {
+		if ( is_dir( $filepath ) && ! is_link( $filepath ) ) {
 
-			if ( $dh = opendir($filepath) ) {
+			if ( $dh = opendir( $filepath ) ) {
 
-				while (($sf = readdir($dh)) !== false) {
+				while ( ( $sf = readdir( $dh ) ) !== false ) {
 
-					if ($sf == '.' || $sf == '..') {
+					if ( $sf == '.' || $sf == '..' ) {
 						continue;
 					}
 
 					if ( ! self::rm_secure_recursive( $filepath . DIRECTORY_SEPARATOR . $sf ) ) {
-						throw new Exception( $filepath . DIRECTORY_SEPARATOR . $sf . ' could not be deleted.');
+						throw new Exception( $filepath . DIRECTORY_SEPARATOR . $sf . ' could not be deleted.' );
 					}
 				}
-				closedir($dh);
+				closedir( $dh );
 			}
 
-			if (!self::is_directory_allowed($filepath))
-				throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.');
+			if ( ! self::is_directory_allowed( $filepath ) )
+				throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.' );
 
-			return rmdir($filepath);
+			return rmdir( $filepath );
 		}
 
-		if (!self::is_directory_allowed($filepath))
-			throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.');
+		if ( ! self::is_directory_allowed( $filepath ) )
+			throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.' );
 
-		return unlink($filepath);
+		return unlink( $filepath );
 	}
 
 
@@ -224,93 +240,119 @@ class PSK_Tools
 	 * @author      Aidan Lister <aidan@php.net>
 	 * @version     1.3.0
 	 * @link        http://aidanlister.com/2004/04/human-readable-file-sizes/
-	 * @param       int     $size        size in bytes
-	 * @param       string  $max         maximum unit
-	 * @param       string  $system      'si' for SI, 'bi' for binary prefixes
-	 * @param       string  $retstring   return string format
+	 *
+	 * @param       int    $size        size in bytes
+	 * @param       string $max         maximum unit
+	 * @param       string $system      'si' for SI, 'bi' for binary prefixes
+	 * @param       string $retstring   return string format
+	 *
 	 * @return      string               readable sizes
 	 */
-	public static function size_readable($size, $max = null, $system = 'si', $retstring = '%01.2f %s')
-	{
-	    $sys['si']['p'] = array(_x('B','Bytes abbr',PSK_S2MSFB_ID), _x('KB','Kilobytes abbr',PSK_S2MSFB_ID), _x('MB','Megabytes abbr',PSK_S2MSFB_ID), _x('GB','Gigabytes abbr',PSK_S2MSFB_ID), _x('TB','Terabytes abbr',PSK_S2MSFB_ID), _x('PB','Petabytes abbr',PSK_S2MSFB_ID));
-	    $sys['si']['s'] = 1000;
-	    $sys['bi']['p'] = array(_x('B','Bytes abbr',PSK_S2MSFB_ID), _x('KiB','Kibibytes abbr',PSK_S2MSFB_ID), _x('MiB','Mebibytes abbr',PSK_S2MSFB_ID), _x('GiB','Gibibytes abbr',PSK_S2MSFB_ID), _x('TiB','Tebibytes abbr',PSK_S2MSFB_ID), _x('PiB','Pebibytes abbr',PSK_S2MSFB_ID));
-	    $sys['bi']['s'] = 1024;
-	    $sys = isset($sys[$system]) ? $sys[$system] : $sys['si'];
+	public static function size_readable( $size, $max = null, $system = 'si', $retstring = '%01.2f %s' ) {
+		$sys['si']['p'] = array( _x( 'B', 'Bytes abbr', PSK_S2MSFB_ID ), _x( 'KB', 'Kilobytes abbr', PSK_S2MSFB_ID ), _x( 'MB', 'Megabytes abbr', PSK_S2MSFB_ID ), _x( 'GB', 'Gigabytes abbr', PSK_S2MSFB_ID ), _x( 'TB', 'Terabytes abbr', PSK_S2MSFB_ID ), _x( 'PB', 'Petabytes abbr', PSK_S2MSFB_ID ) );
+		$sys['si']['s'] = 1000;
+		$sys['bi']['p'] = array( _x( 'B', 'Bytes abbr', PSK_S2MSFB_ID ), _x( 'KiB', 'Kibibytes abbr', PSK_S2MSFB_ID ), _x( 'MiB', 'Mebibytes abbr', PSK_S2MSFB_ID ), _x( 'GiB', 'Gibibytes abbr', PSK_S2MSFB_ID ), _x( 'TiB', 'Tebibytes abbr', PSK_S2MSFB_ID ), _x( 'PiB', 'Pebibytes abbr', PSK_S2MSFB_ID ) );
+		$sys['bi']['s'] = 1024;
+		$sys            = isset( $sys[$system] ) ? $sys[$system] : $sys['si'];
 
-	    $depth = count($sys['p']) - 1;
-	    if ($max && false !== $d = array_search($max, $sys['p'])) $depth = $d;
-	    $i = 0;
-	    while ($size >= $sys['s'] && $i < $depth) {
-	        $size /= $sys['s'];
-	        $i++;
-	    }
-	    return sprintf($retstring, $size, $sys['p'][$i]);
+		$depth = count( $sys['p'] ) - 1;
+		if ( $max && false !== $d = array_search( $max, $sys['p'] ) ) $depth = $d;
+		$i = 0;
+		while ( $size >= $sys['s'] && $i < $depth ) {
+			$size /= $sys['s'];
+			$i ++;
+		}
+		return sprintf( $retstring, $size, $sys['p'][$i] );
 	}
 
 
 	/**
 	 * Return an escaped value for a html attribute
 	 *
-	 * @param       string  $str         the value to escape
+	 * @param       string $str         the value to escape
+	 *
 	 * @return      string               the escaped value
 	 */
-	public static function rel_literal($str) {
+	public static function rel_literal( $str ) {
 		//return htmlspecialchars($str,ENT_COMPAT|ENT_HTML401,'UTF-8'|); // Only for PHP >= 5.4
-		return htmlspecialchars($str,ENT_COMPAT,'UTF-8');
+		return htmlspecialchars( $str, ENT_COMPAT, 'UTF-8' );
 	}
 
 
 	/**
 	 * Return an utf8 htmlentities value
 	 *
-	 * @param       string  $str         the value to escape
+	 * @param       string $str         the value to escape
+	 *
 	 * @return      string               the escaped value
 	 */
-	public static function html_entities($str) {
+	public static function html_entities( $str ) {
 		//return htmlentities($str,ENT_COMPAT|ENT_HTML401,'UTF-8'|); // Only for PHP >= 5.4
-		return htmlentities($str,ENT_COMPAT,'UTF-8');
+		return htmlentities( $str, ENT_COMPAT, 'UTF-8' );
 	}
 
 	/**
 	 * Return a javascript literal
 	 *
-	 * @param       string  $str         the value
+	 * @param       string $str         the value
+	 *
 	 * @return      string               the literalized value
 	 */
-	public static function js_literal($str) {
+	public static function js_literal( $str ) {
 		//return htmlentities('\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$str)).'\'',ENT_COMPAT|ENT_HTML401,'UTF-8'); // Only for PHP >= 5.4
-		return htmlentities('\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$str)).'\'',ENT_COMPAT,'UTF-8');
+		//return htmlentities( '\'' . str_replace( '\'', '\\\'', str_replace( '\\', '\\\\', $str ) ) . '\'', ENT_COMPAT, 'UTF-8' );
+		return '\'' . str_replace( '\'', '\\\'', str_replace( '\\', '\\\\', $str ) ) . '\'';
+	}
+
+
+	/**
+	* Escapes JavaScript and single quotes.
+	*
+	* @param str $string Input string.
+	* @param int $times Number of escapes. Defaults to 1.
+	* @return str Output string after JavaScript and single quotes are escaped.
+	*/
+	public static function js_esc_string($string = FALSE, $times = FALSE) {
+		$times = (is_numeric($times) && $times >= 0) ? (int)$times : 1;
+		return str_replace("'", str_repeat("\\", $times)."'", str_replace(array("\r", "\n"), array("", '\\n'), str_replace("\'", "'", (string)$string)));
 	}
 
 
 	/**
 	 * Return an utf8 html_entities value
 	 *
-	 * @param       string  $str         the value to escape
+	 * @param       string $str         the value to escape
+	 *
 	 * @return      string               the escaped value
 	 */
-	public static function mb_html_entities($str, $encoding = 'utf-8') {
-	    mb_regex_encoding($encoding);
-	    $pattern = array('<', '>', '"', '\'');
-	    $replacement = array('&lt;', '&gt;', '&quot;', '&#39;');
-	    for ($i=0; $i<sizeof($pattern); $i++) {
-	        $str = mb_ereg_replace($pattern[$i], $replacement[$i], $str);
-	    }
-	    return $str;
+	public static function mb_html_entities( $str, $encoding = 'utf-8' ) {
+		mb_regex_encoding( $encoding );
+		$pattern     = array( '<', '>', '"', '\'' );
+		$replacement = array( '&lt;', '&gt;', '&quot;', '&#39;' );
+		for ( $i = 0; $i < sizeof( $pattern ); $i ++ ) {
+			$str = mb_ereg_replace( $pattern[$i], $replacement[$i], $str );
+		}
+		return $str;
 	}
 
 
 	/*
-	 * Display alert
-	 * psk_sfb_alert('Error!','File has been deleted','error');
-	 * psk_sfb_alert('Info!','File has been deleted','info',4000);
-	 * psk_sfb_alert('Success!','File has been deleted','success');
-	 * psk_sfb_alert('Warning!','File has been deleted');
+	 * Display javascript alert. Examples :
+	 * 	psk_sfb_alert('Error!','File has been deleted','error');
+	 * 	psk_sfb_alert('Info!','File has been deleted','info',4000);
+	 * 	psk_sfb_alert('Success!','File has been deleted','success');
+	 * 	psk_sfb_alert('Warning!','File has been deleted');
+	 *
+	 * @param        $title
+	 * @param        $message
+	 * @param string $alert
+	 * @param int    $time
+	 *
+	 * @return string
 	 */
-	public static function get_js_alert($title, $message, $alert='info', $time=5000) {
-		$time = (int)$time;
-		$ret = '<script>psk_sfb_alert('.self::js_literal($title).', '.self::js_literal($message).', '.self::js_literal($alert).', '.self::js_literal($time).');</script>';
+	public static function get_js_alert( $title, $message, $alert = 'info', $time = 5000 ) {
+		$time = (int) $time;
+		$ret  = '<script>psk_sfb_alert(' . self::js_literal( $title ) . ', ' . self::js_literal( $message ) . ', ' . self::js_literal( $alert ) . ', ' . self::js_literal( $time ) . ');</script>';
 		return $ret;
 	}
 

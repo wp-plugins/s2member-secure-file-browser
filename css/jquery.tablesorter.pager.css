@@ -2,11 +2,13 @@
 .tablesorter-pager {
 	padding: 5px;
 }
+
 /* pager wrapper, in thead/tfoot */
 td.tablesorter-pager {
 	background-color: #e6eeee;
 	margin: 0; /* needed for bootstrap .pager gets a 18px bottom margin */
 }
+
 /* pager navigation arrows */
 .tablesorter-pager img {
 	vertical-align: middle;
@@ -33,6 +35,7 @@ td.tablesorter-pager {
 .tablesorter-pager.disabled {
 	display: none;
 }
+
 /* hide or fade out pager arrows when the first or last row is visible */
 .tablesorter-pager .disabled {
 	/* visibility: hidden */
