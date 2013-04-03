@@ -54,12 +54,12 @@ class PSK_S2MSFBAdminManager {
 		wp_enqueue_script( 'jquery.tablesorter', PSK_S2MSFB_JS_URL . 'jquery.tablesorter.min.js', array( 'jquery' ), false, true );
 		wp_enqueue_script( 'jquery.tablesorter.widgets', PSK_S2MSFB_JS_URL . 'jquery.tablesorter.widgets.min.js', array( 'jquery', 'jquery.tablesorter' ), false, true );
 
-		wp_enqueue_style( 'jquery.tablesorter.pager', PSK_S2MSFB_CSS_URL . 'jquery.tablesorter.pager.' . PSK_S2MSFB_EXT_CSS  );
-		wp_enqueue_script( 'jquery.tablesorter.pager', PSK_S2MSFB_JS_URL . 'jquery.tablesorter.pager.' . PSK_S2MSFB_EXT_JS , array( 'jquery', 'jquery.tablesorter' ), false, true );
+		wp_enqueue_style( 'jquery.tablesorter.pager', PSK_S2MSFB_CSS_URL . 'jquery.tablesorter.pager.' . PSK_S2MSFB_EXT_CSS );
+		wp_enqueue_script( 'jquery.tablesorter.pager', PSK_S2MSFB_JS_URL . 'jquery.tablesorter.pager.' . PSK_S2MSFB_EXT_JS, array( 'jquery', 'jquery.tablesorter' ), false, true );
 
 		wp_enqueue_style( 'theme.bootstrap', PSK_S2MSFB_CSS_URL . 'theme.bootstrap.' . PSK_S2MSFB_EXT_CSS );
 
-		wp_enqueue_script( PSK_S2MSFB_ID . '.admin.manager', PSK_S2MSFB_JS_URL . 'admin.manager.' . PSK_S2MSFB_EXT_JS , array( 'jquery', 'jquery.tablesorter' ), false, true );
+		wp_enqueue_script( PSK_S2MSFB_ID . '.admin.manager', PSK_S2MSFB_JS_URL . 'admin.manager.' . PSK_S2MSFB_EXT_JS, array( 'jquery', 'jquery.tablesorter' ), false, true );
 	}
 
 
@@ -121,6 +121,22 @@ class PSK_S2MSFBAdminManager {
 				'defaultm' => __( 'Only allowed directories are displayed', PSK_S2MSFB_ID ),
 				'more'     => __( 'Set to <code>1</code> to display all directories', PSK_S2MSFB_ID ),
 			),
+//			array(
+//				'name'     => 'displaybirthdate',
+//				'desc'     => __( 'Display files birth date', PSK_S2MSFB_ID ),
+//				'descm'    => '',
+//				'default'  => '0',
+//				'defaultm' => '',
+//				'more'     => __( 'Set to <code>0</code> to hide the date when the file has been added', PSK_S2MSFB_ID ),
+//			),
+//			array(
+//				'name'     => 'displaycomment',
+//				'desc'     => __( 'Display files comment', PSK_S2MSFB_ID ),
+//				'descm'    => '',
+//				'default'  => '1',
+//				'defaultm' => '',
+//				'more'     => __( 'Set to <code>0</code> to hide files comment', PSK_S2MSFB_ID ),
+//			),
 			array(
 				'name'     => 'displaydownloaded',
 				'desc'     => __( 'Show if a file has already been downloaded', PSK_S2MSFB_ID ),
@@ -137,6 +153,14 @@ class PSK_S2MSFBAdminManager {
 				'default'  => '1',
 				'defaultm' => '',
 				'more'     => __( 'Set to <code>0</code> to hide files size', PSK_S2MSFB_ID ),
+			),
+			array(
+				'name'     => 'displaymodificationdate',
+				'desc'     => __( 'Display files modification date', PSK_S2MSFB_ID ),
+				'descm'    => '',
+				'default'  => '0',
+				'defaultm' => '',
+				'more'     => __( 'Set to <code>0</code> to hide files modification date', PSK_S2MSFB_ID ),
 			),
 			array(
 				'name'     => 'dirzip',
@@ -259,7 +283,23 @@ class PSK_S2MSFBAdminManager {
 					__( 'Can be set to <code>3</code> to display files group by extension', PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>4</code> to display files group by extension with full path between parenthesis', PSK_S2MSFB_ID ),
 			),
-
+			array(
+				'name'     => 'sortby',
+				'desc'     => __( 'Sort files in directories by a criteria', PSK_S2MSFB_ID ),
+				'descm'    => '',
+				'default'  => '0',
+				'defaultm' => __( 'Files are sorted by name', PSK_S2MSFB_ID ),
+				'more'     =>
+					__( 'Can be set to <code>0D</code> to sort files by name descendant', PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>1</code> to sort files by extension', PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>1D</code> to sort files by extension descendant', PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>2</code> to sort files by size', PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>2D</code> to sort files by size descendant', PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>3</code> to sort files by modification date', PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>3D</code> to sort files by modification date descendant', PSK_S2MSFB_ID ),
+//					__( 'Can be set to <code>4</code> to sort files by birth date', PSK_S2MSFB_ID ) . '<br/>' .
+//					__( 'Can be set to <code>4D</code> to sort files by birth date descendant', PSK_S2MSFB_ID ),
+			),
 		);
 	}
 
@@ -331,7 +371,7 @@ class PSK_S2MSFBAdminManager {
 						$message = __( 'The cache has been totally successfully re-computed !', PSK_S2MSFB_ID ) . '<br/><br/>';
 
 					} else {
-						$result = PSK_S2MSFB::db_clean_files( true, ( $_POST['hash'] == '1' ) );
+						$result  = PSK_S2MSFB::db_clean_files( true, ( $_POST['hash'] == '1' ) );
 						$message = __( 'The cache has been successfully refreshed !', PSK_S2MSFB_ID ) . '<br/><br/>';
 					}
 					$total = 0;
@@ -454,18 +494,18 @@ class PSK_S2MSFBAdminManager {
 		if ( isset( $_GET['me'] ) ) {
 
 			echo 'For readme.txt : <br/><pre>';
-			foreach ( self::$shortcode_options as $option )
+			foreach ( self::$shortcode_options as $option ) {
 				echo "* `" . $option['name'] . "` : " . $option['desc'] . "\n";
+			}
 			echo '</pre>';
 
 			echo 'For wordpress doc : <br/><pre>';
-			foreach ( self::$shortcode_options as $option )
+			foreach ( self::$shortcode_options as $option ) {
 				echo "&lt;li&gt;&lt;code&gt;" . $option['name'] . "&lt;/code&gt; : " . $option['desc'] . "&lt;/li&gt;\n";
+			}
 			echo '</pre>';
 
-		}
-
-		else {
+		} else {
 			echo '<table class="table table-bordered table-striped">
 	            <thead>
 	              <tr>
@@ -553,6 +593,52 @@ class PSK_S2MSFBAdminManager {
 					</label>';
 					break;
 
+				case 'sortby' :
+					$checked0  = ( $default == "0" ) ? ' checked="checked"' : '';
+					$checked1  = ( $default == "1" ) ? ' checked="checked"' : '';
+					$checked2  = ( $default == "2" ) ? ' checked="checked"' : '';
+					$checked3  = ( $default == "3" ) ? ' checked="checked"' : '';
+//					$checked4  = ( $default == "4" ) ? ' checked="checked"' : '';
+					$checked0D = ( $default == "0D" ) ? ' checked="checked"' : '';
+					$checked1D = ( $default == "1D" ) ? ' checked="checked"' : '';
+					$checked2D = ( $default == "2D" ) ? ' checked="checked"' : '';
+					$checked3D = ( $default == "3D" ) ? ' checked="checked"' : '';
+//					$checked4D = ( $default == "4D" ) ? ' checked="checked"' : '';
+					$control .= '
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '0" value="0"' . $checked0 . '/>' . __( 'Sort files by name', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '0D" value="0D"' . $checked0D . '/>' . __( 'Sort files by name descendant', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '1" value="1"' . $checked1 . '/>' . __( 'Sort files by extension', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '1D" value="1D"' . $checked1D . '/>' . __( 'Sort files by extension descendant', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '2" value="2"' . $checked2 . '/>' . __( 'Sort files by size', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '2D" value="2D"' . $checked2D . '/>' . __( 'Sort files by size descendant', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '3" value="3"' . $checked3 . '/>' . __( 'Sort files by modification date', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					<label class="radio inline">
+					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '3D" value="3D"' . $checked3D . '/>' . __( 'Sort files by modification date descendant', PSK_S2MSFB_ID ) . '
+					</label><br/>
+					';
+//					<label class="radio inline">
+//					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '4" value="4"' . $checked4 . '/>' . __( 'Sort files by birth date', PSK_S2MSFB_ID ) . '
+//					</label><br/>
+//					<label class="radio inline">
+//					  <input class="generator" type="radio" name="' . $tagname . '" id="' . $tagname . '4D" value="4D"' . $checked4D . '/>' . __( 'Sort files by birth date descendant', PSK_S2MSFB_ID ) . '
+//					</label><br/>
+
+					break;
+
 				case 'searchdisplay' :
 					$checked0 = ( $default == "0" ) ? ' checked="checked"' : '';
 					$checked1 = ( $default == "1" ) ? ' checked="checked"' : '';
@@ -577,14 +663,17 @@ class PSK_S2MSFBAdminManager {
 					</label>';
 					break;
 
-				case 'displayall'        :
-				case 'displaysize'       :
-				case 'dirzip'            :
-				case 'dirfirst'          :
-				case 'hidden'            :
-				case 'multifolder'       :
-				case 'openrecursive'     :
-				case 's2alertbox'        :
+				case 'displayall'              :
+				case 'displaysize'             :
+				case 'displaybirthdate'        :
+				case 'displaymodificationdate' :
+				case 'displaycomment'          :
+				case 'dirzip'                  :
+				case 'dirfirst'                :
+				case 'hidden'                  :
+				case 'multifolder'             :
+				case 'openrecursive'           :
+				case 's2alertbox'              :
 					$checked1 = ( $default == "1" ) ? ' checked="checked"' : '';
 					$checked0 = ( $default != "1" ) ? ' checked="checked"' : '';
 					$control .= '

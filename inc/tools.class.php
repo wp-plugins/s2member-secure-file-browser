@@ -356,6 +356,42 @@ class PSK_Tools {
 		return $ret;
 	}
 
+/*
+	public static function relative_time( $time , $granularity ) {
+		$d = array(
+			array(1 , "second" ),
+		  	array(60 , "minute" ),
+		  	array(3600 , "hour" ),
+  			array(86400 , "day" ),
+  			array(604800 , "week" ),
+  			array(2592000 , "month" ),
+  			array(31104000 , "year" ),
+		);
+
+	    $w = array();
+
+	    $return = "";
+	    $now = time();
+	    $diff = ($now-$time);
+	    $secondsLeft = $diff;
+
+	    for($i=6;$i>-1;$i--)
+	    {
+	         $w[$i] = intval($secondsLeft/$d[$i][0]);
+	         $secondsLeft -= ($w[$i]*$d[$i][0]);
+	         if($w[$i]!=0)
+	         {
+	            $return.= abs($w[$i]) . " " . $d[$i][1] . (($w[$i]>1)?'s':'') ." ";
+	         }
+
+	    }
+
+	    $return .= ($diff>0)? "ago" : "left";
+	    return $return;
+	}
+*/
+
 }
+
 
 

@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.4
+Stable tag: 0.4.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -179,6 +179,18 @@ Available in upcoming version 0.5 :
 
 == Changelog ==
 
+= 0.4.1 =
+* New feature : sortby shortcode option
+* New feature : modification date display shortcode option
+* New feature : order files by modification date,  addition date, size
+* Enhancement : disable previews for non logged users
+* Bug fix : IE fix for search button
+* Bug fix : mp3 previews in flash fallback was not working in IE and FF.
+* Bug fix : searchdisplay shortcode option was not included in the generator
+* Bug fix : filterfile was not working anymore in 0.4
+* Bug fix : report notification was blank in 0.4
+* Bug fix : download zip link was displayed even if dirzip shortcode option was disabled
+
 = 0.4 =
 * New feature : cut filename shortcode option
 * New feature : already downloaded file warnings shortcode option
@@ -243,6 +255,9 @@ Available in upcoming version 0.5 :
 * First release
 
 == Upgrade Notice ==
+
+= 0.4.1 =
+This version fixes 2 bugs. Upgrade immediately.
 
 = 0.4 =
 This update includes the new file caching feature. **On first launch, it computes all files hash. It can last several minutes!**

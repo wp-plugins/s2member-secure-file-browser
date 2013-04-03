@@ -1,9 +1,11 @@
 <?php
-define( 'PSK_S2MSFB_VERSION', '0.4' );
+define( 'PSK_S2MSFB_VERSION', '0.4.1' );
 define( 'PSK_S2MSFB_MIN_PHP_VERSION', '5.2' );
 define( 'PSK_S2MSFB_MIN_WP_VERSION', '3.3' );
 define( 'PSK_S2MSFB_EXT_JS', 'min.js' );
 define( 'PSK_S2MSFB_EXT_CSS', 'min.css' );
+//define( 'PSK_S2MSFB_EXT_JS', 'js' );
+//define( 'PSK_S2MSFB_EXT_CSS', 'css' );
 
 
 /*

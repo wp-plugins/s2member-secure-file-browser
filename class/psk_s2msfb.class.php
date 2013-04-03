@@ -52,8 +52,12 @@ class PSK_S2MSFB {
 	private static $filterdir = '';
 	private static $display_all_levels = '';
 	private static $displaysize = true;
+	private static $displaymodificationdate = true;
+	private static $displaybirthdate = true;
 	private static $displaydownloaded = 0;
 	private static $search = 0;
+	private static $sortby = '0';
+	private static $sortby_available = array( '0', '1', '2', '3', '0D', '1D', '2D', '3D' );
 	private static $searchdisplay = 0;
 	private static $dirzip = false;
 	private static $cutdirnames = 0;
@@ -393,6 +397,8 @@ class PSK_S2MSFB {
 		self::$display_directory_first = ( @$_POST['dirfirst'] == '0' ) ? false : true;
 		self::$openrecursive           = ( @$_POST['openrecursive'] == '1' ) ? true : false;
 		self::$displaysize             = ( @$_POST['displaysize'] == '0' ) ? false : true;
+		self::$displaymodificationdate = ( @$_POST['displaymodificationdate'] == '0' ) ? false : true;
+		self::$displaybirthdate        = ( @$_POST['displaybirthdate'] == '0' ) ? false : true;
 		self::$dirzip                  = ( @$_POST['dirzip'] == '1' ) ? true : false;
 		self::$displaydownloaded       = (int) @$_POST['displaydownloaded'];
 		self::$search                  = (int) @$_POST['search'];
@@ -401,20 +407,25 @@ class PSK_S2MSFB {
 		self::$cutfilenames            = (int) @$_POST['cutfilenames'];
 		self::$filterfile              = stripslashes( rawurldecode( @$_POST['filterfile'] ) );
 		self::$filterdir               = stripslashes( rawurldecode( @$_POST['filterdir'] ) );
-		$display_directory_names       = stripslashes( @$_POST['names'] );
+
+		if ( in_array( @$_POST['sortby'], self::$sortby_available ) )
+			self::$sortby = $_POST['sortby'];
 
 		self::$displayed_directory_names = array();
-		$tmp                             = explode( '|', $display_directory_names );
+		$tmp                             = explode( '|', stripslashes( @$_POST['names'] ) );
 		foreach ( $tmp as $keyval ) {
 			@list( $key, $val ) = @explode( ':', $keyval, 2 );
 			self::$displayed_directory_names[rawurldecode( $key )] = rawurldecode( $val );
 		}
+
 		self::$previewext = array();
-		/** @var $ext string */
-		foreach ( explode( ',', @$_POST['previewext'] ) as $ext ) {
-			$ext = trim( strtolower( $ext ) );
-			if ( in_array( $ext, self::$previewext_available ) )
-				self::$previewext[] = $ext;
+		if ( is_user_logged_in() ) {
+			/** @var $ext string */
+			foreach ( explode( ',', @$_POST['previewext'] ) as $ext ) {
+				$ext = trim( strtolower( $ext ) );
+				if ( in_array( $ext, self::$previewext_available ) )
+					self::$previewext[] = $ext;
+			}
 		}
 
 		// Retrieve current directory
@@ -477,9 +488,13 @@ class PSK_S2MSFB {
 			$result  = array();
 			$resultf = array();
 			$resultd = array();
+			$ext_all = array();
+			$mdate_all = array();
+			$size_all = array();
 
 			// Part : listing
 			if ( $token == '' ) {
+				// TODO: Retrieve db informations if needed later (comments,birthdate)
 
 				// Browse all dirs and files
 				$files = scandir( $dir );
@@ -507,10 +522,10 @@ class PSK_S2MSFB {
 						if ( self::$filterdir != '' )
 							if ( ! preg_match( self::$filterdir, $file ) )
 								continue;
-							else
-								if ( self::$filterfile != '' )
-									if ( ! preg_match( self::$filterfile, $file ) )
-										continue;
+					} else {
+						if ( self::$filterfile != '' )
+							if ( ! preg_match( self::$filterfile, $file ) )
+								continue;
 					}
 
 
@@ -536,26 +551,86 @@ class PSK_S2MSFB {
 					}
 
 					// Get the html fragment
-					list( $display_name, $li ) = self::get_html_li_token( $isdir, $file, $filepathrelbase, $filepathrel, $filepath, $current, $dirbase, $token, $alreadyd, $hashes );
-					if ( self::$display_directory_first )
-						if ( $isdir )
+					list( $display_name, $li, $size, $mdate, $ext ) = self::get_html_li_token( $isdir, $file, $filepathrelbase, $filepathrel, $filepath, $current, $dirbase, $token, $alreadyd, $hashes );
+
+					if ( self::$display_directory_first ) {
+						if ( $isdir ) {
 							$resultd[$display_name] = $li;
-						else
-							$resultf[$display_name] = $li;
-					else
-						$result[$display_name] = $li;
+						} else {
+							$resultf[$display_name]   = $li;
+							$size_all[$display_name]  = $size;
+							$mdate_all[$display_name] = $mdate;
+							$ext_all[$display_name]   = $ext;
+						}
+					} else {
+						$result[$display_name]    = $li;
+						$size_all[$display_name]  = $size;
+						$mdate_all[$display_name] = $mdate;
+						$ext_all[$display_name]   = $ext;
+					}
 
 				}
 
 				// Sort arrays according to displayed file names and not to system real file names
 				if ( self::$display_directory_first ) {
 					uksort( $resultd, "strnatcasecmp" );
-					uksort( $resultf, "strnatcasecmp" );
+					switch ( self::$sortby ) {
+						case '0D' :
+							uksort( $resultf, "strnatcasecmp" );
+							$resultf = array_reverse( $resultf , true );
+							break;
+						case '1' :
+							array_multisort( $ext_all, SORT_STRING, SORT_ASC, $resultf, SORT_STRING, SORT_ASC );
+							break;
+						case '1D' :
+							array_multisort( $ext_all, SORT_STRING, SORT_DESC, $resultf, SORT_STRING, SORT_ASC );
+							break;
+						case '2' :
+							array_multisort( $size_all, SORT_NUMERIC, SORT_ASC, $resultf, SORT_STRING, SORT_ASC );
+							break;
+						case '2D' :
+							array_multisort( $size_all, SORT_NUMERIC, SORT_DESC, $resultf, SORT_STRING, SORT_ASC );
+							break;
+						case '3' :
+							array_multisort( $mdate_all, SORT_NUMERIC, SORT_ASC, $resultf, SORT_STRING, SORT_ASC );
+							break;
+						case '3D' :
+							array_multisort( $mdate_all, SORT_NUMERIC, SORT_DESC, $resultf, SORT_STRING, SORT_ASC );
+							break;
+						default:
+							uksort( $resultf, "strnatcasecmp" );
+							break;
+					}
 					$result = array_merge( $resultd, $resultf );
 				} else {
-					uksort( $result, "strnatcasecmp" );
+					switch ( self::$sortby ) {
+						case '0D' :
+							uksort( $result, "strnatcasecmp" );
+							$result = array_reverse( $result , true );
+							break;
+						case '1' :
+							array_multisort( $ext_all, SORT_STRING, SORT_ASC, $result, SORT_STRING, SORT_ASC );
+							break;
+						case '1D' :
+							array_multisort( $ext_all, SORT_STRING, SORT_DESC, $result, SORT_STRING, SORT_ASC );
+							break;
+						case '2' :
+							array_multisort( $size_all, SORT_NUMERIC, SORT_ASC, $result, SORT_STRING, SORT_ASC );
+							break;
+						case '2D' :
+							array_multisort( $size_all, SORT_NUMERIC, SORT_DESC, $result, SORT_STRING, SORT_ASC );
+							break;
+						case '3' :
+							array_multisort( $mdate_all, SORT_NUMERIC, SORT_ASC, $result, SORT_STRING, SORT_ASC );
+							break;
+						case '3D' :
+							array_multisort( $mdate_all, SORT_NUMERIC, SORT_DESC, $result, SORT_STRING, SORT_ASC );
+							break;
+						default:
+							uksort( $result, "strnatcasecmp" );
+							break;
+					}
 				}
-
 				$search_inp_value = __( 'Search...', PSK_S2MSFB_ID );
 				$reset_btn_hidden = ' style="display:none;" ';
 				$reset_class      = 'reset';
@@ -584,10 +659,10 @@ class PSK_S2MSFB {
 					}
 					$clause = ( count( $clauses ) > 0 ) ? ' AND ( ' . implode( ' OR ', $clauses ) . ' ) ' : '';
 					$worda  = implode( ' ', $wordz );
-					$sql    = "SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ', '* ', $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
-					$sql .= "FROM " . $tablename . " ";
-					$sql .= "WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
-					$sql .= "ORDER BY score DESC, filename";
+					$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ', '* ', $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+					$sql .= " FROM " . $tablename . " ";
+					$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+					$sql .= " ORDER BY score DESC, filename";
 					$sqlres = $wpdb->get_results( $sql, ARRAY_A );
 
 					foreach ( $sqlres as $row ) {
@@ -635,10 +710,10 @@ class PSK_S2MSFB {
 					}
 					$clause = ( count( $clauses ) > 0 ) ? ' AND ( ' . implode( ' OR ', $clauses ) . ' ) ' : '';
 					$worda  = implode( ' ', $wordz );
-					$sql    = "SELECT filename, filepath, fileext, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ', '* ', $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
-					$sql .= "FROM " . $tablename . " ";
-					$sql .= "WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
-					$sql .= "ORDER BY score DESC, filename";
+					$sql    = " SELECT filename, filepath, fileext, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ', '* ', $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+					$sql .= " FROM " . $tablename . " ";
+					$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+					$sql .= " ORDER BY score DESC, filename";
 					$sqlres = $wpdb->get_results( $sql, ARRAY_A );
 
 					foreach ( $sqlres as $row ) {
@@ -686,10 +761,10 @@ class PSK_S2MSFB {
 					}
 					$clause = ( count( $clauses ) > 0 ) ? ' AND ( ' . implode( ' OR ', $clauses ) . ' ) ' : '';
 					$worda  = implode( ' ', $wordz );
-					$sql    = "SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ', '* ', $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
-					$sql .= "FROM " . $tablename . " ";
-					$sql .= "WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
-					$sql .= "ORDER BY score DESC, filename";
+					$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ', '* ', $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+					$sql .= " FROM " . $tablename . " ";
+					$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+					$sql .= " ORDER BY score DESC, filename";
 					$sqlres = $wpdb->get_results( $sql, ARRAY_A );
 
 					foreach ( $sqlres as $row ) {
@@ -717,8 +792,9 @@ class PSK_S2MSFB {
 				$search_btn_value = __( 'Click to search', PSK_S2MSFB_ID );
 				$search_inp_title = __( 'Search...', PSK_S2MSFB_ID );
 
+				$ie      = ( preg_match( '~MSIE|Internet Explorer~i' , $_SERVER['HTTP_USER_AGENT'] ) ) ? 'ie ' : '';
 				$return .= '<li>';
-				$return .= ' <div class="PSK_S2MSFB_search">';
+				$return .= ' <div class="PSK_S2MSFB_search' . $ie . '">';
 				$return .= '  <button value="reset"' . $reset_btn_hidden . 'class="PSK_S2MSFB_' . $reset_class . 'btn" title="' . PSK_Tools::rel_literal( $reset_btn_value ) . '"></button>';
 				$return .= '  <button value="submit" class="PSK_S2MSFB_searchbtn" title="' . PSK_Tools::rel_literal( $search_btn_value ) . '"></button>';
 				$return .= '  <input type="text" name="search" class="PSK_S2MSFB_searchinp" value="' . PSK_Tools::rel_literal( $search_inp_value ) . '" title="' . PSK_Tools::rel_literal( $search_inp_title ) . '"/>';
@@ -818,33 +894,38 @@ class PSK_S2MSFB {
 	 */
 	private static function get_html_li_token( $isdir, $file, $filepathrelbase, $filepathrel, $filepath, $current, $dirbase, $token, $alreadyd, $hashes, $extended = '' ) {
 
-		$display_name = self::get_display_name( $isdir, $file );
-
+		$display_name    = self::get_display_name( $isdir, $file );
+		$filepathrelbase = PSK_Tools::sanitize_directory_path( $filepathrelbase, true, false );
+		$size            = 0;
+		$mdate           = 0;
+		$ext             = '';
 		if ( $isdir ) {
 			$lizip    = '';
 			$already  = ' style="display:none;"';
 			$alreadys = '';
 			$alreadya = '0';
 
-			if ( file_exists( $filepath . '.zip' ) ) {
-				$filepathrelbasezip = $filepathrelbase . '.zip';
-				$link               = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbasezip ) ) );
-				if ( self::$displaydownloaded > 0 ) {
-					if ( isset( $alreadyd[$filepathrelbasezip] ) ) {
-						if ( ! isset( $hashes[$filepathrelbasezip] ) ) {
-							self::db_clean_files();
-						} else {
-							if ( $hashes[$filepathrelbasezip] == $alreadyd[$filepathrelbasezip] ) {
-								if ( self::$displaydownloaded == 2 ) {
-									$already  = '';
-									$alreadys = ' already';
+			if ( self::$dirzip == "1" ) {
+				if ( file_exists( $filepath . '.zip' ) ) {
+					$filepathrelbasezip = $filepathrelbase . '.zip';
+					$link               = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbasezip ) ) );
+					if ( self::$displaydownloaded > 0 ) {
+						if ( isset( $alreadyd[$filepathrelbasezip] ) ) {
+							if ( ! isset( $hashes[$filepathrelbasezip] ) ) {
+								self::db_clean_files();
+							} else {
+								if ( $hashes[$filepathrelbasezip] == $alreadyd[$filepathrelbasezip] ) {
+									if ( self::$displaydownloaded == 2 ) {
+										$already  = '';
+										$alreadys = ' already';
+									}
+									$alreadya = '1';
 								}
-								$alreadya = '1';
 							}
 						}
 					}
+					$lizip = '<span class="d dwnl display_name"><a href="#" class="link" rel="' . $link . '">' . __( 'Download zip', PSK_S2MSFB_ID ) . '</a></span>';
 				}
-				$lizip = '<span class="d dwnl display_name"><a href="#" class="link" rel="' . $link . '">' . __( 'Download zip', PSK_S2MSFB_ID ) . '</a></span>';
 			}
 
 			$li = '<li class="directory ';
@@ -863,12 +944,24 @@ class PSK_S2MSFB {
 			$li .= '</li>';
 
 		} else {
-			$ext      = mb_strtolower( preg_replace( '/^.*\./', '', $file ) );
-			$link     = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbase ) ) );
-			$prev     = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbase, 'file_inline' => true ) ) );
-			$size     = filesize( $filepath );
-			$hsize    = PSK_Tools::size_readable( $size );
-			$size     = PSK_Tools::rel_literal( $size );
+			$ext  = mb_strtolower( preg_replace( '/^.*\./', '', $file ) );
+			$link = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbase ) ) );
+			$prev = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbase, 'file_inline' => true ) ) . '&PSK_preview=1' );
+
+			if ( ( 2 == (int) self::$sortby ) || ( self::$displaysize ) )
+				$size = filesize( $filepath );
+			if ( self::$displaysize ) {
+				$hsize = PSK_Tools::size_readable( $size );
+				$msize = PSK_Tools::rel_literal( $size );
+			}
+
+			if ( ( 3 == (int) self::$sortby ) || ( self::$displaymodificationdate ) )
+				$mdate = filemtime( $filepath ) + get_option( 'gmt_offset' ) * 3600;
+			if ( self::$displaymodificationdate ) {
+				$hmdate = date_i18n( sprintf( '%1$s - %2$s', get_option( 'date_format' ), get_option( 'time_format' ) ), $mdate );
+				$tmdate = PSK_Tools::rel_literal( sprintf( __( 'Modified on %s', PSK_S2MSFB_ID ), $hmdate ) );
+			}
+
 			$already  = ' style="display:none;"';
 			$alreadys = '';
 			$alreadya = '0';
@@ -889,11 +982,15 @@ class PSK_S2MSFB {
 			}
 
 			/** @var $ext string */
-			$li = '<li class="file' . $alreadys . ' ext_' . PSK_Tools::rel_literal( $ext ) . '" data-s="' . $size . '" data-already="' . $alreadya . '">';
+			$li = '<li data-n="' . $display_name . '" class="file' . $alreadys . ' ext_' . PSK_Tools::rel_literal( $ext ) . '" data-s="' . $msize . '" data-already="' . $alreadya . '">';
 			$li .= '<div class="jftctn"><a href="#" class="link" rel="' . $link . '">' . $display_name . $extended . '</a>';
-			$li .= '<span class="size d" title="' . $size . ' ' . _x( 'B', 'Bytes abbr', PSK_S2MSFB_ID ) . '">';
-			$li .= ( self::$displaysize ) ? $hsize : '';
-			$li .= '</span>';
+
+			if ( self::$displaysize ) {
+				$li .= '<span class="size d" title="' . $msize . ' ' . _x( 'B', 'Bytes abbr', PSK_S2MSFB_ID ) . '">' . $hsize . '</span>';
+			}
+
+			if ( self::$displaymodificationdate )
+				$li .= '<span class="size d" title="' . $tmdate . '">' . $hmdate . '</span>';
 
 			if ( in_array( $ext, self::$previewext ) )
 				$li .= '<span class="prev d" data-e="' . $ext . '" rel="' . $prev . '"></span>';
@@ -905,8 +1002,7 @@ class PSK_S2MSFB {
 			$li .= '<div style="clear:both"></div></div></li>';
 		}
 
-		return array( $display_name, $li );
-
+		return array( $display_name, $li, $size, $mdate, $ext );
 	}
 
 
@@ -938,9 +1034,12 @@ class PSK_S2MSFB {
 
 		$rt .= '}, function( obj ) {';
 
-		$rt .= 'var download = false;';
-		$rt .= 'var a = $(obj).parent().parent().attr( "data-already" );';
-		$rt .= 'var f = (typeof a !== "undefined" && a !== false) ? $(obj).parent().parent() : $(obj).parent().parent().parent();'; // file or directory
+		/*		$rt .= 'var download = false;';
+				$rt .= 'var a = $(obj).parent().parent().attr( "data-already" );';
+				$rt .= 'var f = (typeof a !== "undefined" && a !== false) ? $(obj).parent().parent() : $(obj).parent().parent().parent();'; // file or directory
+		*/
+		$rt .= 'var download=false;';
+		$rt .= 'var f=$(obj).parent().parent(); if ($(f).attr("data-already")===undefined) f=$(f).parent();'; // file or directory
 
 		if ( @$atts['displaydownloaded'] == '1' ) {
 			$rt .= 'if ( $(f).attr( "data-already" ) == "1" ) {';
@@ -1022,7 +1121,6 @@ class PSK_S2MSFB {
 				$users[$user->ID] = $user->display_name;
 			}
 
-
 			// Block unnotified rows now
 			//
 			$now = date( 'Y-m-d H:i:s' );
@@ -1076,7 +1174,7 @@ class PSK_S2MSFB {
 					//
 					$msg .= '<h3>' . __( 'Top downloaders', PSK_S2MSFB_ID ) . '</h3>';
 					$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
-					$sql       = "SELECT userid, COUNT(*) A FROM " . $tablename . "WHERE notified='" . $now . " GROUP BY userid ORDER BY A DESC";
+					$sql       = "SELECT userid, COUNT(*) A FROM " . $tablename . " WHERE notified='" . $now . " GROUP BY userid ORDER BY A DESC";
 					$result    = $wpdb->get_results( $sql, ARRAY_A );
 					if ( count( $result ) == 0 ) {
 						$msg .= __( "No download", PSK_S2MSFB_ID );
@@ -1132,16 +1230,12 @@ class PSK_S2MSFB {
 		/** @var $wpdb WPDB */
 		global $wpdb;
 
-		/* It seems to be a preview...
-		 * Do not record anything
-		 */
-		if ( isset( $vars['serving_range'] ) ) {
-			if ( $vars['serving_range'] === true ) {
-				return;
-			}
-		}
-
 		if ( isset( $_GET["s2member_file_download"] ) ) {
+
+			// It seems to be a preview..., do not record anything
+			if ( isset( $_GET['PSK_preview'] ) )
+				return;
+
 			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_LATEST_ID );
 			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP0_ID );
 			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP1_ID );

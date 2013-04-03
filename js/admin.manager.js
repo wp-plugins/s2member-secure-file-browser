@@ -141,16 +141,21 @@ function get_shortcode_val(tag) {
 	var val = "";
 
 	switch (tag) {
-		case 'displayall'        :
-		case 'displaydownloaded' :
-		case 'search'            :
-		case 'displaysize'       :
-		case 'dirzip'            :
-		case 's2alertbox'        :
-		case 'dirfirst'          :
-		case 'hidden'            :
-		case 'multifolder'       :
-		case 'openrecursive'     :
+		case 'displayall'              :
+		case 'displaydownloaded'       :
+		case 'displaybirthdate'        :
+		case 'displaycomment'          :
+		case 'displaymodificationdate' :
+		case 'sortby'                  :
+		case 'search'                  :
+		case 'searchdisplay'           :
+		case 'displaysize'             :
+		case 'dirzip'                  :
+		case 's2alertbox'              :
+		case 'dirfirst'                :
+		case 'hidden'                  :
+		case 'multifolder'             :
+		case 'openrecursive'           :
 			val = $('input[type=radio][name=' + tag + ']:checked').val();
 			break;
 

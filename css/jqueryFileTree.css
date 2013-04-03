@@ -36,9 +36,17 @@ UL.jqueryFileTree A.link SPAN.fn {
 
 UL.jqueryFileTree .size {
 	color: #888;
-	font-style: italic;
 	text-align: right;
-	width: 100px;
+	width: 90px;
+	font-size:10px!important;
+}
+
+UL.jqueryFileTree .mdate {
+	color: #888;
+	text-align: right;
+	width: 200px;
+	margin-right: 20px!important;
+	font-size:10px!important;
 }
 
 UL.jqueryFileTree .d {
@@ -81,6 +89,7 @@ UL.jqueryFileTree input, UL.jqueryFileTree label {
 	background: url(../img/playpause.png);
 	background-repeat: no-repeat;
 	background-position: 0 0;
+	margin-left: 20px!important;
 }
 .jqueryFileTree LI.file SPAN.prev DIV.play {
 	background-position: 0 0;
@@ -370,13 +379,24 @@ UL.jqueryFileTree input, UL.jqueryFileTree label {
 	float:left;
 	clear:left;
 }
+
+.PSK_S2MSFB_searchie {
+	width:250px!important;
+	opacity:0.5;
+	display: block;
+	float:left;
+	clear:left;
+}
+
+.PSK_S2MSFB_searchie:hover,
 .PSK_S2MSFB_search:hover {
 	opacity:1.0;
 }
+.PSK_S2MSFB_searchie input,
 .PSK_S2MSFB_search input {
-	float:right;
-	width:190px;
-	height:14px;
+	float:right!important;
+	width:190px!important;
+	height:14px!important;
 	margin:0!important;
 	border-top: 1px solid #f4f4f4!important;
 	border-left: 1px solid #e2e2e2!important;
@@ -385,30 +405,32 @@ UL.jqueryFileTree input, UL.jqueryFileTree label {
 	padding:1px 3px 1px 3px!important;
 	font-size:small!important;
 }
+.PSK_S2MSFB_searchie input:hover,
 .PSK_S2MSFB_search input:hover {
 	color: #3f9aff!important;
 }
+.PSK_S2MSFB_searchie button,
 .PSK_S2MSFB_search button {
-	float:right;
-	width:23px;
-	height:18px;
+	float:right!important;;
+	width:23px!important;;
+	height:18px!important;;
 	margin:0!important;
 	padding:0!important;
 	border:0!important;
-	background-repeat:no-repeat;
+	background-repeat:no-repeat!important;;
 }
+.PSK_S2MSFB_searchie button.PSK_S2MSFB_searchbtn,
 .PSK_S2MSFB_search button.PSK_S2MSFB_searchbtn {
 	background-image:url('../img/search.png');
 }
+.PSK_S2MSFB_searchie button.PSK_S2MSFB_resetbtn,
+.PSK_S2MSFB_searchie button.PSK_S2MSFB_reloadbtn,
 .PSK_S2MSFB_search button.PSK_S2MSFB_resetbtn,
 .PSK_S2MSFB_search button.PSK_S2MSFB_reloadbtn {
 	background-image:url('../img/reset.png');
 }
 
+.PSK_S2MSFB_searchie button:hover,
 .PSK_S2MSFB_search button:hover {
 	cursor:pointer;
 }
-
-
-
-

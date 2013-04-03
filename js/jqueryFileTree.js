@@ -21,6 +21,7 @@
 //           loadmessage    - Message to display while initial tree loads (can be HTML)
 //
 // History:
+// 1.?? - Modified by potsky : unable to explain all changes ! (2013/04/01)
 // 1.03 - Modified by potsky : LI are now triggerable (2012/12/30)
 // 1.02 - Modified by potsky : work with Wordpress plugin s2member-files-browser (2012/12/24)
 // 1.01 - updated to work with foreign characters in directory/file names (12 April 2008)
@@ -31,7 +32,8 @@
 // This plugin is dual-licensed under the GNU General Public License and the MIT License and
 // is copyright 2008 A Beautiful Site, LLC.
 //
-;(function ($) {
+;
+(function ($) {
 	$.extend($.fn, {
 
 		fileTreeReload: function () {
@@ -67,6 +69,10 @@
 				if (o.cutdirnames === undefined) o.cutdirnames = '0';
 				if (o.cutfilenames === undefined) o.cutfilenames = '0';
 				if (o.displaysize === undefined) o.displaysize = '1';
+				if (o.displaymodificationdate === undefined) o.displaymodificationdate = '0';
+				if (o.displaybirthdate === undefined) o.displaybirthdate = '0';
+				if (o.displaycomment === undefined) o.displaycomment = '1';
+				if (o.sortby === undefined) o.sortby = '0';
 				if (o.displaydownloaded === undefined) o.displaydownloaded = '0';
 				if (o.search === undefined) o.search = '0';
 				if (o.searchdisplay === undefined) o.searchdisplay = '0';
@@ -87,25 +93,29 @@
 				function showTree(c, t) {
 					$(c).addClass('wait');
 					$.post(o.script, {
-						action           : o.action,
-						dir              : t,
-						hidden           : o.hidden,
-						dirfirst         : o.dirfirst,
-						names            : o.names,
-						filterfile       : o.filterfile,
-						filterdir        : o.filterdir,
-						displayall       : o.displayall,
-						dirbase          : o.dirbase,
-						openrecursive    : o.openrecursive,
-						cutdirnames      : o.cutdirnames,
-						cutfilenames     : o.cutfilenames,
-						displaysize      : o.displaysize,
-						displaydownloaded: o.displaydownloaded,
-						search           : o.search,
-						searchdisplay    : o.searchdisplay,
-						dirzip           : o.dirzip,
-						previewext       : o.previewext,
-						nonce            : PSK_S2MSFB.nonce
+						action                 : o.action,
+						dir                    : t,
+						hidden                 : o.hidden,
+						dirfirst               : o.dirfirst,
+						names                  : o.names,
+						filterfile             : o.filterfile,
+						filterdir              : o.filterdir,
+						displayall             : o.displayall,
+						dirbase                : o.dirbase,
+						openrecursive          : o.openrecursive,
+						cutdirnames            : o.cutdirnames,
+						cutfilenames           : o.cutfilenames,
+						displaysize            : o.displaysize,
+						displaydownloaded      : o.displaydownloaded,
+						search                 : o.search,
+						searchdisplay          : o.searchdisplay,
+						dirzip                 : o.dirzip,
+						previewext             : o.previewext,
+						displaymodificationdate: o.displaymodificationdate,
+						displaybirthdate       : o.displaybirthdate,
+						displaycomment         : o.displaycomment,
+						sortby                 : o.sortby,
+						nonce                  : PSK_S2MSFB.nonce
 					}, function (data) {
 						$(c).removeClass('wait').append(data);
 						$(c).find('UL:hidden').slideDown({ duration: o.expandspeed, easing: o.expandeasing });
@@ -114,7 +124,7 @@
 					});
 				}
 
-				function searchTree(c,s) {
+				function searchTree(c, s) {
 					if ($(c).hasClass('psk_jfiletree')) { // top search
 						var t = '/';
 						$(c).find('.start').show();
@@ -157,52 +167,52 @@
 				function bindTree(t) {
 					// Search feature
 					$(t).find('.PSK_S2MSFB_searchinp')
-						.blur(function(){
-							if ( $(this).val() == '' ) {
-								$(this).val( $(this).attr('title') );
-								if ( $(this).find('UL.jqueryFileTree').attr('data-token') == '' )
+						.blur(function () {
+							if ($(this).val() == '') {
+								$(this).val($(this).attr('title'));
+								if ($(this).find('UL.jqueryFileTree').attr('data-token') == '')
 									$(this).prev().prev().hide();//resetbtn
 							}
 						})
-						.click(function(){
-							if ( $(this).val() == $(this).attr('title') )
+						.click(function () {
+							if ($(this).val() == $(this).attr('title'))
 								$(this).val('');
 
-							if ( ( $(this).val() == '' ) || ( $(this).val() == $(this).attr('title') ) )
-								if ( $(this).find('UL.jqueryFileTree').attr('data-token') == '' )
+							if (( $(this).val() == '' ) || ( $(this).val() == $(this).attr('title') ))
+								if ($(this).find('UL.jqueryFileTree').attr('data-token') == '')
 									$(this).prev().prev().hide();//resetbtn
-							else
-								$(this).prev().prev().show();//resetbtn
+								else
+									$(this).prev().prev().show();//resetbtn
 						})
-						.keypress(function(e){
-							if ( ( $(this).val() == '' ) || ( $(this).val() == $(this).attr('title') ) )
-								if ( $(this).find('UL.jqueryFileTree').attr('data-token') == '' )
+						.keypress(function (e) {
+							if (( $(this).val() == '' ) || ( $(this).val() == $(this).attr('title') ))
+								if ($(this).find('UL.jqueryFileTree').attr('data-token') == '')
 									$(this).prev().prev().hide();//resetbtn
-							else
-								$(this).prev().prev().show();//resetbtn
+								else
+									$(this).prev().prev().show();//resetbtn
 
 							if (e.which == 13)
-								if ( ( $(this).val() == '' ) || ( $(this).val() == $(this).attr('title') ) )
-									alert( PSK_S2MSFB.errorsearch );
+								if (( $(this).val() == '' ) || ( $(this).val() == $(this).attr('title') ))
+									alert(PSK_S2MSFB.errorsearch);
 								else
-									searchTree( $(this).parent().parent().parent().parent() , $(this).val() );
+									searchTree($(this).parent().parent().parent().parent(), $(this).val());
 						})
 					;
 					$(t).find('.PSK_S2MSFB_searchbtn')
-						.click(function(){
+						.click(function () {
 							var e = jQuery.Event("keypress");
 							e.which = 13;
 							$(this).next().trigger(e);
 						})
 					;
 					$(t).find('.PSK_S2MSFB_reloadbtn')
-						.click(function(){
-							searchTree( $(this).parent().parent().parent().parent() , '' );
+						.click(function () {
+							searchTree($(this).parent().parent().parent().parent(), '');
 						})
 					;
 					$(t).find('.PSK_S2MSFB_resetbtn')
-						.click(function(){
-							$(this).next().next().val( $(this).next().next().attr('title') );
+						.click(function () {
+							$(this).next().next().val($(this).next().next().attr('title'));
 							$(this).hide();
 						})
 					;
@@ -213,7 +223,7 @@
 						var thisdesign = "PSK_S2MSFB_jdesign" + PSK_S2MSFB_jplayer_id;
 						var thisurl = $(this).attr('rel');
 						$(this)
-							.html('<div id="' + thisplayer + '" style="display:none"></div><div id="' + thisdesign + '" class="play"></div>')
+							.html('<div id="' + thisplayer + '" style="width:1px!important;height:1px!important;"></div><div id="' + thisdesign + '" class="play"></div>')
 							.unbind('click')
 							.click(function () {
 								$(this).unbind('click');
@@ -227,6 +237,8 @@
 											.jPlayer('play');
 									},
 									play         : function () {
+										$('#' + thisplayer)
+											.jPlayer('pauseOthers');
 										$('#' + thisdesign)
 											.removeClass('play')
 											.addClass('stop')
@@ -258,18 +270,20 @@
 									},
 									swfPath      : o.swfurl,
 									supplied     : 'mp3',
-									solution     : 'html, flash',
+									solution     : 'html,flash',
 									preload      : 'none',
 									volume       : 1,
 									muted        : false,
-									errorAlerts  : false,
-									warningAlerts: false
+									errorAlerts  : true,
+									warningAlerts: false,
+									wmode        : "window"
 								});
-
 								//noinspection JSJQueryEfficiency
-								$('#' + thisplayer)
-									.jPlayer('pauseOthers')
-									.jPlayer('play');
+								/*								$('#' + thisplayer)
+								 .jPlayer("setMedia", { mp3: thisurl })
+								 .jPlayer('pauseOthers')
+								 .jPlayer('play');
+								 */
 							}
 						);
 					});
@@ -282,7 +296,7 @@
 									$(this).parent().parent().parent().find('UL').slideUp({ duration: o.collapsespeed, easing: o.collapseeasing });
 									$(this).parent().parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
 								}
-								if ($(this).attr('rel')=='') {
+								if ($(this).attr('rel') == '') {
 									$(this).parent().parent().find('UL').slideDown({ duration: o.expandspeed, easing: o.expandeasing });
 									$(this).parent().parent().removeClass('collapsed').addClass('expanded');
 								}
