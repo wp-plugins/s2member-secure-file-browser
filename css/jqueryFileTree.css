@@ -18,7 +18,28 @@ UL.jqueryFileTree LI {
 	background-color: #f4f4ff;
 }
 
-UL.jqueryFileTree A.link, UL.jqueryFileTree A.prev {
+UL.jqueryFileTree input, UL.jqueryFileTree label {
+	margin: 0px;
+	padding: 0px;
+	background: none;
+}
+
+UL.jqueryFileTree .d {
+	float: right;
+	margin: 0px;
+	padding: 0px;
+}
+
+UL.jqueryFileTree SPAN.dspacer {
+	float: right;
+	margin: 0px;
+	padding: 0px;
+	width:16px;
+	height:16px;
+}
+
+UL.jqueryFileTree A.link,
+UL.jqueryFileTree A.prev {
 	color: #333;
 	text-decoration: none;
 	display: block;
@@ -34,41 +55,30 @@ UL.jqueryFileTree A.link SPAN.fn {
 	font-style: italic;
 }
 
-UL.jqueryFileTree .size {
+UL.jqueryFileTree SPAN.size,
+UL.jqueryFileTree SPAN.dwnl {
 	color: #888;
 	text-align: right;
 	width: 90px;
 	font-size:10px!important;
 }
+UL.jqueryFileTree SPAN.size {
+	cursor:help;
+}
 
-UL.jqueryFileTree .mdate {
+UL.jqueryFileTree SPAN.mdate,
+UL.jqueryFileTree SPAN.bdate {
 	color: #888;
 	text-align: right;
-	width: 200px;
 	margin-right: 20px!important;
 	font-size:10px!important;
-}
-
-UL.jqueryFileTree .d {
-	float: right;
-	margin: 0px;
-	padding: 0px;
-}
-
-UL.jqueryFileTree input, UL.jqueryFileTree label {
-	margin: 0px;
-	padding: 0px;
-	background: none;
+	cursor:help;
 }
 
 /* Core Styles */
 .jqueryFileTree LI.waitinit {
 	background: url(../img/spinner.gif) left top no-repeat;
 	padding-left: 20px;
-}
-
-.jqueryFileTree LI.directory SPAN.dwnl A.link {
-	background: url(../img/download.png) left top no-repeat;
 }
 
 .jqueryFileTree LI.directory A.link {
@@ -83,13 +93,27 @@ UL.jqueryFileTree input, UL.jqueryFileTree label {
 	opacity:0.69;
 }
 
+.jqueryFileTree SPAN.comm {
+	width:16px;
+	height:16px;
+	margin-right: 10px!important;
+}
+.jqueryFileTree SPAN.comm.ok {
+	background: url(../img/comment.png);
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	cursor:help;
+}
+.jqueryFileTree SPAN.comm.ok:hover {
+	background-position: -16px 0;
+}
 .jqueryFileTree LI.file SPAN.prev DIV {
 	width:16px;
 	height:16px;
 	background: url(../img/playpause.png);
 	background-repeat: no-repeat;
 	background-position: 0 0;
-	margin-left: 20px!important;
+	margin-right: 10px!important;
 }
 .jqueryFileTree LI.file SPAN.prev DIV.play {
 	background-position: 0 0;
@@ -397,13 +421,15 @@ UL.jqueryFileTree input, UL.jqueryFileTree label {
 	float:right!important;
 	width:190px!important;
 	height:14px!important;
-	margin:0!important;
+	padding:1px 3px 1px 3px!important;
 	border-top: 1px solid #f4f4f4!important;
 	border-left: 1px solid #e2e2e2!important;
 	border-right: 1px solid #e2e2e2!important;
 	border-bottom: 1px solid #b9b9b9!important;
-	padding:1px 3px 1px 3px!important;
+	margin:0!important;
 	font-size:small!important;
+	-moz-box-sizing: content-box!important;
+	box-sizing: content-box!important;
 }
 .PSK_S2MSFB_searchie input:hover,
 .PSK_S2MSFB_search input:hover {
@@ -411,9 +437,9 @@ UL.jqueryFileTree input, UL.jqueryFileTree label {
 }
 .PSK_S2MSFB_searchie button,
 .PSK_S2MSFB_search button {
-	float:right!important;;
-	width:23px!important;;
-	height:18px!important;;
+	float:right!important;
+	width:23px!important;
+	height:18px!important;
 	margin:0!important;
 	padding:0!important;
 	border:0!important;

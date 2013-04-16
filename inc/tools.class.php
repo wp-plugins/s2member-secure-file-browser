@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
-if ( ( realpath( __FILE__ ) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
+if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
 	status_header( 404 );
 	exit;
 }
@@ -34,8 +34,8 @@ class PSK_Tools {
 	 * @return      string               the url of the gravatar
 	 */
 	public static function get_avatar_url( $user ) {
-		preg_match( "/src='(.*?)'/i", get_avatar( $user ), $matches );
-		return $matches[1];
+		preg_match( "/src='(.*?)'/i" , get_avatar( $user ) , $matches );
+		return $matches[ 1 ];
 	}
 
 
@@ -48,76 +48,76 @@ class PSK_Tools {
 	 */
 	public static function get_file_icon( $file_path ) {
 		$extensions = array(
-			'3gp'   => 'film.png',
-			'afp'   => 'code.png',
-			'afpa'  => 'code.png',
-			'asp'   => 'code.png',
-			'aspx'  => 'code.png',
-			'avi'   => 'film.png',
-			'bat'   => 'application.png',
-			'bmp'   => 'picture.png',
-			'c'     => 'code.png',
-			'cfm'   => 'code.png',
-			'cgi'   => 'code.png',
-			'com'   => 'application.png',
-			'cpp'   => 'code.png',
-			'css'   => 'css.png',
-			'doc'   => 'doc.png',
-			'exe'   => 'application.png',
-			'gif'   => 'picture.png',
-			'fla'   => 'flash.png',
-			'h'     => 'code.png',
-			'htm'   => 'html.png',
-			'html'  => 'html.png',
-			'jar'   => 'java.png',
-			'jpg'   => 'picture.png',
-			'jpeg'  => 'picture.png',
-			'js'    => 'script.png',
-			'lasso' => 'code.png',
-			'log'   => 'txt.png',
-			'm4p'   => 'music.png',
-			'mov'   => 'film.png',
-			'mp3'   => 'music.png',
-			'mp4'   => 'film.png',
-			'mpg'   => 'film.png',
-			'mpeg'  => 'film.png',
-			'mpeg4' => 'film.png',
-			'ogg'   => 'music.png',
-			'pcx'   => 'picture.png',
-			'pdf'   => 'pdf.png',
-			'php'   => 'php.png',
-			'png'   => 'picture.png',
-			'ppt'   => 'ppt.png',
-			'pps'   => 'ppt.png',
-			'psd'   => 'psd.png',
-			'pl'    => 'script.png',
-			'py'    => 'script.png',
-			'rb'    => 'ruby.png',
-			'rbx'   => 'ruby.png',
-			'rhtml' => 'ruby.png',
-			'rpm'   => 'linux.png',
-			'ruby'  => 'ruby.png',
-			'sql'   => 'db.png',
-			'swf'   => 'flash.png',
-			'tif'   => 'picture.png',
-			'tiff'  => 'picture.png',
-			'txt'   => 'txt.png',
-			'vb'    => 'code.png',
-			'wav'   => 'music.png',
-			'wmv'   => 'film.png',
-			'xls'   => 'xls.png',
-			'xml'   => 'code.png',
-			'zip'   => 'zip.png',
-			'rar'   => 'zip.png',
-			'bz2'   => 'zip.png',
-			'tar'   => 'zip.png',
-			'gz'    => 'zip.png',
-			'vsa'   => 'vsa.png',
+			'3gp'   => 'film.png' ,
+			'afp'   => 'code.png' ,
+			'afpa'  => 'code.png' ,
+			'asp'   => 'code.png' ,
+			'aspx'  => 'code.png' ,
+			'avi'   => 'film.png' ,
+			'bat'   => 'application.png' ,
+			'bmp'   => 'picture.png' ,
+			'c'     => 'code.png' ,
+			'cfm'   => 'code.png' ,
+			'cgi'   => 'code.png' ,
+			'com'   => 'application.png' ,
+			'cpp'   => 'code.png' ,
+			'css'   => 'css.png' ,
+			'doc'   => 'doc.png' ,
+			'exe'   => 'application.png' ,
+			'gif'   => 'picture.png' ,
+			'fla'   => 'flash.png' ,
+			'h'     => 'code.png' ,
+			'htm'   => 'html.png' ,
+			'html'  => 'html.png' ,
+			'jar'   => 'java.png' ,
+			'jpg'   => 'picture.png' ,
+			'jpeg'  => 'picture.png' ,
+			'js'    => 'script.png' ,
+			'lasso' => 'code.png' ,
+			'log'   => 'txt.png' ,
+			'm4p'   => 'music.png' ,
+			'mov'   => 'film.png' ,
+			'mp3'   => 'music.png' ,
+			'mp4'   => 'film.png' ,
+			'mpg'   => 'film.png' ,
+			'mpeg'  => 'film.png' ,
+			'mpeg4' => 'film.png' ,
+			'ogg'   => 'music.png' ,
+			'pcx'   => 'picture.png' ,
+			'pdf'   => 'pdf.png' ,
+			'php'   => 'php.png' ,
+			'png'   => 'picture.png' ,
+			'ppt'   => 'ppt.png' ,
+			'pps'   => 'ppt.png' ,
+			'psd'   => 'psd.png' ,
+			'pl'    => 'script.png' ,
+			'py'    => 'script.png' ,
+			'rb'    => 'ruby.png' ,
+			'rbx'   => 'ruby.png' ,
+			'rhtml' => 'ruby.png' ,
+			'rpm'   => 'linux.png' ,
+			'ruby'  => 'ruby.png' ,
+			'sql'   => 'db.png' ,
+			'swf'   => 'flash.png' ,
+			'tif'   => 'picture.png' ,
+			'tiff'  => 'picture.png' ,
+			'txt'   => 'txt.png' ,
+			'vb'    => 'code.png' ,
+			'wav'   => 'music.png' ,
+			'wmv'   => 'film.png' ,
+			'xls'   => 'xls.png' ,
+			'xml'   => 'code.png' ,
+			'zip'   => 'zip.png' ,
+			'rar'   => 'zip.png' ,
+			'bz2'   => 'zip.png' ,
+			'tar'   => 'zip.png' ,
+			'gz'    => 'zip.png' ,
+			'vsa'   => 'vsa.png' ,
 		);
 
-		$ext = trim( mb_strtolower( mb_substr( $file_path, mb_strrpos( $file_path, '.' ) + 1 ) ) );
-		if ( array_key_exists( $ext, $extensions ) ) {
-			return $extensions[$ext];
+		$ext = trim( mb_strtolower( mb_substr( $file_path , mb_strrpos( $file_path , '.' ) + 1 ) ) );
+		if ( array_key_exists( $ext , $extensions ) ) {
+			return $extensions[ $ext ];
 		} else {
 			return 'file.png';
 		}
@@ -133,7 +133,7 @@ class PSK_Tools {
 	 * @return      string               a granted capability
 	 */
 	public static function current_user_cans( $capablities ) {
-		$caps = array_unique( explode( ',', $capablities ) );
+		$caps = array_unique( explode( ',' , $capablities ) );
 		foreach ( $caps as $cap ) {
 			$c = strtolower( trim( $cap ) );
 			if ( current_user_can( $c ) ) {
@@ -152,8 +152,8 @@ class PSK_Tools {
 	 *
 	 * @return      boolean
 	 */
-	public static function starts_with( $string, $start ) {
-		return ( mb_substr( $string, 0, mb_strlen( $start ) ) == $start );
+	public static function starts_with( $string , $start ) {
+		return ( mb_substr( $string , 0 , mb_strlen( $start ) ) == $start );
 	}
 
 
@@ -166,12 +166,12 @@ class PSK_Tools {
 	 *
 	 * @return      boolean
 	 */
-	public static function sanitize_directory_path( $directory , $start=false , $end=false ) {
-		while ( mb_substr( $directory, - 1, 1 ) == DIRECTORY_SEPARATOR ) {
-			$directory = mb_substr( $directory, 0, - 1 );
+	public static function sanitize_directory_path( $directory , $start = false , $end = false ) {
+		while ( mb_substr( $directory , - 1 , 1 ) == DIRECTORY_SEPARATOR ) {
+			$directory = mb_substr( $directory , 0 , - 1 );
 		}
-		while ( mb_substr( $directory, 0, 1 ) == DIRECTORY_SEPARATOR ) {
-			$directory = mb_substr( $directory, 1 );
+		while ( mb_substr( $directory , 0 , 1 ) == DIRECTORY_SEPARATOR ) {
+			$directory = mb_substr( $directory , 1 );
 		}
 		if ( $end )
 			$directory .= DIRECTORY_SEPARATOR;
@@ -192,7 +192,7 @@ class PSK_Tools {
 	public static function is_directory_allowed( $directory ) {
 		$child  = realpath( $directory );
 		$parent = realpath( PSK_S2MSFB_S2MEMBER_FILES_FOLDER );
-		return self::starts_with( $child, $parent );
+		return self::starts_with( $child , $parent );
 	}
 
 
@@ -248,21 +248,21 @@ class PSK_Tools {
 	 *
 	 * @return      string               readable sizes
 	 */
-	public static function size_readable( $size, $max = null, $system = 'si', $retstring = '%01.2f %s' ) {
-		$sys['si']['p'] = array( _x( 'B', 'Bytes abbr', PSK_S2MSFB_ID ), _x( 'KB', 'Kilobytes abbr', PSK_S2MSFB_ID ), _x( 'MB', 'Megabytes abbr', PSK_S2MSFB_ID ), _x( 'GB', 'Gigabytes abbr', PSK_S2MSFB_ID ), _x( 'TB', 'Terabytes abbr', PSK_S2MSFB_ID ), _x( 'PB', 'Petabytes abbr', PSK_S2MSFB_ID ) );
-		$sys['si']['s'] = 1000;
-		$sys['bi']['p'] = array( _x( 'B', 'Bytes abbr', PSK_S2MSFB_ID ), _x( 'KiB', 'Kibibytes abbr', PSK_S2MSFB_ID ), _x( 'MiB', 'Mebibytes abbr', PSK_S2MSFB_ID ), _x( 'GiB', 'Gibibytes abbr', PSK_S2MSFB_ID ), _x( 'TiB', 'Tebibytes abbr', PSK_S2MSFB_ID ), _x( 'PiB', 'Pebibytes abbr', PSK_S2MSFB_ID ) );
-		$sys['bi']['s'] = 1024;
-		$sys            = isset( $sys[$system] ) ? $sys[$system] : $sys['si'];
+	public static function size_readable( $size , $max = null , $system = 'si' , $retstring = '%01.2f %s' ) {
+		$sys[ 'si' ][ 'p' ] = array( _x( 'B' , 'Bytes abbr' , PSK_S2MSFB_ID ) , _x( 'KB' , 'Kilobytes abbr' , PSK_S2MSFB_ID ) , _x( 'MB' , 'Megabytes abbr' , PSK_S2MSFB_ID ) , _x( 'GB' , 'Gigabytes abbr' , PSK_S2MSFB_ID ) , _x( 'TB' , 'Terabytes abbr' , PSK_S2MSFB_ID ) , _x( 'PB' , 'Petabytes abbr' , PSK_S2MSFB_ID ) );
+		$sys[ 'si' ][ 's' ] = 1000;
+		$sys[ 'bi' ][ 'p' ] = array( _x( 'B' , 'Bytes abbr' , PSK_S2MSFB_ID ) , _x( 'KiB' , 'Kibibytes abbr' , PSK_S2MSFB_ID ) , _x( 'MiB' , 'Mebibytes abbr' , PSK_S2MSFB_ID ) , _x( 'GiB' , 'Gibibytes abbr' , PSK_S2MSFB_ID ) , _x( 'TiB' , 'Tebibytes abbr' , PSK_S2MSFB_ID ) , _x( 'PiB' , 'Pebibytes abbr' , PSK_S2MSFB_ID ) );
+		$sys[ 'bi' ][ 's' ] = 1024;
+		$sys                = isset( $sys[ $system ] ) ? $sys[ $system ] : $sys[ 'si' ];
 
-		$depth = count( $sys['p'] ) - 1;
-		if ( $max && false !== $d = array_search( $max, $sys['p'] ) ) $depth = $d;
+		$depth = count( $sys[ 'p' ] ) - 1;
+		if ( $max && false !== $d = array_search( $max , $sys[ 'p' ] ) ) $depth = $d;
 		$i = 0;
-		while ( $size >= $sys['s'] && $i < $depth ) {
-			$size /= $sys['s'];
+		while ( $size >= $sys[ 's' ] && $i < $depth ) {
+			$size /= $sys[ 's' ];
 			$i ++;
 		}
-		return sprintf( $retstring, $size, $sys['p'][$i] );
+		return sprintf( $retstring , $size , $sys[ 'p' ][ $i ] );
 	}
 
 
@@ -275,7 +275,7 @@ class PSK_Tools {
 	 */
 	public static function rel_literal( $str ) {
 		//return htmlspecialchars($str,ENT_COMPAT|ENT_HTML401,'UTF-8'|); // Only for PHP >= 5.4
-		return htmlspecialchars( $str, ENT_COMPAT, 'UTF-8' );
+		return htmlspecialchars( $str , ENT_COMPAT , 'UTF-8' );
 	}
 
 
@@ -288,7 +288,7 @@ class PSK_Tools {
 	 */
 	public static function html_entities( $str ) {
 		//return htmlentities($str,ENT_COMPAT|ENT_HTML401,'UTF-8'|); // Only for PHP >= 5.4
-		return htmlentities( $str, ENT_COMPAT, 'UTF-8' );
+		return htmlentities( $str , ENT_COMPAT , 'UTF-8' );
 	}
 
 	/**
@@ -301,20 +301,21 @@ class PSK_Tools {
 	public static function js_literal( $str ) {
 		//return htmlentities('\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$str)).'\'',ENT_COMPAT|ENT_HTML401,'UTF-8'); // Only for PHP >= 5.4
 		//return htmlentities( '\'' . str_replace( '\'', '\\\'', str_replace( '\\', '\\\\', $str ) ) . '\'', ENT_COMPAT, 'UTF-8' );
-		return '\'' . str_replace( '\'', '\\\'', str_replace( '\\', '\\\\', $str ) ) . '\'';
+		return '\'' . str_replace( '"' , '&quot;' , str_replace( '\'' , '\\\'' , str_replace( '\\' , '\\\\' , $str ) ) ) . '\'';
 	}
 
 
 	/**
-	* Escapes JavaScript and single quotes.
-	*
-	* @param str $string Input string.
-	* @param int $times Number of escapes. Defaults to 1.
-	* @return str Output string after JavaScript and single quotes are escaped.
-	*/
-	public static function js_esc_string($string = FALSE, $times = FALSE) {
-		$times = (is_numeric($times) && $times >= 0) ? (int)$times : 1;
-		return str_replace("'", str_repeat("\\", $times)."'", str_replace(array("\r", "\n"), array("", '\\n'), str_replace("\'", "'", (string)$string)));
+	 * Escapes JavaScript and single quotes.
+	 *
+	 * @param str $string Input string.
+	 * @param int $times  Number of escapes. Defaults to 1.
+	 *
+	 * @return str Output string after JavaScript and single quotes are escaped.
+	 */
+	public static function js_esc_string( $string = FALSE , $times = FALSE ) {
+		$times = ( is_numeric( $times ) && $times >= 0 ) ? (int) $times : 1;
+		return str_replace( "'" , str_repeat( "\\" , $times ) . "'" , str_replace( array( "\r" , "\n" ) , array( "" , '\\n' ) , str_replace( "\'" , "'" , (string) $string ) ) );
 	}
 
 
@@ -325,12 +326,12 @@ class PSK_Tools {
 	 *
 	 * @return      string               the escaped value
 	 */
-	public static function mb_html_entities( $str, $encoding = 'utf-8' ) {
+	public static function mb_html_entities( $str , $encoding = 'utf-8' ) {
 		mb_regex_encoding( $encoding );
-		$pattern     = array( '<', '>', '"', '\'' );
-		$replacement = array( '&lt;', '&gt;', '&quot;', '&#39;' );
-		for ( $i = 0; $i < sizeof( $pattern ); $i ++ ) {
-			$str = mb_ereg_replace( $pattern[$i], $replacement[$i], $str );
+		$pattern     = array( '<' , '>' , '"' , '\'' );
+		$replacement = array( '&lt;' , '&gt;' , '&quot;' , '&#39;' );
+		for ( $i = 0 ; $i < sizeof( $pattern ) ; $i ++ ) {
+			$str = mb_ereg_replace( $pattern[ $i ] , $replacement[ $i ] , $str );
 		}
 		return $str;
 	}
@@ -350,46 +351,64 @@ class PSK_Tools {
 	 *
 	 * @return string
 	 */
-	public static function get_js_alert( $title, $message, $alert = 'info', $time = 5000 ) {
+	public static function get_js_alert( $title , $message , $alert = 'info' , $time = 5000 ) {
 		$time = (int) $time;
 		$ret  = '<script>psk_sfb_alert(' . self::js_literal( $title ) . ', ' . self::js_literal( $message ) . ', ' . self::js_literal( $alert ) . ', ' . self::js_literal( $time ) . ');</script>';
 		return $ret;
 	}
 
-/*
-	public static function relative_time( $time , $granularity ) {
-		$d = array(
-			array(1 , "second" ),
-		  	array(60 , "minute" ),
-		  	array(3600 , "hour" ),
-  			array(86400 , "day" ),
-  			array(604800 , "week" ),
-  			array(2592000 , "month" ),
-  			array(31104000 , "year" ),
-		);
 
-	    $w = array();
-
-	    $return = "";
-	    $now = time();
-	    $diff = ($now-$time);
-	    $secondsLeft = $diff;
-
-	    for($i=6;$i>-1;$i--)
-	    {
-	         $w[$i] = intval($secondsLeft/$d[$i][0]);
-	         $secondsLeft -= ($w[$i]*$d[$i][0]);
-	         if($w[$i]!=0)
-	         {
-	            $return.= abs($w[$i]) . " " . $d[$i][1] . (($w[$i]>1)?'s':'') ." ";
-	         }
-
-	    }
-
-	    $return .= ($diff>0)? "ago" : "left";
-	    return $return;
+	/**
+	 * @param $arr
+	 *
+	 * @return array
+	 */
+	public static function ref_array_values( $arr ) {
+		if ( strnatcmp( phpversion() , '5.3' ) >= 0 ) {
+			$refs = array();
+			foreach ( $arr as $key => $value ) {
+				$refs[ $key ] = & $arr[ $key ];
+			}
+			return $refs;
+		}
+		return $arr;
 	}
-*/
+
+
+	/*
+		public static function relative_time( $time , $granularity ) {
+			$d = array(
+				array(1 , "second" ),
+				  array(60 , "minute" ),
+				  array(3600 , "hour" ),
+				  array(86400 , "day" ),
+				  array(604800 , "week" ),
+				  array(2592000 , "month" ),
+				  array(31104000 , "year" ),
+			);
+
+			$w = array();
+
+			$return = "";
+			$now = time();
+			$diff = ($now-$time);
+			$secondsLeft = $diff;
+
+			for($i=6;$i>-1;$i--)
+			{
+				 $w[$i] = intval($secondsLeft/$d[$i][0]);
+				 $secondsLeft -= ($w[$i]*$d[$i][0]);
+				 if($w[$i]!=0)
+				 {
+					$return.= abs($w[$i]) . " " . $d[$i][1] . (($w[$i]>1)?'s':'') ." ";
+				 }
+
+			}
+
+			$return .= ($diff>0)? "ago" : "left";
+			return $return;
+		}
+	*/
 
 }
 

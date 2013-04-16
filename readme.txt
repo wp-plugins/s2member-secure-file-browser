@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.4.1
+Stable tag: 0.4.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -39,29 +39,33 @@ Please use the shortcode generator in the *Dashboard > s2Member Menu > Secure Fi
 
 **Available shortcode options**
 
-* `collapseeasing` : Easing function to use on collapse
-* `collapsespeed` : Speed of the collapse folder action in ms
-* `cutdirnames` : Truncate directory names to specific chars length
-* `cutfilenames` : Truncate file names to specific chars length
-* `dirbase` : Initial directory from the s2member-files directory
-* `dirfirst` : Show directories above files
-* `displayall` : Display all items without checking if user is granted to download them
-* `displaydownloaded` : Show if a file has already been downloaded
-* `displaysize` : Display files size
-* `dirzip` : Let directories be downloaded
-* `expandeasing` : Easing function to use on expand
-* `expandspeed` : Speed of the expand folder action in ms
-* `filterdir` : A full regexp directories have to match to be displayed
-* `filterfile` : A full regexp files have to match to be displayed
-* `folderevent` : Event to trigger expand/collapse
-* `hidden` : Show hidden files or not
-* `multifolder` : Whether or not to limit the browser to one subfolder at a time
-* `names` : Replace files name with custom values
-* `openrecursive` : Whether or not to open all subdirectories when opening a directory
-* `previewext` : Display file preview button for these extensions
-* `s2alertbox` : Display the s2member confirmation box when a user tries to download a file
-* `search` : Let user search files
-* `searchdisplay` : How to display search results
+* `collapseeasing` : Type display_name'animation pour la fermeture display_name'un répertoire
+* `collapsespeed` : Vitesse en millisecondes de fermeture display_name'un répertoire
+* `cutdirnames` : Couper le nom des répertoires à un nombre de caractères
+* `cutfilenames` : Couper le nom des fichiers à un nombre de caractères
+* `dirbase` : Répertoire initial depuis le répertoire s2member-files
+* `dirfirst` : Montrer les répertoires avant les fichiers
+* `displayall` : Afficher tous les fichiers sans vérifier si l'utilisateur peut les télécharger
+* `displaybirthdate` : Display files birth date
+* `displaycomment` : Display files comment
+* `displaydownloaded` : Montrer si un fichier a déjà été téléchargé
+* `displaysize` : Afficher la taille des fichiers
+* `displaymodificationdate` : Display files modification date
+* `dirzip` : Permettre aux répertoires d'être téléchargés
+* `expandeasing` : Type display_name'animation pour l'ouverture display_name'un répertoire
+* `expandspeed` : Vitesse en millisecondes display_name'ouverture display_name'un répertoire
+* `filterdir` : Une expression régulière que le nom display_name'un répertoire doit satisfaire pour être affiché
+* `filterfile` : Une expression régulière que le nom display_name'un fichier doit satisfaire pour être affiché
+* `folderevent` : Evénement pour déclancher l'ouverture/fermeture
+* `hidden` : Montrer les fichiers cachés ou non
+* `multifolder` : Limiter l'affichage du navigateur à un seul répertoire ouvert à la fois
+* `names` : Remplacer le nom de fichiers par des valeurs
+* `openrecursive` : Permettre ou non l'ouverture automatique de tous les sous-répertoires display_name'un répertoire
+* `previewext` : Afficher la prévisualisation pour les fichiers ayant ces extensions
+* `s2alertbox` : Afficher la fenêtre de confirmation s2member avant qu'un utilisateur télécharge un fichier
+* `search` : Activer la recherche de fichier
+* `searchdisplay` : Comment afficher le résultat de la recherche
+* `sortby` : Sort files in directories by a criteria
 
 All informations about these options are well documented in :
 
@@ -87,7 +91,7 @@ All informations about these options are well documented in :
     filterfile="%2F%5C.(png%7Cjpe%3Fg%7Cgif%7Czip)%24%2Fi"
     names="access-s2member-level0:General|access-s2member-ccap-video:Videos"
     search="1"
-    searchdisplay="3"
+    searchdisplay="4D"
 /]`
 
 You can generate a shortcode with complex options with the `Shortcode Generator` in the `Dashboard > s2Member > Secure File Browser` panel
@@ -179,6 +183,16 @@ Available in upcoming version 0.5 :
 
 == Changelog ==
 
+= 0.4.5 =
+* Enhancement : force mp3 flash player (fallback to html5)  because of a bug in Chrome when playing mp3 via html5 and downloading a file in the same time
+* Enhancement : large directories/files supported (tested up to 100000 files in 10000 directories)
+* Enhancement : display fixes for all browsers and especially Firefox
+* New feature : sort files by birth date (date when then was available in your s2member-files directory)
+* New feature : display birth date column
+* New feature : display file comments in browser
+* New feature : add comments in the dashboard
+* Bug fix     : top downloader in notification reports was empty
+
 = 0.4.1 =
 * New feature : sortby shortcode option
 * New feature : modification date display shortcode option
@@ -255,6 +269,9 @@ Available in upcoming version 0.5 :
 * First release
 
 == Upgrade Notice ==
+
+= 0.4.2 =
+This version fixes several bugs. If you had a blank screen with the previous version because of a large number of files, try this!
 
 = 0.4.1 =
 This version fixes 2 bugs. Upgrade immediately.

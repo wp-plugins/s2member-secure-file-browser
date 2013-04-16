@@ -912,7 +912,7 @@ class PSK_S2MSFB_wdgt_files extends WP_Widget {
 			/** @var $wpdb WPDB */
 			global $wpdb;
 			$tablename = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
-			$sql       = 'SELECT filepath, modificationdate, lastdate FROM ' . $tablename . ' ORDER BY lastdate DESC LIMIT 0, 100';
+			$sql       = 'SELECT filepath, filemodificationdate, lastdate FROM ' . $tablename . ' ORDER BY lastdate DESC LIMIT 0, 100';
 			$result    = $wpdb->get_results( $sql, ARRAY_A );
 			set_transient( PSK_S2MSFB_WIDGET_FILES_LATEST_ID, $result );
 		}
@@ -927,7 +927,7 @@ class PSK_S2MSFB_wdgt_files extends WP_Widget {
 
 			foreach ( $result as $row ) {
 
-				$modified = $row['modificationdate'];
+				$modified = $row['filemodificationdate'];
 				if ( ( false == $show_modified_files ) && ( 0 != (int) $modified ) )
 					continue;
 
