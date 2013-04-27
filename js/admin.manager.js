@@ -26,40 +26,40 @@ function psk_sfb_remove_dir( f ) {
 var sk_sfb_rename_df_lock = false;
 function psk_sfb_rename_df( f , d ) {
 	var title = (d === true) ? objectL10n.renamedirectory : objectL10n.renamefile;
-	$( "#pskModalLabel" ).html( title );
+	jQuery( "#pskModalLabel" ).html( title );
 
 	var s = psk_sfb_basename( f );
 	var text = objectL10n.rename + " <code>" + new psk_sfb_html( f ) + "</code><br/><br/><input id=\"pskModalInput\" type=\"text\" value=\"" + new psk_sfb_html( s ) + "\"/><br/><br/>";
-	$( "#pskModalBody" ).html( text );
-	$( "#pskModalSave" ).html( objectL10n.rename );
-	$( "#pskModalSave" ).removeClass( "btn-danger" );
-	$( "#pskModalSave" ).addClass( "btn-success" );
+	jQuery( "#pskModalBody" ).html( text );
+	jQuery( "#pskModalSave" ).html( objectL10n.rename );
+	jQuery( "#pskModalSave" ).removeClass( "btn-danger" );
+	jQuery( "#pskModalSave" ).addClass( "btn-success" );
 
-	$( "#pskModal" ).modal( "show" );
+	jQuery( "#pskModal" ).modal( "show" );
 
-	$( '#pskModalInput' ).keypress( function ( event ) {
+	jQuery( '#pskModalInput' ).keypress( function ( event ) {
 		var keycode = (event.keyCode ? event.keyCode : event.which);
-		if ( keycode == '13' ) $( '#pskModalSave' ).trigger( 'click' );
+		if ( keycode == '13' ) jQuery( '#pskModalSave' ).trigger( 'click' );
 	} );
 
-	$( "#pskModalSave" ).click( function () {
+	jQuery( "#pskModalSave" ).click( function () {
 		if ( ! sk_sfb_rename_df_lock ) {
 			sk_sfb_rename_df_lock = true;
-			$( "#pskModalSave" ).addClass( "disabled" );
+			jQuery( "#pskModalSave" ).addClass( "disabled" );
 
-			var d = encodeURIComponent( $( '#pskModalInput' ).attr( 'value' ) );
-			$.post( PSK_S2MSFB.ajaxurl , {action: PSK_S2MSFB.action_rf , dir: '' , dirbase: '' , s: f , d: d , nonce: PSK_S2MSFB.nonce } , function ( data ) {
+			var d = encodeURIComponent( jQuery( '#pskModalInput' ).attr( 'value' ) );
+			jQuery.post( PSK_S2MSFB.ajaxurl , {action: PSK_S2MSFB.action_rf , dir: '' , dirbase: '' , s: f , d: d , nonce: PSK_S2MSFB.nonce } , function ( data ) {
 				if ( data != "1" )
 					psk_sfb_alert( objectL10n.error , objectL10n.erroroccurs + "<br/>" + data , 'error' , 120000 );
 				else
 					psk_sfb_alert( objectL10n.success , (d === true) ? objectL10n.renamedirectoryok : objectL10n.renamefileok , 'success' );
-				$( "#pskModalSave" ).unbind();
-				$( '#pskModalInput' ).unbind();
-				$( ".psk_jfiletree" ).each( function () {
-					$( this ).fileTreeReload();
+				jQuery( "#pskModalSave" ).unbind();
+				jQuery( '#pskModalInput' ).unbind();
+				jQuery( ".psk_jfiletree" ).each( function () {
+					jQuery( this ).fileTreeReload();
 				} );
-				$( "#pskModal" ).modal( "hide" );
-				$( "#pskModalSave" ).removeClass( "disabled" );
+				jQuery( "#pskModal" ).modal( "hide" );
+				jQuery( "#pskModalSave" ).removeClass( "disabled" );
 				sk_sfb_rename_df_lock = false;
 			} );
 		}
@@ -73,36 +73,36 @@ function psk_sfb_rename_df( f , d ) {
 var sk_sfb_comment_df_lock = false;
 function psk_sfb_comment_df( f , d , c) {
 	var title = (d === true) ? objectL10n.commentdirectory : objectL10n.commentfile;
-	$( "#pskModalLabel" ).html( title );
+	jQuery( "#pskModalLabel" ).html( title );
 	c = c.replace(/\[\[\[BR\]\]\]/g, "\n");
 	var s = psk_sfb_basename( f );
 	var text = objectL10n.comment + " <code>" + new psk_sfb_html( f ) + "</code><br/><br/><textarea class=\"span6\" placeholder=\"" + new psk_sfb_html( objectL10n.commentplaceholder ) + "\" id=\"pskModalInput\" rows=\"5\" cols=\"60\">" + new psk_sfb_html( c ) + "</textarea><br/><br/>";
-	$( "#pskModalBody" ).html( text );
-	$( "#pskModalSave" ).html( objectL10n.comment );
-	$( "#pskModalSave" ).removeClass( "btn-danger" );
-	$( "#pskModalSave" ).addClass( "btn-success" );
+	jQuery( "#pskModalBody" ).html( text );
+	jQuery( "#pskModalSave" ).html( objectL10n.comment );
+	jQuery( "#pskModalSave" ).removeClass( "btn-danger" );
+	jQuery( "#pskModalSave" ).addClass( "btn-success" );
 
-	$( "#pskModal" ).modal( "show" );
+	jQuery( "#pskModal" ).modal( "show" );
 
-	$( "#pskModalSave" ).click( function () {
+	jQuery( "#pskModalSave" ).click( function () {
 		if ( ! sk_sfb_comment_df_lock ) {
 			sk_sfb_comment_df_lock = true;
-			$( "#pskModalSave" ).addClass( "disabled" );
+			jQuery( "#pskModalSave" ).addClass( "disabled" );
 
-			//			var d = encodeURIComponent( $( '#pskModalInput' ).attr( 'value' ) );
-			var c = $( '#pskModalInput' ).attr( 'value' );
-			$.post( PSK_S2MSFB.ajaxurl , { action: PSK_S2MSFB.action_cf , dir: '' , dirbase: '' , s: f , c: c , nonce: PSK_S2MSFB.nonce } , function ( data ) {
+			//			var d = encodeURIComponent( jQuery( '#pskModalInput' ).attr( 'value' ) );
+			var c = jQuery( '#pskModalInput' ).attr( 'value' );
+			jQuery.post( PSK_S2MSFB.ajaxurl , { action: PSK_S2MSFB.action_cf , dir: '' , dirbase: '' , s: f , c: c , nonce: PSK_S2MSFB.nonce } , function ( data ) {
 				if ( data != "1" )
 					psk_sfb_alert( objectL10n.error , objectL10n.erroroccurs + "<br/>" + data , 'error' , 120000 );
 				else
 					psk_sfb_alert( objectL10n.success , (d === true) ? objectL10n.commentdirectoryok : objectL10n.commentfileok , 'success' );
-				$( "#pskModalSave" ).unbind();
-				$( '#pskModalInput' ).unbind();
-				$( ".psk_jfiletree" ).each( function () {
-					$( this ).fileTreeReload();
+				jQuery( "#pskModalSave" ).unbind();
+				jQuery( '#pskModalInput' ).unbind();
+				jQuery( ".psk_jfiletree" ).each( function () {
+					jQuery( this ).fileTreeReload();
 				} );
-				$( "#pskModal" ).modal( "hide" );
-				$( "#pskModalSave" ).removeClass( "disabled" );
+				jQuery( "#pskModal" ).modal( "hide" );
+				jQuery( "#pskModalSave" ).removeClass( "disabled" );
 				sk_sfb_comment_df_lock = false;
 			} );
 		}
@@ -116,21 +116,21 @@ function psk_sfb_comment_df( f , d , c) {
 var sk_sfb_remove_df_lock = false;
 function psk_sfb_remove_df( f , d ) {
 	var title = (d === true) ? objectL10n.removedirectory : objectL10n.removefile;
-	$( "#pskModalLabel" ).html( title );
+	jQuery( "#pskModalLabel" ).html( title );
 
 	var text = (d === true) ? objectL10n.removedirectory + "<br/><code>" + new psk_sfb_html( f ) + "</code><br/><br/>" + objectL10n.removedirectorywarning : objectL10n.removefile + "<br/><code>" + f + "</code><br/><br/>" + objectL10n.removefilewarning
-	$( "#pskModalBody" ).html( text );
-	$( "#pskModalSave" ).html( objectL10n.remove );
-	$( "#pskModalSave" ).removeClass( "btn-success" );
-	$( "#pskModalSave" ).addClass( "btn-danger" );
-	$( "#pskModal" ).modal( "show" );
+	jQuery( "#pskModalBody" ).html( text );
+	jQuery( "#pskModalSave" ).html( objectL10n.remove );
+	jQuery( "#pskModalSave" ).removeClass( "btn-success" );
+	jQuery( "#pskModalSave" ).addClass( "btn-danger" );
+	jQuery( "#pskModal" ).modal( "show" );
 
-	$( "#pskModalSave" ).click( function () {
+	jQuery( "#pskModalSave" ).click( function () {
 		if ( ! sk_sfb_remove_df_lock ) {
 			sk_sfb_remove_df_lock = true;
-			$( "#pskModalSave" ).addClass( "disabled" );
+			jQuery( "#pskModalSave" ).addClass( "disabled" );
 
-			$.post( PSK_S2MSFB.ajaxurl , {action: PSK_S2MSFB.action_df , dir: '' , dirbase: '' , s: f , nonce: PSK_S2MSFB.nonce } , function ( data ) {
+			jQuery.post( PSK_S2MSFB.ajaxurl , {action: PSK_S2MSFB.action_df , dir: '' , dirbase: '' , s: f , nonce: PSK_S2MSFB.nonce } , function ( data ) {
 				if ( data != "1" ) {
 					if ( data.indexOf( 'Maximum function nesting level' ) != - 1 ) data = objectL10n.xdebugerror;
 					psk_sfb_alert( objectL10n.error , objectL10n.erroroccurs + "<br/>" + data , 'error' , 120000 );
@@ -138,12 +138,12 @@ function psk_sfb_remove_df( f , d ) {
 				else {
 					psk_sfb_alert( objectL10n.success , (d === true) ? objectL10n.removedirectoryok : objectL10n.removefileok , 'success' );
 				}
-				$( "#pskModalSave" ).unbind();
-				$( ".psk_jfiletree" ).each( function () {
-					$( this ).fileTreeReload();
+				jQuery( "#pskModalSave" ).unbind();
+				jQuery( ".psk_jfiletree" ).each( function () {
+					jQuery( this ).fileTreeReload();
 				} );
-				$( "#pskModal" ).modal( "hide" );
-				$( "#pskModalSave" ).removeClass( "disabled" );
+				jQuery( "#pskModal" ).modal( "hide" );
+				jQuery( "#pskModalSave" ).removeClass( "disabled" );
 				sk_sfb_remove_df_lock = false;
 			} );
 		}
@@ -154,12 +154,6 @@ function psk_sfb_remove_df( f , d ) {
 }
 
 
-$( '#pskModal' ).on( 'hidden' , function () {
-	$( "#pskModalSave" ).unbind();
-	$( '#pskModalInput' ).unbind();
-} );
-
-
 /*
  * Generate the shortcode
  */
@@ -167,7 +161,7 @@ function generate_shortcode() {
 	var str = '[' + objectL10n.shortcode;
 	var taa = objectL10n.shortcodetags.split( ',' );
 
-	$.each( taa , function ( i ) {
+	jQuery.each( taa , function ( i ) {
 		var tag = taa[i];
 		var val = get_shortcode_val( tag );
 		if ( (val != '') && (val != undefined) ) {
@@ -176,7 +170,7 @@ function generate_shortcode() {
 	} );
 
 	str += " /]";
-	$( "#shortcode_preview" ).html( str );
+	jQuery( "#shortcode_preview" ).html( str );
 }
 
 
@@ -202,37 +196,37 @@ function get_shortcode_val( tag ) {
 		case 'hidden'                  :
 		case 'multifolder'             :
 		case 'openrecursive'           :
-			val = $( 'input[type=radio][name=' + tag + ']:checked' ).val();
+			val = jQuery( 'input[type=radio][name=' + tag + ']:checked' ).val();
 			break;
 
 		case 'collapsespeed' :
 		case 'expandspeed'   :
-			val = $( '#' + tag ).val();
+			val = jQuery( '#' + tag ).val();
 			if ( val != '' ) {
-				val = parseInt( $( '#' + tag ).val() , 10 );
+				val = parseInt( jQuery( '#' + tag ).val() , 10 );
 				if ( isNaN( val ) ) {
 					val = '';
-					$( '#cg' + tag ).addClass( 'error' );
+					jQuery( '#cg' + tag ).addClass( 'error' );
 				} else {
-					$( '#cg' + tag ).removeClass( 'error' );
+					jQuery( '#cg' + tag ).removeClass( 'error' );
 				}
 				val = val.toString();
 			}
 			else {
-				$( '#cg' + tag ).removeClass( 'error' );
+				jQuery( '#cg' + tag ).removeClass( 'error' );
 			}
 			break;
 
 		case 'filterdir'  :
 		case 'filterfile' :
 		case 'dirbase'    :
-			val = encodeURIComponent( $( '#' + tag ).val() );
+			val = encodeURIComponent( jQuery( '#' + tag ).val() );
 			break;
 
 		case 'names':
 			for ( var i = 0 ; i < 6 ; i ++ ) {
-				var k = $( '#h' + tag + i ).val();
-				var v = $( '#' + tag + i ).val();
+				var k = jQuery( '#h' + tag + i ).val();
+				var v = jQuery( '#' + tag + i ).val();
 				if ( v != '' )
 					val = val + encodeURIComponent( k ) + ':' + encodeURIComponent( v ) + '|';
 			}
@@ -243,19 +237,24 @@ function get_shortcode_val( tag ) {
 		case 'collapseeasing' :
 		case 'expandeasing'   :
 		default:
-			val = $( '#' + tag ).val();
+			val = jQuery( '#' + tag ).val();
 			break;
 	}
 	return val;
 }
 
 
-if ( $( "#shortcode_preview" ).length != 0 ) {
-	$( '.generator' ).on( 'change' , function () {
+jQuery( document ).ready( function () {
+	if ( jQuery( "#shortcode_preview" ).length != 0 ) {
+		jQuery( '.generator' ).on( 'change' , function () {
+			generate_shortcode();
+		} );
 		generate_shortcode();
-	} );
-	$( document ).ready( function () {
-		generate_shortcode();
-	} );
-}
+	}
 
+	jQuery( '#pskModal' ).on( 'hidden' , function () {
+		jQuery( "#pskModalSave" ).unbind();
+		jQuery( '#pskModalInput' ).unbind();
+	} );
+
+} );

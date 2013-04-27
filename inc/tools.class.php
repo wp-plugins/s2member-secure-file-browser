@@ -167,16 +167,17 @@ class PSK_Tools {
 	 * @return      boolean
 	 */
 	public static function sanitize_directory_path( $directory , $start = false , $end = false ) {
-		while ( mb_substr( $directory , - 1 , 1 ) == DIRECTORY_SEPARATOR ) {
+		$directory = str_replace( DIRECTORY_SEPARATOR , PSK_S2MSFB_DIRECTORY_SEPARATOR , $directory );
+		while ( mb_substr( $directory , - 1 , 1 ) == PSK_S2MSFB_DIRECTORY_SEPARATOR ) {
 			$directory = mb_substr( $directory , 0 , - 1 );
 		}
-		while ( mb_substr( $directory , 0 , 1 ) == DIRECTORY_SEPARATOR ) {
+		while ( mb_substr( $directory , 0 , 1 ) == PSK_S2MSFB_DIRECTORY_SEPARATOR ) {
 			$directory = mb_substr( $directory , 1 );
 		}
 		if ( $end )
-			$directory .= DIRECTORY_SEPARATOR;
+			$directory .= PSK_S2MSFB_DIRECTORY_SEPARATOR;
 		if ( $start )
-			$directory = DIRECTORY_SEPARATOR . $directory;
+			$directory = PSK_S2MSFB_DIRECTORY_SEPARATOR . $directory;
 		$directory = str_replace( '//' , '/' , $directory );
 		return $directory;
 	}
@@ -185,7 +186,7 @@ class PSK_Tools {
 	/**
 	 * Check if the specified directory is in s2member_files_path directory
 	 *
-	 * @param       string $directory   the dirctory to check
+	 * @param       string $directory   the directory to check
 	 *
 	 * @return      boolean
 	 */
@@ -197,7 +198,7 @@ class PSK_Tools {
 
 
 	/**
-	 * Remove recursively a direcory or a file with check if the specified file/dir is in s2member_files_path directory
+	 * Remove recursively a directory or a file with check if the specified file/dir is in s2member_files_path directory
 	 *
 	 * @param       string $filepath   the directory or file to delete
 	 *
@@ -214,21 +215,21 @@ class PSK_Tools {
 						continue;
 					}
 
-					if ( ! self::rm_secure_recursive( $filepath . DIRECTORY_SEPARATOR . $sf ) ) {
-						throw new Exception( $filepath . DIRECTORY_SEPARATOR . $sf . ' could not be deleted.' );
+					if ( ! self::rm_secure_recursive( $filepath . PSK_S2MSFB_DIRECTORY_SEPARATOR . $sf ) ) {
+						throw new Exception( $filepath . PSK_S2MSFB_DIRECTORY_SEPARATOR . $sf . ' could not be deleted.' );
 					}
 				}
 				closedir( $dh );
 			}
 
 			if ( ! self::is_directory_allowed( $filepath ) )
-				throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.' );
+				throw new Exception( $filepath . PSK_S2MSFB_DIRECTORY_SEPARATOR . ' could not be deleted.' );
 
 			return rmdir( $filepath );
 		}
 
 		if ( ! self::is_directory_allowed( $filepath ) )
-			throw new Exception( $filepath . DIRECTORY_SEPARATOR . ' could not be deleted.' );
+			throw new Exception( $filepath . PSK_S2MSFB_DIRECTORY_SEPARATOR . ' could not be deleted.' );
 
 		return unlink( $filepath );
 	}
@@ -308,10 +309,10 @@ class PSK_Tools {
 	/**
 	 * Escapes JavaScript and single quotes.
 	 *
-	 * @param str $string Input string.
+	 * @param string $string Input string.
 	 * @param int $times  Number of escapes. Defaults to 1.
 	 *
-	 * @return str Output string after JavaScript and single quotes are escaped.
+	 * @return string Output string after JavaScript and single quotes are escaped.
 	 */
 	public static function js_esc_string( $string = FALSE , $times = FALSE ) {
 		$times = ( is_numeric( $times ) && $times >= 0 ) ? (int) $times : 1;
@@ -373,42 +374,6 @@ class PSK_Tools {
 		}
 		return $arr;
 	}
-
-
-	/*
-		public static function relative_time( $time , $granularity ) {
-			$d = array(
-				array(1 , "second" ),
-				  array(60 , "minute" ),
-				  array(3600 , "hour" ),
-				  array(86400 , "day" ),
-				  array(604800 , "week" ),
-				  array(2592000 , "month" ),
-				  array(31104000 , "year" ),
-			);
-
-			$w = array();
-
-			$return = "";
-			$now = time();
-			$diff = ($now-$time);
-			$secondsLeft = $diff;
-
-			for($i=6;$i>-1;$i--)
-			{
-				 $w[$i] = intval($secondsLeft/$d[$i][0]);
-				 $secondsLeft -= ($w[$i]*$d[$i][0]);
-				 if($w[$i]!=0)
-				 {
-					$return.= abs($w[$i]) . " " . $d[$i][1] . (($w[$i]>1)?'s':'') ." ";
-				 }
-
-			}
-
-			$return .= ($diff>0)? "ago" : "left";
-			return $return;
-		}
-	*/
 
 }
 

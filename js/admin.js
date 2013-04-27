@@ -12,8 +12,8 @@ function psk_sfb_alert(title, message, alert, time) {
 	al += '<button type="button" class="close" data-dismiss="alert">&times;</button>';
 	al += "<strong>" + title + "</strong> " + message;
 	al += "</div>";
-	$("#psk-alert-area").append($(al).delay(time).fadeOut("slow", function () {
-		$(this).remove();
+	jQuery("#psk-alert-area").append(jQuery(al).delay(time).fadeOut("slow", function () {
+		jQuery(this).remove();
 	}));
 }
 

@@ -5,7 +5,6 @@
 // Cory S.N. LaViska
 // A Beautiful Site (http://abeautifulsite.net/)
 // 24 March 2008
-//
 // Visit http://abeautifulsite.net/notebook.php?article=58 for more information
 //
 // Usage: $('.fileTreeDemo').fileTree( options, callback )
@@ -75,6 +74,7 @@
 				if ( o.sortby === undefined ) o.sortby = '0';
 				if ( o.displaydownloaded === undefined ) o.displaydownloaded = '0';
 				if ( o.search === undefined ) o.search = '0';
+				if ( o.searchgroup === undefined ) o.searchgroup = '0';
 				if ( o.searchdisplay === undefined ) o.searchdisplay = '0';
 				if ( o.dirzip === undefined ) o.dirzip = '0';
 				if ( o.previewext === undefined ) o.previewext = '';
@@ -90,6 +90,7 @@
 			}
 
 			$( this ).each( function () {
+
 				function showTree( c , t ) {
 					$( c ).addClass( 'wait' );
 					$.post( o.script , {
@@ -108,6 +109,7 @@
 						displaysize            : o.displaysize ,
 						displaydownloaded      : o.displaydownloaded ,
 						search                 : o.search ,
+						searchgroup            : o.searchgroup ,
 						searchdisplay          : o.searchdisplay ,
 						dirzip                 : o.dirzip ,
 						previewext             : o.previewext ,
@@ -137,26 +139,31 @@
 						$( c ).find( 'UL.jqueryFileTree' ).remove(); // UL
 					}
 					$.post( o.script , {
-						action           : o.action ,
-						dir              : t ,
-						hidden           : o.hidden ,
-						dirfirst         : o.dirfirst ,
-						names            : o.names ,
-						filterfile       : o.filterfile ,
-						filterdir        : o.filterdir ,
-						displayall       : o.displayall ,
-						dirbase          : o.dirbase ,
-						openrecursive    : o.openrecursive ,
-						cutdirnames      : o.cutdirnames ,
-						cutfilenames     : o.cutfilenames ,
-						displaysize      : o.displaysize ,
-						displaydownloaded: o.displaydownloaded ,
-						search           : o.search ,
-						searchdisplay    : o.searchdisplay ,
-						dirzip           : o.dirzip ,
-						previewext       : o.previewext ,
-						token            : s ,
-						nonce            : PSK_S2MSFB.nonce
+						action                 : o.action ,
+						dir                    : t ,
+						hidden                 : o.hidden ,
+						dirfirst               : o.dirfirst ,
+						names                  : o.names ,
+						filterfile             : o.filterfile ,
+						filterdir              : o.filterdir ,
+						displayall             : o.displayall ,
+						dirbase                : o.dirbase ,
+						openrecursive          : o.openrecursive ,
+						cutdirnames            : o.cutdirnames ,
+						cutfilenames           : o.cutfilenames ,
+						displaysize            : o.displaysize ,
+						displaydownloaded      : o.displaydownloaded ,
+						search                 : o.search ,
+						searchgroup            : o.searchgroup ,
+						searchdisplay          : o.searchdisplay ,
+						dirzip                 : o.dirzip ,
+						previewext             : o.previewext ,
+						displaymodificationdate: o.displaymodificationdate ,
+						displaybirthdate       : o.displaybirthdate ,
+						displaycomment         : o.displaycomment ,
+						sortby                 : o.sortby ,
+						nonce                  : PSK_S2MSFB.nonce,
+						token                  : s
 					} , function ( data ) {
 						$( c ).removeClass( 'wait' ).append( data );
 						$( c ).find( 'UL:hidden' ).slideDown( { duration: o.expandspeed , easing: o.expandeasing } );
@@ -166,37 +173,57 @@
 				}
 
 				function bindTree( t ) {
+					var searchgroup = $( t ).find( "li.PSK_S2MSFB_searchli" ).attr( "data-group" );
+					searchgroup = (isNaN( searchgroup )) ? 0 : parseInt( searchgroup , 10 );
+
 					// Search feature
 					$( t ).find( '.PSK_S2MSFB_searchinp' )
 						.blur( function () {
 							if ( $( this ).val() == '' ) {
 								$( this ).val( $( this ).attr( 'title' ) );
-								if ( $( this ).find( 'UL.jqueryFileTree' ).attr( 'data-token' ) == '' )
+								if ( $( this ).find( 'UL.jqueryFileTree' ).attr( 'data-token' ) == '' ) {
 									$( this ).prev().prev().hide();//resetbtn
+								}
 							}
 						} )
 						.click( function () {
-							if ( $( this ).val() == $( this ).attr( 'title' ) )
+							if ( $( this ).val() == $( this ).attr( 'title' ) ) {
 								$( this ).val( '' );
+							}
 
-							if ( ( $( this ).val() == '' ) || ( $( this ).val() == $( this ).attr( 'title' ) ) )
-								if ( $( this ).find( 'UL.jqueryFileTree' ).attr( 'data-token' ) == '' )
+							if ( ( $( this ).val() == '' ) || ( $( this ).val() == $( this ).attr( 'title' ) ) ) {
+								if ( $( this ).find( 'UL.jqueryFileTree' ).attr( 'data-token' ) == '' ) {
 									$( this ).prev().prev().hide();//resetbtn
-								else
+								}
+								else {
 									$( this ).prev().prev().show();//resetbtn
+								}
+							}
 						} )
 						.keypress( function ( e ) {
-							if ( ( $( this ).val() == '' ) || ( $( this ).val() == $( this ).attr( 'title' ) ) )
-								if ( $( this ).find( 'UL.jqueryFileTree' ).attr( 'data-token' ) == '' )
+							if ( ( $( this ).val() == '' ) || ( $( this ).val() == $( this ).attr( 'title' ) ) ) {
+								if ( $( this ).find( 'UL.jqueryFileTree' ).attr( 'data-token' ) == '' ) {
 									$( this ).prev().prev().hide();//resetbtn
-								else
+								}
+								else {
 									$( this ).prev().prev().show();//resetbtn
-
-							if ( e.which == 13 )
-								if ( ( $( this ).val() == '' ) || ( $( this ).val() == $( this ).attr( 'title' ) ) )
+								}
+							}
+							if ( e.which == 13 ) {
+								if ( ( $( this ).val() == '' ) || ( $( this ).val() == $( this ).attr( 'title' ) ) ) {
 									alert( PSK_S2MSFB.errorsearch );
-								else
-									searchTree( $( this ).parent().parent().parent().parent() , $( this ).val() );
+								}
+								else {
+									if ( searchgroup >= 1 ) {
+										var thisval = $( this ).val();
+										$("li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "] .PSK_S2MSFB_searchinp" ).each(function() {
+											searchTree( $( this ).parent().parent().parent().parent() , thisval );
+										});
+									} else {
+										searchTree( $( this ).parent().parent().parent().parent() , $( this ).val() );
+									}
+								}
+							}
 						} )
 					;
 					$( t ).find( '.PSK_S2MSFB_searchbtn' )
@@ -208,7 +235,13 @@
 					;
 					$( t ).find( '.PSK_S2MSFB_reloadbtn' )
 						.click( function () {
-							searchTree( $( this ).parent().parent().parent().parent() , '' );
+							if ( searchgroup >= 1 ) {
+								$("li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "] .PSK_S2MSFB_searchinp" ).each(function() {
+									searchTree( $( this ).parent().parent().parent().parent() , '' );
+								});
+							} else {
+								searchTree( $( this ).parent().parent().parent().parent() , '' );
+							}
 						} )
 					;
 					$( t ).find( '.PSK_S2MSFB_resetbtn' )
@@ -218,11 +251,12 @@
 						} )
 					;
 					// Preview for mp3
-					if (document.getElementById('psk_jquery_jplayer') == null)
-						$( t ).append('<div id="psk_jquery_jplayer" style="width:1px!important;height:1px!important;"></div>');
+					if ( document.getElementById( 'psk_jquery_jplayer' ) == null ) {
+						$( t ).append( '<div id="psk_jquery_jplayer" style="width:1px!important;height:1px!important;"></div>' );
+					}
 
 					$( t ).find( 'LI SPAN.prev[data-e=mp3]' ).each( function () {
-						PSK_S2MSFB_jplayer_id++;
+						PSK_S2MSFB_jplayer_id ++;
 						var thisdesign = "PSK_S2MSFB_jdesign" + PSK_S2MSFB_jplayer_id;
 						var thisurl = $( this ).attr( 'rel' );
 						$( this )
@@ -240,9 +274,9 @@
 									$( "#psk_jquery_jplayer" )
 										.jPlayer( {
 											ready        : function () {
-												$(this)
-													.jPlayer("setMedia", { mp3: thisurl })
-													.jPlayer('play');
+												$( this )
+													.jPlayer( "setMedia" , { mp3: thisurl } )
+													.jPlayer( 'play' );
 											} ,
 											ended        : function () {
 												$( '#' + thisdesign )
@@ -261,7 +295,7 @@
 											volume       : 1 ,
 											muted        : false ,
 											errorAlerts  : true ,
-											warningAlerts: false,
+											warningAlerts: false ,
 											wmode        : "window"
 										} );
 								}
@@ -274,74 +308,6 @@
 								}
 
 							} );
-						/*
-
-						 $(this).unbind('click');
-						 console.log('#' + thisplayer + " : CLICK INIT");
-
-						 //noinspection JSJQueryEfficiency
-						 $('#' + thisplayer).jPlayer({
-						 ready        : function () {
-						 console.log('#' + thisplayer + " : ready");
-						 $('#' + thisplayer)
-						 //											.jPlayer("setMedia", { mp3: thisurl })
-						 //											.jPlayer('pauseOthers')
-						 .jPlayer('play');
-						 },
-						 play         : function () {
-						 console.log('#' + thisplayer + " : play");
-						 $('#' + thisplayer)
-						 .jPlayer('pauseOthers');
-						 $('#' + thisdesign)
-						 .removeClass('play')
-						 .addClass('stop')
-						 .unbind('click')
-						 .click(function () {
-						 console.log('#' + thisplayer + " : playCLICK");
-
-						 $('#' + thisplayer)
-						 .jPlayer('pause');
-						 });
-						 },
-						 ended        : function () {
-						 console.log('#' + thisplayer + " : ended");
-						 $('#' + thisdesign)
-						 .removeClass('stop')
-						 .addClass('play')
-						 .unbind('click')
-						 .click(function () {
-						 console.log('#' + thisplayer + " :  endedCLICK");
-						 $('#' + thisplayer)
-						 .jPlayer('play');
-						 });
-						 },
-						 pause        : function () {
-						 console.log('#' + thisplayer + " : pause");
-						 $('#' + thisdesign)
-						 .removeClass('stop')
-						 .addClass('play')
-						 .unbind('click')
-						 .click(function () {
-						 console.log('#' + thisplayer + " : pauseCLICK");
-						 $('#' + thisplayer)
-						 .jPlayer('play');
-						 });
-						 },
-						 swfPath      : o.swfurl,
-						 supplied     : 'mp3,flash',
-						 solution     : 'html',
-						 preload      : 'auto',
-						 volume       : 1,
-						 muted        : false,
-						 errorAlerts  : true,
-						 warningAlerts: false
-						 });
-						 $('#' + thisplayer)
-						 .jPlayer("setMedia", { mp3: thisurl })
-						 .jPlayer('pauseOthers');
-						 }
-						 );
-						 */
 					} );
 
 					$( t ).find( 'LI DIV A.link,LI DIV A.linko' ).bind( o.folderevent , function ( e ) {
@@ -361,21 +327,31 @@
 									showTree( $( this ).parent().parent() , encodeURIComponent( $( this ).attr( 'rel' ).match( /.*\// ) ) );
 									$( this ).parent().parent().removeClass( 'collapsed' ).addClass( 'expanded' );
 								}
-							} else {
+							}
+							else {
 								// Collapse
 								$( this ).parent().parent().find( 'UL' ).slideUp( { duration: o.collapsespeed , easing: o.collapseeasing } );
 								$( this ).parent().parent().removeClass( 'expanded' ).addClass( 'collapsed' );
 							}
-						} else {
+						}
+						else {
 							h( $( this ) , e );
 						}
 						return false;
 					} );
 
 					// Prevent A from triggering the # on non-click events
-					if ( o.folderevent.toLowerCase != 'click' ) $( t ).find( 'LI DIV A.link' ).bind( 'click' , function () {
-						return false;
-					} );
+					if ( o.folderevent.toLowerCase != 'click' ) {
+						$( t ).find( 'LI DIV A.link' ).bind( 'click' , function () {
+							return false;
+						} );
+					}
+
+					// Show only first search box if there are several shortcodes in the same group
+					if ( searchgroup >= 1 ) {
+						$( "li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "]" ).hide();
+						$( "li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "]:first" ).show();
+					}
 				}
 
 				// Loading message
@@ -386,7 +362,7 @@
 			} );
 		}
 	} );
+
 }( jQuery ));
 
 var PSK_S2MSFB_jplayer_id = 0;
-

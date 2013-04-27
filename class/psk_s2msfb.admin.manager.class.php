@@ -16,7 +16,14 @@
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
 if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
-	status_header( 404 );
+	if (function_exists('status_header')) {
+		status_header( 404 );
+	}
+	else {
+		header( 'HTTP/1.0 404 Not Found' );
+		echo "<h1>404 Not Found</h1>";
+		echo "The page that you have requested could not be found.";
+	}
 	exit;
 }
 
@@ -283,6 +290,15 @@ class PSK_S2MSFBAdminManager {
 				'defaultm' => __( 'Search is unavailable' , PSK_S2MSFB_ID ) ,
 				'more'     => __( 'Can be set to <code>1</code> to display a global search button on top of the shortcode' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>2</code> to display a global search button on top and a search button for each directory' , PSK_S2MSFB_ID ) ,
+			) ,
+			array(
+				'name'     => 'searchgroup' ,
+				'desc'     => __( 'Group shortcodes with a single single search box' , PSK_S2MSFB_ID ) ,
+				'descm'    => '' ,
+				'default'  => '0' ,
+				'defaultm' => __( 'There is no group. Every shortcode has it own search box' , PSK_S2MSFB_ID ) ,
+				'more'     => __( 'You can define groups by setting this value to <code>1</code> for all shortcodes in the first group, <code>2</code> for all shortcodes in the second group, ...' , PSK_S2MSFB_ID) . '<br/>' .
+							__( 'The first shortcode of every group will display the search box and performing a search in a box will launch a search in all shortcodes of the same group.' , PSK_S2MSFB_ID ) ,
 			) ,
 			array(
 				'name'     => 'searchdisplay' ,
@@ -789,6 +805,10 @@ class PSK_S2MSFBAdminManager {
 					$control .= '  <input id="h' . $tagname . $i . '" name="h' . $tagname . $i . '" type="hidden" value="' . esc_attr( PSK_S2MSFB_S2MEMBER_CCAP_FOLDER . 'videos' ) . '" />';
 					$control .= '  <input class="generator" id="' . $tagname . $i . '" name="' . $tagname . $i . '" type="text" value="' . esc_attr( $currentval ) . '" placeholder="' . esc_attr( PSK_S2MSFB_S2MEMBER_CCAP_FOLDER . 'videos' ) . '" />';
 					$control .= '</label>';
+					break;
+
+				case 'searchgroup':
+					$control .= '<input class="generator flat" id="' . $tagname . '" name="' . $tagname . '" type="number" value="' . esc_attr( $currentval ) . '" placeholder="' . esc_attr( $default ) . '" />';
 					break;
 
 				default:

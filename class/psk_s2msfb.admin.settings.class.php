@@ -16,7 +16,14 @@
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
 if ( ( realpath( __FILE__ ) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
-	status_header( 404 );
+	if (function_exists('status_header')) {
+		status_header( 404 );
+	}
+	else {
+		header( 'HTTP/1.0 404 Not Found' );
+		echo "<h1>404 Not Found</h1>";
+		echo "The page that you have requested could not be found.";
+	}
 	exit;
 }
 
@@ -82,17 +89,28 @@ class PSK_S2MSFBAdminSettings {
 		$capstats   = ( @$settings['capstats'] == '' ) ? PSK_S2MSFB_ADMIN_SETTINGS_ACCESS : @$settings['capstats'];
 		$capmanager = ( @$settings['capmanager'] == '' ) ? PSK_S2MSFB_ADMIN_SETTINGS_ACCESS : @$settings['capmanager'];
 
+		if ( isset( $_GET['action'] ) ) {
+			switch ( $_GET['action'] ) {
+				case 'deletedwnl':
+					PSK_S2MSFB::db_uninstall_download();
+					PSK_S2MSFB::db_install_download();
+					echo PSK_Tools::get_js_alert( __( 'Success!', PSK_S2MSFB_ID ), __( 'Download records deleted', PSK_S2MSFB_ID ), 'success' );
+					break;
+				default:
+					break;
+			}
+		}
+
 		if ( isset( $_POST['action'] ) ) {
 
 			check_admin_referer( __CLASS__ . __METHOD__ );
 
-			$action     = $_POST['action'];
 			$maxcount   = (int) $_POST['maxcount'];
 			$retention  = (int) $_POST['retention'];
 			$capstats   = $_POST['capstats'];
 			$capmanager = $_POST['capmanager'];
 
-			switch ( $action ) {
+			switch ( $_POST['action'] ) {
 
 				case 'update':
 					$form_is_valid = true;
@@ -153,7 +171,27 @@ class PSK_S2MSFBAdminSettings {
 		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
 		$sql       = "SELECT COUNT(*) FROM $tablename";
 		$result    = $wpdb->get_row( $sql, ARRAY_N );
-		echo '  <span class="help-inline"><em>' . sprintf( __( 'There are %s records now', PSK_S2MSFB_ID ), $result[0] ) . '</em></span>';
+		echo '  <span class="help-inline"><em>' . sprintf( __( 'There are %s records now', PSK_S2MSFB_ID ), $result[0] ) . '</em>.</span>';
+		echo '';
+
+		echo '
+		<a href="#myModal" role="button" class="btn btn-mini btn-danger" data-toggle="modal"><span class="icon-remove"></span> ' . __( 'Delete all records...' , PSK_S2MSFB_ID ) . '</a>
+		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 id="myModalLabel">' . __('Delete all download records',PSK_S2MSFB_ID) . '</h3>
+		  </div>
+		  <div class="modal-body">
+		    <p>'.__('Hum... you should backup all download records before.',PSK_S2MSFB_ID).'</p>';
+		echo '<a class="btn" href="?psk_s2msfb_download=psk_s2msfb_stats_all_xml&n=0"><span class="icon-tasks"></span> ' . __( 'Export all data as XML' , 'PSK_S2MSFB_ID' ) . '</a>';
+		echo '&nbsp;<a class="btn" href="?psk_s2msfb_download=psk_s2msfb_stats_all_csv&n=0' . $_SERVER[ 'QUERY_STRING' ] . '&e=c"><span class="icon-th"></span> ' . __( 'Export all data as Excel CSV' , 'PSK_S2MSFB_ID' ) . '</a>';
+		echo '</div>
+		  <div class="modal-footer">
+		    <button class="btn" data-dismiss="modal" aria-hidden="true">'.__('Close',PSK_S2MSFB_ID).'</button>
+		    <a href="?'.$_SERVER['QUERY_STRING'].'&action=deletedwnl" class="btn btn-danger">'.__('Delete',PSK_S2MSFB_ID).'</a>
+		  </div>
+		</div>';
+
 
 		echo '  </fieldset>';
 

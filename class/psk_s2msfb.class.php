@@ -57,6 +57,7 @@ class PSK_S2MSFB {
 	private static $displaybirthdate = true;
 	private static $displaydownloaded = 0;
 	private static $search = 0;
+	private static $searchgroup = 0;
 	private static $sortby = '0';
 	private static $sortby_available = array( '0' , '1' , '2' , '3' , '0D' , '1D' , '2D' , '3D' , '4' , '4D' );
 	private static $searchdisplay = 0;
@@ -83,7 +84,7 @@ class PSK_S2MSFB {
 
 		// Create filters
 		//
-		//add_filter( 'cron_schedules'                                , array( __CLASS__ , 'set_cron_interval' ) );
+		//add_filter( 'cron_schedules' , array( __CLASS__ , 'set_cron_interval' ) );
 
 		// Create and/or setup actions
 		//
@@ -397,6 +398,7 @@ class PSK_S2MSFB {
 	 * Returns a directory as a html structure
 	 */
 	public static function ajax_do_get_directory() {
+
 		if ( ! isset( $_POST[ 'nonce' ] ) || ! check_ajax_referer( PSK_S2MSFB_ID . '-nonce' , 'nonce' , false ) ) die ( __( "Please reload the page" , PSK_S2MSFB_ID ) );
 		if ( ! isset( $_POST[ 'dir' ] ) ) die ( 'invalid parameters' );
 
@@ -419,6 +421,7 @@ class PSK_S2MSFB {
 		self::$displaybirthdate        = (int) @$_POST[ 'displaybirthdate' ];
 		self::$displaydownloaded       = (int) @$_POST[ 'displaydownloaded' ];
 		self::$search                  = (int) @$_POST[ 'search' ];
+		self::$searchgroup             = (int) @$_POST[ 'searchgroup' ];
 		self::$searchdisplay           = (int) @$_POST[ 'searchdisplay' ];
 		self::$cutdirnames             = (int) @$_POST[ 'cutdirnames' ];
 		self::$cutfilenames            = (int) @$_POST[ 'cutfilenames' ];
@@ -482,10 +485,16 @@ class PSK_S2MSFB {
 			$comments   = array();
 			$birthdates = array();
 			$alreadyd   = array();
+			$result     = array();
+			$resultf    = array();
+			$resultd    = array();
+			$ext_all    = array();
+			$mdate_all  = array();
+			$bdate_all  = array();
+			$size_all   = array();
 
 			// Get hashes and already downloaded files
 			if ( ( self::$displaydownloaded > 0 ) || ( self::$displaybirthdate ) || ( self::$displaycomment ) ) {
-
 				$what = array( 'filepath' );
 				if ( self::$displaydownloaded > 0 )
 					$what[ ] = 'filemodificationdate';
@@ -495,48 +504,44 @@ class PSK_S2MSFB {
 				if ( self::$displaycomment )
 					$what[ ] = 'comment';
 				$what = implode( ',' , $what );
-
-				/** @var $wpdb WPDB */
-				global $wpdb;
-				$tablename  = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
-				$sql        = "SELECT " . $what . " FROM " . $tablename . " WHERE filedir='" . mysql_real_escape_string( $dirfile ) . "'";
-				$result     = $wpdb->get_results( $sql , ARRAY_A );
-				$gmt_offset = get_option( 'gmt_offset' ) * 3600;
-
-				if ( self::$displaydownloaded > 0 )
-					foreach ( $result as $row ) {
-						$hashes[ $row[ 'filepath' ] ] = $row[ 'filemodificationdate' ] . '-' . $row[ 'filesize' ];
-					}
-				if ( self::$displaybirthdate )
-					foreach ( $result as $row ) {
-						$birthdates[ $row[ 'filepath' ] ] = strtotime( $row[ 'creationdate' ] ) + $gmt_offset;
-					}
-				if ( self::$displaycomment )
-					foreach ( $result as $row ) {
-						$comments[ $row[ 'filepath' ] ] = $row[ 'comment' ];
-					}
-
-				if ( self::$displaydownloaded > 0 ) {
-					$cuser     = wp_get_current_user();
-					$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
-					$sql       = $wpdb->prepare( "SELECT filepath, filemd5 FROM " . $tablename . " WHERE userid = %s ORDER BY created ASC" , $cuser->ID );
-					$result    = $wpdb->get_results( $sql , ARRAY_A );
-					foreach ( $result as $row ) {
-						$alreadyd[ $row[ 'filepath' ] ] = $row[ 'filemd5' ];
-					}
-				}
 			}
-
-			$result    = array();
-			$resultf   = array();
-			$resultd   = array();
-			$ext_all   = array();
-			$mdate_all = array();
-			$bdate_all = array();
-			$size_all  = array();
 
 			// Part : listing
 			if ( $token == '' ) {
+
+				// Get hashes,comment,... and already downloaded files
+				if ( isset( $what ) ) {
+
+					/** @var $wpdb WPDB */
+					global $wpdb;
+					$tablename  = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
+					$sql        = "SELECT " . $what . " FROM " . $tablename . " WHERE filedir='" . mysql_real_escape_string( $dirfile ) . "'";
+					$sqlr       = $wpdb->get_results( $sql , ARRAY_A );
+					$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+
+					if ( self::$displaydownloaded > 0 )
+						foreach ( $sqlr as $row ) {
+							$hashes[ $row[ 'filepath' ] ] = $row[ 'filemodificationdate' ] . '-' . $row[ 'filesize' ];
+						}
+					if ( self::$displaybirthdate )
+						foreach ( $sqlr as $row ) {
+							$birthdates[ $row[ 'filepath' ] ] = strtotime( $row[ 'creationdate' ] ) + $gmt_offset;
+						}
+					if ( self::$displaycomment )
+						foreach ( $sqlr as $row ) {
+							$comments[ $row[ 'filepath' ] ] = $row[ 'comment' ];
+						}
+
+					if ( self::$displaydownloaded > 0 ) {
+						$cuser     = wp_get_current_user();
+						$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+						$sql       = $wpdb->prepare( "SELECT filepath, filemd5 FROM " . $tablename . " WHERE userid = %s ORDER BY created ASC" , $cuser->ID );
+						$sqlr      = $wpdb->get_results( $sql , ARRAY_A );
+						foreach ( $sqlr as $row ) {
+							$alreadyd[ $row[ 'filepath' ] ] = $row[ 'filemd5' ];
+						}
+					}
+				}
 
 				// Browse all dirs and files
 				$files = scandir( $dir );
@@ -690,8 +695,9 @@ class PSK_S2MSFB {
 				$search_inp_value = __( 'Search...' , PSK_S2MSFB_ID );
 				$reset_btn_hidden = ' style="display:none;" ';
 				$reset_class      = 'reset';
-			} // Part search
+			} /* Part search */
 			else {
+
 				/** @var $wpdb WPDB */
 				global $wpdb;
 				$tablename        = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
@@ -708,49 +714,59 @@ class PSK_S2MSFB {
 					$wordz   = array();
 					$clauses = array();
 					foreach ( $words as $word ) {
-						if ( $word == '' )
+						if ( trim( $word ) == '' )
 							continue;
 						$wordz[ ]   = $word;
 						$clauses[ ] = "filepath LIKE '%" . mysql_real_escape_string( $word ) . "%' ";
 					}
-					$clause = ( count( $clauses ) > 0 ) ? ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ' : '';
-					$worda  = implode( ' ' , $wordz );
-					$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
-					$sql .= " FROM " . $tablename . " ";
-					$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
-					$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
-					$sqlres = $wpdb->get_results( $sql , ARRAY_A );
+					if ( count( $clauses ) > 0 ) {
+						$clause = ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ';
+						$worda  = implode( ' ' , $wordz );
+						$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+						$sql .= " FROM " . $tablename . " ";
+						$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+						$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
+						$sqlres = $wpdb->get_results( $sql , ARRAY_A );
 
-					foreach ( $sqlres as $row ) {
-						$filepathrelbase = $row[ 'filepath' ];
-						$filepath        = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $filepathrelbase;
-						if ( ! file_exists( $filepath ) )
-							continue;
-						$file                                   = $row[ 'filename' ];
-						$dirbase                                = PSK_Tools::sanitize_directory_path( $dirbase , true , false );
-						$filepathrel                            = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
-						$subdirectory                           = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
-						$subdirectory                           = ( $subdirectory == '' ) ? '/' : $subdirectory;
-						$a                                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
-						$group[ $subdirectory ][ $filepathrel ] = $a[ 1 ];
-					}
-
-					uksort( $group , "strnatcasecmp" );
-
-					foreach ( $group as $groupby => $v ) {
-						$result[ ] = '<li class="directory expanded" data-s="-1"><div class="jftctn">';
-						$result[ ] = '<a href="#" class="link" rel="">' . sprintf( __( 'Path <strong>%s</strong>' , PSK_S2MSFB_ID ) , $groupby ) . '</a>';
-						$result[ ] = '</div>';
-						$result[ ] = '<div style="clear:both"></div>';
-						$result[ ] = '<ul class="jqueryFileTree">';
-						uksort( $v , "strnatcasecmp" );
-						foreach ( $v as $li ) {
-							$result[ ] = $li;
+						if ( isset( $what ) ) {
+							$wheres = array();
+							foreach ( $sqlres as $row ) {
+								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
+							}
+							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $alreadyd );
 						}
-						$result[ ] = '</ul>';
-						$result[ ] = '</li>';
-					}
 
+						foreach ( $sqlres as $row ) {
+							$filepathrelbase = $row[ 'filepath' ];
+							$filepath        = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $filepathrelbase;
+							if ( ! file_exists( $filepath ) )
+								continue;
+							$file                                   = $row[ 'filename' ];
+							$dirbase                                = PSK_Tools::sanitize_directory_path( $dirbase , true , false );
+							$filepathrel                            = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
+							$subdirectory                           = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
+							$subdirectory                           = ( $subdirectory == '' ) ? '/' : $subdirectory;
+							$a                                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
+							$group[ $subdirectory ][ $filepathrel ] = $a[ 1 ];
+						}
+
+
+						uksort( $group , "strnatcasecmp" );
+
+						foreach ( $group as $groupby => $v ) {
+							$result[ ] = '<li class="directory expanded" data-s="-1"><div class="jftctn">';
+							$result[ ] = '<a href="#" class="link" rel="">' . sprintf( __( 'Path <strong>%s</strong>' , PSK_S2MSFB_ID ) , $groupby ) . '</a>';
+							$result[ ] = '</div>';
+							$result[ ] = '<div style="clear:both"></div>';
+							$result[ ] = '<ul class="jqueryFileTree">';
+							uksort( $v , "strnatcasecmp" );
+							foreach ( $v as $li ) {
+								$result[ ] = $li;
+							}
+							$result[ ] = '</ul>';
+							$result[ ] = '</li>';
+						}
+					}
 					// Search group by extension
 				} else if ( ( self::$searchdisplay == '3' ) || ( self::$searchdisplay == '4' ) ) {
 
@@ -759,85 +775,102 @@ class PSK_S2MSFB {
 					$wordz   = array();
 					$clauses = array();
 					foreach ( $words as $word ) {
-						if ( $word == '' )
+						if ( trim( $word ) == '' )
 							continue;
 						$wordz[ ]   = $word;
 						$clauses[ ] = "filepath LIKE '%" . mysql_real_escape_string( $word ) . "%' ";
 					}
-					$clause = ( count( $clauses ) > 0 ) ? ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ' : '';
-					$worda  = implode( ' ' , $wordz );
-					$sql    = " SELECT filename, filepath, fileext, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
-					$sql .= " FROM " . $tablename . " ";
-					$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
-					$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
-					$sqlres = $wpdb->get_results( $sql , ARRAY_A );
-
-					foreach ( $sqlres as $row ) {
-						$filepathrelbase = $row[ 'filepath' ];
-						$filepath        = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $filepathrelbase;
-						if ( ! file_exists( $filepath ) )
-							continue;
-						$file                                = $row[ 'filename' ];
-						$dirbase                             = PSK_Tools::sanitize_directory_path( $dirbase , true , false );
-						$filepathrel                         = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
-						$subdirectory                        = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
-						$subdirectory                        = ( $subdirectory == '' ) ? '/' : $subdirectory;
-						$extension                           = mb_strtolower( $row[ 'fileext' ] );
-						$extended                            = ( self::$searchdisplay == '4' ) ? ' <small><em>(' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , self::get_directories_name( $subdirectory ) ) . ')</em></small>' : '';
-						$a                                   = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
-						$group[ $extension ][ $filepathrel ] = $a[ 1 ];
-					}
-
-					uksort( $group , "strnatcasecmp" );
-
-					foreach ( $group as $groupby => $v ) {
-						$result[ ] = '<li class="directory expanded ' . $groupby . '" data-s="-1"><div class="jftctn">';
-						$result[ ] = '<a href="#" class="link" rel="">' . sprintf( __( 'Extension <strong>%s</strong>' , PSK_S2MSFB_ID ) , $groupby ) . '</a>';
-						$result[ ] = '</div>';
-						$result[ ] = '<div style="clear:both"></div>';
-						$result[ ] = '<ul class="jqueryFileTree">';
-						uksort( $v , "strnatcasecmp" );
-						foreach ( $v as $li ) {
-							$result[ ] = $li;
+					if ( count( $clauses ) > 0 ) {
+						$clause = ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ';
+						$worda  = implode( ' ' , $wordz );
+						$sql    = " SELECT filename, filepath, fileext, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+						$sql .= " FROM " . $tablename . " ";
+						$sql .= " WHERE fileext != '' AND filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+						$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
+						$sqlres = $wpdb->get_results( $sql , ARRAY_A );
+						if ( isset( $what ) ) {
+							$wheres = array();
+							foreach ( $sqlres as $row ) {
+								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
+							}
+							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $alreadyd );
 						}
-						$result[ ] = '</ul>';
-						$result[ ] = '</li>';
-					}
 
+						foreach ( $sqlres as $row ) {
+							$filepathrelbase = $row[ 'filepath' ];
+							$filepath        = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $filepathrelbase;
+							if ( ! file_exists( $filepath ) )
+								continue;
+							$file                                = $row[ 'filename' ];
+							$dirbase                             = PSK_Tools::sanitize_directory_path( $dirbase , true , false );
+							$filepathrel                         = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
+							$subdirectory                        = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
+							$subdirectory                        = ( $subdirectory == '' ) ? '/' : $subdirectory;
+							$extension                           = mb_strtolower( $row[ 'fileext' ] );
+							$extended                            = ( self::$searchdisplay == '4' ) ? ' <small><em>(' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , self::get_directories_name( $subdirectory ) ) . ')</em></small>' : '';
+							$a                                   = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
+							$group[ $extension ][ $filepathrel ] = $a[ 1 ];
+						}
+
+						uksort( $group , "strnatcasecmp" );
+
+						foreach ( $group as $groupby => $v ) {
+							$result[ ] = '<li class="directory expanded ' . $groupby . '" data-s="-1"><div class="jftctn">';
+							$result[ ] = '<a href="#" class="link" rel="">' . sprintf( __( 'Extension <strong>%s</strong>' , PSK_S2MSFB_ID ) , $groupby ) . '</a>';
+							$result[ ] = '</div>';
+							$result[ ] = '<div style="clear:both"></div>';
+							$result[ ] = '<ul class="jqueryFileTree">';
+							uksort( $v , "strnatcasecmp" );
+							foreach ( $v as $li ) {
+								$result[ ] = $li;
+							}
+							$result[ ] = '</ul>';
+							$result[ ] = '</li>';
+						}
+					}
 					// Search flat
 				} else {
 					$words   = explode( ' ' , trim( $token ) );
 					$wordz   = array();
 					$clauses = array();
 					foreach ( $words as $word ) {
-						if ( $word == '' )
+						if ( trim( $word ) == '' )
 							continue;
 						$wordz[ ]   = $word;
 						$clauses[ ] = "filepath LIKE '%" . mysql_real_escape_string( $word ) . "%' ";
 					}
-					$clause = ( count( $clauses ) > 0 ) ? ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ' : '';
-					$worda  = implode( ' ' , $wordz );
-					$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
-					$sql .= " FROM " . $tablename . " ";
-					$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
-					$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
-					$sqlres = $wpdb->get_results( $sql , ARRAY_A );
+					if ( count( $clauses ) > 0 ) {
+						$clause = ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ';
+						$worda  = implode( ' ' , $wordz );
+						$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+						$sql .= " FROM " . $tablename . " ";
+						$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+						$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
+						$sqlres = $wpdb->get_results( $sql , ARRAY_A );
+						if ( isset( $what ) ) {
+							$wheres = array();
+							foreach ( $sqlres as $row ) {
+								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
+							}
+							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $alreadyd );
+						}
 
-					foreach ( $sqlres as $row ) {
-						$filepathrelbase = $row[ 'filepath' ];
-						$filepath        = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $filepathrelbase;
-						if ( ! file_exists( $filepath ) )
-							continue;
-						$file                   = $row[ 'filename' ];
-						$dirbase                = PSK_Tools::sanitize_directory_path( $dirbase , true , false );
-						$filepathrel            = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
-						$subdirectory           = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
-						$subdirectory           = ( $subdirectory == '' ) ? '/' : $subdirectory;
-						$extended               = ( self::$searchdisplay == '0' ) ? ' <small><em>(' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , self::get_directories_name( $subdirectory ) ) . ')</em></small>' : '';
-						$a                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
-						$result[ $filepathrel ] = $a[ 1 ];
+						foreach ( $sqlres as $row ) {
+							$filepathrelbase = $row[ 'filepath' ];
+							$filepath        = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $filepathrelbase;
+							if ( ! file_exists( $filepath ) )
+								continue;
+							$file                   = $row[ 'filename' ];
+							$dirbase                = PSK_Tools::sanitize_directory_path( $dirbase , true , false );
+							$filepathrel            = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
+							$subdirectory           = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
+							$subdirectory           = ( $subdirectory == '' ) ? '/' : $subdirectory;
+							$extended               = ( self::$searchdisplay == '0' ) ? ' <small><em>(' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , self::get_directories_name( $subdirectory ) ) . ')</em></small>' : '';
+							$a                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
+							$result[ $filepathrel ] = $a[ 1 ];
+						}
+						//uksort( $result, "strnatcasecmp" );
 					}
-					//uksort( $result, "strnatcasecmp" );
 				}
 			}
 
@@ -849,7 +882,7 @@ class PSK_S2MSFB {
 				$search_inp_title = __( 'Search...' , PSK_S2MSFB_ID );
 
 				$ie = ( preg_match( '~MSIE|Internet Explorer~i' , $_SERVER[ 'HTTP_USER_AGENT' ] ) ) ? 'ie ' : '';
-				$return .= '<li>';
+				$return .= '<li class="PSK_S2MSFB_searchli" data-group="' . self::$searchgroup . '">';
 				$return .= ' <div class="PSK_S2MSFB_search' . $ie . '">';
 				$return .= '  <button value="reset"' . $reset_btn_hidden . 'class="PSK_S2MSFB_' . $reset_class . 'btn" title="' . PSK_Tools::rel_literal( $reset_btn_value ) . '"></button>';
 				$return .= '  <button value="submit" class="PSK_S2MSFB_searchbtn" title="' . PSK_Tools::rel_literal( $search_btn_value ) . '"></button>';
@@ -869,6 +902,54 @@ class PSK_S2MSFB {
 			$return .= '</ul>';
 		}
 		return $return;
+	}
+
+
+	/**
+	 * Get hashes,comment,... and already downloaded files
+	 *
+	 * @param $files
+	 * @param $hashes
+	 * @param $birthdates
+	 * @param $comments
+	 * @param $alreadyd
+	 */
+	private static function get_meta_for_search( $wheres , $what , &$hashes , &$birthdates , &$comments , &$alreadyd ) {
+
+		if ( count( $wheres ) > 0 ) {
+
+			/** @var $wpdb WPDB */
+			global $wpdb;
+			$tablename = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
+			$sql       = "SELECT " . $what . " FROM " . $tablename . " WHERE ";
+			$sql .= implode( ' OR ' , $wheres );
+			$sqlr       = $wpdb->get_results( $sql , ARRAY_A );
+			$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+
+			if ( self::$displaydownloaded > 0 )
+				foreach ( $sqlr as $row ) {
+					$hashes[ $row[ 'filepath' ] ] = $row[ 'filemodificationdate' ] . '-' . $row[ 'filesize' ];
+				}
+			if ( self::$displaybirthdate )
+				foreach ( $sqlr as $row ) {
+					$birthdates[ $row[ 'filepath' ] ] = strtotime( $row[ 'creationdate' ] ) + $gmt_offset;
+				}
+			if ( self::$displaycomment )
+				foreach ( $sqlr as $row ) {
+					$comments[ $row[ 'filepath' ] ] = $row[ 'comment' ];
+				}
+
+			if ( self::$displaydownloaded > 0 ) {
+				$cuser     = wp_get_current_user();
+				$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
+				$sql       = $wpdb->prepare( "SELECT filepath, filemd5 FROM " . $tablename . " WHERE userid = %s ORDER BY created ASC" , $cuser->ID );
+				$sqlr      = $wpdb->get_results( $sql , ARRAY_A );
+				foreach ( $sqlr as $row ) {
+					$alreadyd[ $row[ 'filepath' ] ] = $row[ 'filemd5' ];
+				}
+			}
+
+		}
 	}
 
 
@@ -999,6 +1080,8 @@ class PSK_S2MSFB {
 				$class  = ( $comments[ $filepathrelbasefile ] != '' ) ? ' ok' : '';
 				$licomm = '<span class="d comm' . $class . '" title="' . PSK_Tools::rel_literal( $comments[ $filepathrelbasefile ] ) . '"></span>';
 				$comm   = PSK_Tools::js_literal( str_replace( "\n" , "[[[BR]]]" , $comments[ $filepathrelbasefile ] ) );
+			} else {
+				$licomm = '<span class="d comm" title=""></span>';
 			}
 
 			if ( ( self::$displaymodificationdate == 2 ) || ( self::$displaymodificationdate == 3 ) ) {
@@ -1050,8 +1133,9 @@ class PSK_S2MSFB {
 		} else {
 
 			$ext  = mb_strtolower( preg_replace( '/^.*\./' , '' , $file ) );
-			$link = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbase ) ) );
-			$prev = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $filepathrelbase , 'file_inline' => true ) ) . '&PSK_preview=1' );
+			$winf = ( strtoupper( substr( PHP_OS , 0 , 3 ) ) === 'WIN' ) ? preg_replace( '/^\/*app_data/' , '' , $filepathrelbase ) : $filepathrelbase;
+			$link = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $winf ) ) . '&PSK_file=' . urlencode( $filepathrelbase ) );
+			$prev = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $winf , 'file_inline' => true ) ) . '&PSK_preview=1' );
 
 			if ( ( 2 == (int) self::$sortby ) || ( self::$displaysize ) )
 				$size = filesize( $filepath );
@@ -1098,11 +1182,12 @@ class PSK_S2MSFB {
 				$class  = ( $comments[ $filepathrelbase ] != '' ) ? ' ok' : '';
 				$licomm = '<span class="d comm' . $class . '" title="' . PSK_Tools::rel_literal( $comments[ $filepathrelbase ] ) . '"></span>';
 				$comm   = PSK_Tools::js_literal( str_replace( "\n" , "[[[BR]]]" , $comments[ $filepathrelbase ] ) );
+			} else {
+				$licomm = '<span class="d comm" title=""></span>';
 			}
 
 			$li = '<li data-n="' . $display_name . '" class="file' . $alreadys . ' ext_' . PSK_Tools::rel_literal( $ext ) . '" data-s="' . $msize . '" data-already="' . $alreadya . '" >';
 			$li .= '<div class="jftctn"><a href="#" class="link" rel="' . $link . '">' . $display_name . $extended . '</a>';
-
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_comment_file(' . $filepathrelbasej . ',' . $comm . ')"><i class="icon-comment"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_rename_file(' . $filepathrelbasej . ')"><i class="icon-pencil"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_remove_file(' . $filepathrelbasej . ')"><i class="icon-remove"></i></a></span>' : '';
@@ -1147,7 +1232,7 @@ class PSK_S2MSFB {
 		$rt = '<div id="' . PSK_S2MSFB_ID . $i . '" class="psk_jfiletree"></div>';
 		$rt .= '<script type="text/javascript">';
 		$rt .= 'jQuery(document).ready(function($){$("#' . PSK_S2MSFB_ID . $i . '").fileTree({';
-		$rt .= '	root:"' . DIRECTORY_SEPARATOR . '",';
+		$rt .= '	root:"/",';
 		$rt .= '	swfurl:"' . PSK_S2MSFB_SWF_URL . '",';
 		$rt .= '	loadmessage:"' . esc_attr__( "Please wait while loading..." , PSK_S2MSFB_ID ) . '"';
 
@@ -1364,7 +1449,7 @@ class PSK_S2MSFB {
 			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP31_ID );
 			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP365_ID );
 
-			$file    = stripslashes( $_GET[ "s2member_file_download" ] );
+			$file    = stripslashes( $_GET[ "PSK_file" ] );
 			$user_id = $vars[ "user_id" ];
 			$user    = new WP_User( $user_id );
 			$ip      = $_SERVER[ 'REMOTE_ADDR' ];
@@ -1373,7 +1458,7 @@ class PSK_S2MSFB {
 			//
 			$tablename   = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
 			$fileinfo    = $wpdb->get_row( $wpdb->prepare( "SELECT filemodificationdate,filesize FROM " . $tablename . " WHERE filepath = %s" , $file ) );
-			$fileversion = $fileinfo->filemodificationdate.'-'.$fileinfo->filesize;
+			$fileversion = $fileinfo->filemodificationdate . '-' . $fileinfo->filesize;
 
 			// Insert record in table
 			//
@@ -1572,6 +1657,8 @@ class PSK_S2MSFB {
 		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
 		$sql       = 'SELECT id,filepath,filesize,filemodificationdate FROM ' . $tablename;
 		if ( $stmt = $mysqli->prepare( $sql ) ) {
+			$db_filesize             = 0;
+			$db_filemodificationdate = 0;
 			$stmt->execute();
 			$stmt->bind_result( $db_id , $db_filepath , $db_filesize , $db_filemodificationdate );
 			$stmt->store_result();
@@ -1687,30 +1774,59 @@ class PSK_S2MSFB {
 		$result = array();
 		$it     = new RecursiveDirectoryIterator( '.' );
 
-		/** @var $file SplFileInfo */
-		foreach ( new RecursiveIteratorIterator( $it , RecursiveIteratorIterator::SELF_FIRST ) as $file ) {
+		if ( strtoupper( substr( PHP_OS , 0 , 3 ) ) === 'WIN' ) {
+			/** @var $file SplFileInfo */
+			foreach ( new RecursiveIteratorIterator( $it , RecursiveIteratorIterator::SELF_FIRST ) as $file ) {
 
-			$filepath = substr( $file , 1 );
+				$filepath = str_replace( DIRECTORY_SEPARATOR , PSK_S2MSFB_DIRECTORY_SEPARATOR , substr( $file , 1 ) );
 
-			if ( $file->isDir() ) {
-				$result[ $filepath . '/.' ] = array(
-					'p' => substr( $file->getPath() , 1 ) . '/' ,
-					'n' => '' ,
-					's' => 0 ,
-					'm' => $file->getMTime() ,
-					'e' => '' ,
-				);
-				self::$debug_howmany_dirs ++;
-			} else {
-				$result[ $filepath ] = array(
-					'p' => substr( $file->getPath() , 1 ) . '/' ,
-					'n' => $file->getFilename() ,
-					's' => $file->getSize() ,
-					'm' => $file->getMTime() ,
-					'e' => $file->getExtension() ,
-				);
+				if ( $file->isDir() ) {
+					$result[ $filepath . '/.' ] = array(
+						'p' => str_replace( DIRECTORY_SEPARATOR , PSK_S2MSFB_DIRECTORY_SEPARATOR , substr( $file->getPath() , 1 ) . '/' ) ,
+						'n' => '' ,
+						's' => 0 ,
+						'm' => $file->getMTime() ,
+						'e' => '' ,
+					);
+					self::$debug_howmany_dirs ++;
+				} else {
+					$result[ $filepath ] = array(
+						'p' => str_replace( DIRECTORY_SEPARATOR , PSK_S2MSFB_DIRECTORY_SEPARATOR , substr( $file->getPath() , 1 ) ) . '/' ,
+						'n' => str_replace( DIRECTORY_SEPARATOR , PSK_S2MSFB_DIRECTORY_SEPARATOR , $file->getFilename() ) ,
+						's' => $file->getSize() ,
+						'm' => $file->getMTime() ,
+						'e' => pathinfo( $file->getFilename() , PATHINFO_EXTENSION ) ,
+					);
 
-				self::$debug_howmany_files ++;
+					self::$debug_howmany_files ++;
+				}
+			}
+		} else {
+			/** @var $file SplFileInfo */
+			foreach ( new RecursiveIteratorIterator( $it , RecursiveIteratorIterator::SELF_FIRST ) as $file ) {
+
+				$filepath = substr( $file , 1 );
+
+				if ( $file->isDir() ) {
+					$result[ $filepath . '/.' ] = array(
+						'p' => substr( $file->getPath() , 1 ) . '/' ,
+						'n' => '' ,
+						's' => 0 ,
+						'm' => $file->getMTime() ,
+						'e' => '' ,
+					);
+					self::$debug_howmany_dirs ++;
+				} else {
+					$result[ $filepath ] = array(
+						'p' => substr( $file->getPath() , 1 ) . '/' ,
+						'n' => $file->getFilename() ,
+						's' => $file->getSize() ,
+						'm' => $file->getMTime() ,
+						'e' => pathinfo( $file->getFilename() , PATHINFO_EXTENSION ) ,
+					);
+
+					self::$debug_howmany_files ++;
+				}
 			}
 		}
 
