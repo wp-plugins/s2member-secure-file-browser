@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: s2member Secure File Browser\n"
-"POT-Creation-Date: 2013-04-26 18:37+0100\n"
-"PO-Revision-Date: 2013-04-26 18:41+0100\n"
+"POT-Creation-Date: 2013-05-06 14:01+0100\n"
+"PO-Revision-Date: 2013-05-06 15:36+0100\n"
 "Last-Translator: potsky <potsky@me.com>\n"
 "Language-Team: potsky <potsky@me.com>\n"
 "MIME-Version: 1.0\n"
@@ -22,11 +22,11 @@ msgstr "Statistiques"
 msgid "All downloads"
 msgstr "Tous les téléchargements"
 
-#: class/psk_s2msfb.admin.class.php:152 class/psk_s2msfb.class.php:1275
+#: class/psk_s2msfb.admin.class.php:152 class/psk_s2msfb.class.php:1411
 msgid "Top files"
 msgstr "Fichiers populaires"
 
-#: class/psk_s2msfb.admin.class.php:153 class/psk_s2msfb.class.php:1299
+#: class/psk_s2msfb.admin.class.php:153 class/psk_s2msfb.class.php:1435
 msgid "Top downloaders"
 msgstr "Plus gros téléchargeurs"
 
@@ -74,62 +74,62 @@ msgstr "Général"
 msgid "Notification"
 msgstr "Notification"
 
-#: class/psk_s2msfb.admin.manager.class.php:77
+#: class/psk_s2msfb.admin.manager.class.php:76
 msgid "Easing function to use on collapse"
 msgstr "Type d'animation pour la fermeture d'un répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:81
-#: class/psk_s2msfb.admin.manager.class.php:203
+#: class/psk_s2msfb.admin.manager.class.php:80
+#: class/psk_s2msfb.admin.manager.class.php:214
 msgid "Can be set to <code>linear</code>"
 msgstr "Peut-être mis à <code>linear</code>"
 
-#: class/psk_s2msfb.admin.manager.class.php:85
+#: class/psk_s2msfb.admin.manager.class.php:84
 msgid "Speed of the collapse folder action in ms"
 msgstr "Vitesse en millisecondes de fermeture d'un répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:89
-#: class/psk_s2msfb.admin.manager.class.php:211
+#: class/psk_s2msfb.admin.manager.class.php:88
+#: class/psk_s2msfb.admin.manager.class.php:222
 msgid "Use <code>-1</code> for no animation"
 msgstr "Mettre la valeur à <code>-1</code> pour désactiver l'animation"
 
-#: class/psk_s2msfb.admin.manager.class.php:93
+#: class/psk_s2msfb.admin.manager.class.php:92
 msgid "Truncate directory names to specific chars length"
 msgstr "Couper le nom des répertoires à un nombre de caractères"
 
-#: class/psk_s2msfb.admin.manager.class.php:96
-#: class/psk_s2msfb.admin.manager.class.php:104
+#: class/psk_s2msfb.admin.manager.class.php:95
+#: class/psk_s2msfb.admin.manager.class.php:103
 msgid "Do not truncate"
 msgstr "Ne pas couper"
 
-#: class/psk_s2msfb.admin.manager.class.php:101
+#: class/psk_s2msfb.admin.manager.class.php:100
 msgid "Truncate file names to specific chars length"
 msgstr "Couper le nom des fichiers à un nombre de caractères"
 
-#: class/psk_s2msfb.admin.manager.class.php:109
+#: class/psk_s2msfb.admin.manager.class.php:108
 msgid "Initial directory from the s2member-files directory"
 msgstr "Répertoire initial depuis le répertoire s2member-files"
 
-#: class/psk_s2msfb.admin.manager.class.php:117
+#: class/psk_s2msfb.admin.manager.class.php:116
 msgid "Show directories above files"
 msgstr "Montrer les répertoires avant les fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:120
+#: class/psk_s2msfb.admin.manager.class.php:119
 msgid "Show directories first"
 msgstr "Montrer les répertoires en premier"
 
-#: class/psk_s2msfb.admin.manager.class.php:121
+#: class/psk_s2msfb.admin.manager.class.php:120
 msgid "Set to <code>0</code> to display directories with files"
 msgstr ""
 "Mettre la valeur à <code>0</code> pour afficher les répertoires avec les "
 "fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:125
+#: class/psk_s2msfb.admin.manager.class.php:124
 msgid "Display all items without checking if user is granted to download them"
 msgstr ""
 "Afficher tous les fichiers sans vérifier si l'utilisateur peut les "
 "télécharger"
 
-#: class/psk_s2msfb.admin.manager.class.php:126
+#: class/psk_s2msfb.admin.manager.class.php:125
 msgid ""
 "If the user downloads an unauthorized file, it will be redirected to the "
 "s2member Membership Page"
@@ -137,21 +137,21 @@ msgstr ""
 "Si l'utilisateur télécharge un fichier non authorisé, il sera redirigé vers "
 "la page d'adhésion de s2member"
 
-#: class/psk_s2msfb.admin.manager.class.php:128
+#: class/psk_s2msfb.admin.manager.class.php:127
 msgid "Only allowed directories are displayed"
 msgstr "Montrer les répertoires avant les fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:129
+#: class/psk_s2msfb.admin.manager.class.php:128
 msgid "Set to <code>1</code> to display all directories"
 msgstr ""
 "Mettre la valeur à <code>0</code> pour afficher les répertoires avec les "
 "fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:133
+#: class/psk_s2msfb.admin.manager.class.php:132
 msgid "Display files birth date"
 msgstr "Afficher la taille d'ajout des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:138
+#: class/psk_s2msfb.admin.manager.class.php:137
 msgid ""
 "Set to <code>0</code> to hide the date when files and directories have been "
 "added"
@@ -159,60 +159,60 @@ msgstr ""
 "Mettre la valeur à <code>0</code> pour cacher la date d'ajout des "
 "répertoires et des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:139
+#: class/psk_s2msfb.admin.manager.class.php:138
 msgid "Can be set to <code>1</code> to display files added date only"
 msgstr ""
 "Mettre la valeur à <code>1</code> pour afficher la date d'ajout des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:140
+#: class/psk_s2msfb.admin.manager.class.php:139
 msgid "Can be set to <code>2</code> to display directories added date only"
 msgstr ""
 "Mettre la valeur à <code>2</code> pour afficher la date d'ajout des "
 "répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:141
+#: class/psk_s2msfb.admin.manager.class.php:140
 msgid ""
 "Can be set to <code>3</code> to display files and directories added date"
 msgstr ""
 "Mettre la valeur à <code>3</code> pour afficher la date d'ajout des fichiers "
 "et des répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:145
+#: class/psk_s2msfb.admin.manager.class.php:144
 msgid "Display files comment"
 msgstr "Afficher les commentaires des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:150
+#: class/psk_s2msfb.admin.manager.class.php:149
 msgid "Set to <code>0</code> to hide files and directories comments"
 msgstr ""
-"Mettre la valeur à <code>0</code> pour cacher lles commentaires des "
+"Mettre la valeur à <code>0</code> pour cacher les commentaires des "
 "répertoires et des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:151
+#: class/psk_s2msfb.admin.manager.class.php:150
 msgid "Can be set to <code>1</code> to display files comments only"
 msgstr ""
 "Mettre la valeur à <code>1</code> pour afficher les commentaires des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:152
+#: class/psk_s2msfb.admin.manager.class.php:151
 msgid "Can be set to <code>2</code> to display directories comments only"
 msgstr ""
 "Mettre la valeur à <code>2</code> pour afficher les commentaires des "
 "répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:153
+#: class/psk_s2msfb.admin.manager.class.php:152
 msgid "Can be set to <code>3</code> to display files and directories comments"
 msgstr ""
 "Mettre la valeur à <code>3</code> pour afficher les commentaires des "
 "fichiers et des répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:157
+#: class/psk_s2msfb.admin.manager.class.php:156
 msgid "Show if a file has already been downloaded"
 msgstr "Montrer si un fichier a déjà été téléchargé"
 
-#: class/psk_s2msfb.admin.manager.class.php:160
+#: class/psk_s2msfb.admin.manager.class.php:159
 msgid "Do not show already downloaded files"
 msgstr "Ne pas montrer les fichiers déjà téléchargés"
 
-#: class/psk_s2msfb.admin.manager.class.php:161
+#: class/psk_s2msfb.admin.manager.class.php:160
 msgid ""
 "Can be set to <code>1</code> to display a confirm box when user clicks to "
 "download an already downloaded file"
@@ -220,7 +220,7 @@ msgstr ""
 "Mettre la valeur à <code>1</code> pour afficher une fenêtre d'alerte quand "
 "un utilisateur télécharge un fichier déjà téléchargé"
 
-#: class/psk_s2msfb.admin.manager.class.php:162
+#: class/psk_s2msfb.admin.manager.class.php:161
 msgid ""
 "Can be set to <code>2</code> to lowlight already downloaded files in the "
 "browser with a message"
@@ -228,20 +228,54 @@ msgstr ""
 "Mettre la valeur à <code>2</code> pour afficher un petit texte dans le "
 "navigateur au niveau de chaque fichier téléchargé"
 
-#: class/psk_s2msfb.admin.manager.class.php:166
+#: class/psk_s2msfb.admin.manager.class.php:165
+msgid "Display files name"
+msgstr "Afficher les noms des fichiers"
+
+#: class/psk_s2msfb.admin.manager.class.php:169
+msgid "Set to <code>0</code> to display regular files and directories name"
+msgstr ""
+"Mettre la valeur à <code>0</code> pour afficher les noms des fichiers et des "
+"répertoires"
+
+#: class/psk_s2msfb.admin.manager.class.php:170
+msgid "Can be set to <code>1</code> to display files displayname only"
+msgstr ""
+"Mettre la valeur à <code>1</code> pour afficher le nom d'affichage des "
+"fichiers"
+
+#: class/psk_s2msfb.admin.manager.class.php:171
+msgid "Can be set to <code>2</code> to display directories displayname only"
+msgstr ""
+"Mettre la valeur à <code>2</code> pour afficher le nom d'affichage des "
+"répertoires"
+
+#: class/psk_s2msfb.admin.manager.class.php:172
+msgid ""
+"Can be set to <code>3</code> to display files and directories displayname"
+msgstr ""
+"Mettre la valeur à <code>3</code> pour afficher le nom d'affichage des "
+"fichiers et des répertoires"
+
+#: class/psk_s2msfb.admin.manager.class.php:173
+#: class/psk_s2msfb.admin.manager.class.php:369
+msgid "You can use these HTML tags : em strong u style"
+msgstr "Vous pouvez utiliser ces balises HTML : em strong u style"
+
+#: class/psk_s2msfb.admin.manager.class.php:177
 msgid "Display files size"
 msgstr "Afficher la taille des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:170
+#: class/psk_s2msfb.admin.manager.class.php:181
 msgid "Set to <code>0</code> to hide files size"
 msgstr ""
 "Mettre la valeur à <code>0</code> pour ne pas afficher la taille des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:174
+#: class/psk_s2msfb.admin.manager.class.php:185
 msgid "Display files modification date"
 msgstr "Afficher la date de modification des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:179
+#: class/psk_s2msfb.admin.manager.class.php:190
 msgid ""
 "Set to <code>0</code> to hide the date when files and directories have been "
 "modified"
@@ -249,20 +283,20 @@ msgstr ""
 "Mettre la valeur à <code>0</code> pour cacher la date de modification des "
 "répertoires et des fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:180
+#: class/psk_s2msfb.admin.manager.class.php:191
 msgid "Can be set to <code>1</code> to display files modification date only"
 msgstr ""
 "Mettre la valeur à <code>1</code> pour afficher la date de modification des "
 "fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:181
+#: class/psk_s2msfb.admin.manager.class.php:192
 msgid ""
 "Can be set to <code>2</code> to display directories modification date only"
 msgstr ""
 "Mettre la valeur à <code>2</code> pour afficher la date de modification des "
 "répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:182
+#: class/psk_s2msfb.admin.manager.class.php:193
 msgid ""
 "Can be set to <code>3</code> to display files and directories modification "
 "date"
@@ -270,15 +304,15 @@ msgstr ""
 "Mettre la valeur à <code>3</code> pour afficher la date de modification des "
 "fichiers et des répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:186
+#: class/psk_s2msfb.admin.manager.class.php:197
 msgid "Let directories be downloaded"
 msgstr "Permettre aux répertoires d'être téléchargés"
 
-#: class/psk_s2msfb.admin.manager.class.php:189
+#: class/psk_s2msfb.admin.manager.class.php:200
 msgid "Directories cannot be downloaded as zip files"
 msgstr "Les répertoires ne peuvent pas être téléchargés en tant qu'archive zip"
 
-#: class/psk_s2msfb.admin.manager.class.php:190
+#: class/psk_s2msfb.admin.manager.class.php:201
 msgid ""
 "If set to <code>1</code> and if a zip file has exactly the same name as "
 "directory in the same parent folder, then a download button will be "
@@ -288,95 +322,95 @@ msgstr ""
 "répertoire en tant qu'archive zip si un fichier zip placé à coté du "
 "répertoire porte le même nom que le répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:192
+#: class/psk_s2msfb.admin.manager.class.php:203
 msgid "Example:"
 msgstr "Exemple :"
 
-#: class/psk_s2msfb.admin.manager.class.php:194
+#: class/psk_s2msfb.admin.manager.class.php:205
 msgid "will result in:"
 msgstr "va donner :"
 
-#: class/psk_s2msfb.admin.manager.class.php:199
+#: class/psk_s2msfb.admin.manager.class.php:210
 msgid "Easing function to use on expand"
 msgstr "Type d'animation pour l'ouverture d'un répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:207
+#: class/psk_s2msfb.admin.manager.class.php:218
 msgid "Speed of the expand folder action in ms"
 msgstr "Vitesse en millisecondes d'ouverture d'un répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:215
+#: class/psk_s2msfb.admin.manager.class.php:226
 msgid "A full regexp directories have to match to be displayed"
 msgstr ""
 "Une expression régulière que le nom d'un répertoire doit satisfaire pour "
 "être affiché"
 
-#: class/psk_s2msfb.admin.manager.class.php:216
-#: class/psk_s2msfb.admin.manager.class.php:224
+#: class/psk_s2msfb.admin.manager.class.php:227
+#: class/psk_s2msfb.admin.manager.class.php:235
 msgid "Syntax available here"
 msgstr "Syntaxe disponible ici"
 
-#: class/psk_s2msfb.admin.manager.class.php:216
-#: class/psk_s2msfb.admin.manager.class.php:224
+#: class/psk_s2msfb.admin.manager.class.php:227
+#: class/psk_s2msfb.admin.manager.class.php:235
 msgid "<code>preg_match</code> PHP function is used"
 msgstr "la fonction PHP <code>preg_match</code> est utilisée"
 
-#: class/psk_s2msfb.admin.manager.class.php:219
+#: class/psk_s2msfb.admin.manager.class.php:230
 msgid "eg: <code>/(access|user)/i</code>"
 msgstr "par exemple : <code>/(access|user)/i</code>"
 
-#: class/psk_s2msfb.admin.manager.class.php:223
+#: class/psk_s2msfb.admin.manager.class.php:234
 msgid "A full regexp files have to match to be displayed"
 msgstr ""
 "Une expression régulière que le nom d'un fichier doit satisfaire pour être "
 "affiché"
 
-#: class/psk_s2msfb.admin.manager.class.php:227
+#: class/psk_s2msfb.admin.manager.class.php:238
 msgid "eg: <code>/\\.(png|jpe?g|gif|zip)$/i</code>"
 msgstr "par exemple : <code>/\\.(png|jpe?g|gif|zip)$/i</code>"
 
-#: class/psk_s2msfb.admin.manager.class.php:231
+#: class/psk_s2msfb.admin.manager.class.php:242
 msgid "Event to trigger expand/collapse"
 msgstr "Evénement pour déclancher l'ouverture/fermeture"
 
-#: class/psk_s2msfb.admin.manager.class.php:234
+#: class/psk_s2msfb.admin.manager.class.php:245
 msgid "User has to click to toggle directories, download files, ..."
 msgstr ""
 "L'utilisateur doit cliquer pour ouvrir/fermer les répertoires, télécharger "
 "les fichiers, etc…"
 
-#: class/psk_s2msfb.admin.manager.class.php:235
+#: class/psk_s2msfb.admin.manager.class.php:246
 msgid "Can be any javascript event like <code>mouseover</code>, ..."
 msgstr ""
 "Peut être n'importe quel événement javascript comme <code>mouseover</code>, …"
 
-#: class/psk_s2msfb.admin.manager.class.php:239
+#: class/psk_s2msfb.admin.manager.class.php:250
 msgid "Show hidden files or not"
 msgstr "Montrer les fichiers cachés ou non"
 
-#: class/psk_s2msfb.admin.manager.class.php:242
+#: class/psk_s2msfb.admin.manager.class.php:253
 msgid "Do not show hidden files"
 msgstr "Ne pas montrer les fichiers cachés"
 
-#: class/psk_s2msfb.admin.manager.class.php:243
+#: class/psk_s2msfb.admin.manager.class.php:254
 msgid "Set to <code>1</code> to display"
 msgstr "Mettre la valeur à <code>1</code> pour afficher"
 
-#: class/psk_s2msfb.admin.manager.class.php:247
+#: class/psk_s2msfb.admin.manager.class.php:258
 msgid "Whether or not to limit the browser to one subfolder at a time"
 msgstr ""
 "Limiter l'affichage du navigateur à un seul répertoire ouvert à la fois"
 
-#: class/psk_s2msfb.admin.manager.class.php:251
+#: class/psk_s2msfb.admin.manager.class.php:262
 msgid "Set to <code>0</code> to display only one open directory at a time"
 msgstr ""
 "Mettre la valeur à <code>0</code> pour ouvrir un répertoire et tous les sous-"
 "répertoires à fois"
 
-#: class/psk_s2msfb.admin.manager.class.php:255
+#: class/psk_s2msfb.admin.manager.class.php:266
 msgid "Replace files name with custom values"
 msgstr "Remplacer le nom de fichiers par des valeurs"
 
-#: class/psk_s2msfb.admin.manager.class.php:256
+#: class/psk_s2msfb.admin.manager.class.php:267
 msgid ""
 "Syntax : <code>realfilename_1:Custom File Name #1|...|realfilename_n:Custom "
 "File Name #n</code>"
@@ -384,7 +418,7 @@ msgstr ""
 "Syntaxe : <code>nom_fichier_1:Nouveau nom de fichier affiche #1|…|"
 "nom_fichier_N:Nouveau nom de fichier affiche #N</code>"
 
-#: class/psk_s2msfb.admin.manager.class.php:259
+#: class/psk_s2msfb.admin.manager.class.php:270
 msgid ""
 "<code>access-s2member-level#</code> will be automatically renamed with your "
 "s2member level custom labels."
@@ -392,17 +426,17 @@ msgstr ""
 "<code>access-s2member-level#</code> est automatiquement renommé par les noms "
 "définis pour les niveaux dans les préférences de s2member."
 
-#: class/psk_s2msfb.admin.manager.class.php:263
+#: class/psk_s2msfb.admin.manager.class.php:274
 msgid "Whether or not to open all subdirectories when opening a directory"
 msgstr ""
 "Permettre ou non l'ouverture automatique de tous les sous-répertoires d'un "
 "répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:266
+#: class/psk_s2msfb.admin.manager.class.php:277
 msgid "User has to open directories himself"
 msgstr "L'utilisateur doit ouvrir lui même les répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:267
+#: class/psk_s2msfb.admin.manager.class.php:278
 msgid ""
 "Set to <code>1</code> to open recursively subdirectories when opening a "
 "directory (then all directories will be open at initialization)"
@@ -411,47 +445,47 @@ msgstr ""
 "répertoires à fois (tous les répertoires seront donc ouverts à "
 "l'initialisation)"
 
-#: class/psk_s2msfb.admin.manager.class.php:271
+#: class/psk_s2msfb.admin.manager.class.php:282
 msgid "Display file preview button for these extensions"
 msgstr "Afficher la prévisualisation pour les fichiers ayant ces extensions"
 
-#: class/psk_s2msfb.admin.manager.class.php:272
+#: class/psk_s2msfb.admin.manager.class.php:283
 msgid "Define file types by extensions seperated by coma"
 msgstr ""
 "Définir le type des fichiers en séparant les extensions par des virgules"
 
-#: class/psk_s2msfb.admin.manager.class.php:274
+#: class/psk_s2msfb.admin.manager.class.php:285
 msgid "Supported values are : <code>mp3</code>"
 msgstr "Valeurs possibles : <code>mp3</code>"
 
-#: class/psk_s2msfb.admin.manager.class.php:275
+#: class/psk_s2msfb.admin.manager.class.php:286
 msgid "eg: <code>mp3,jpg,png</code>"
 msgstr "par exemple : <code>mp3,jpg,png</code>"
 
-#: class/psk_s2msfb.admin.manager.class.php:279
+#: class/psk_s2msfb.admin.manager.class.php:290
 msgid ""
 "Display the s2member confirmation box when a user tries to download a file"
 msgstr ""
 "Afficher la fenêtre de confirmation s2member avant qu'un utilisateur "
 "télécharge un fichier"
 
-#: class/psk_s2msfb.admin.manager.class.php:282
+#: class/psk_s2msfb.admin.manager.class.php:293
 msgid "No confirmation box displayed"
 msgstr "Pas de fenêtre de confirmation"
 
-#: class/psk_s2msfb.admin.manager.class.php:283
+#: class/psk_s2msfb.admin.manager.class.php:294
 msgid "Set to <code>1</code> to display the confirmation box"
 msgstr "Mettre la valeur à <code>1</code> pour afficher"
 
-#: class/psk_s2msfb.admin.manager.class.php:287
+#: class/psk_s2msfb.admin.manager.class.php:298
 msgid "Let user search files"
 msgstr "Activer la recherche de fichier"
 
-#: class/psk_s2msfb.admin.manager.class.php:290
+#: class/psk_s2msfb.admin.manager.class.php:301
 msgid "Search is unavailable"
 msgstr "Recherche non disponible"
 
-#: class/psk_s2msfb.admin.manager.class.php:291
+#: class/psk_s2msfb.admin.manager.class.php:302
 msgid ""
 "Can be set to <code>1</code> to display a global search button on top of the "
 "shortcode"
@@ -459,7 +493,7 @@ msgstr ""
 "Mettre la valeur à <code>1</code> pour afficher la recherche en haut "
 "uniquement"
 
-#: class/psk_s2msfb.admin.manager.class.php:292
+#: class/psk_s2msfb.admin.manager.class.php:303
 msgid ""
 "Can be set to <code>2</code> to display a global search button on top and a "
 "search button for each directory"
@@ -467,15 +501,15 @@ msgstr ""
 "Mettre la valeur à <code>2</code>pour afficher la recherche en haut et dans "
 "chaque répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:296
+#: class/psk_s2msfb.admin.manager.class.php:307
 msgid "Group shortcodes with a single single search box"
 msgstr "Grouper les shortcodes pour n'utiliser qu'un seul bloc de recherche"
 
-#: class/psk_s2msfb.admin.manager.class.php:299
+#: class/psk_s2msfb.admin.manager.class.php:310
 msgid "There is no group. Every shortcode has it own search box"
 msgstr "Pas de groupe. Chaque shortcode a son bloc de recherche"
 
-#: class/psk_s2msfb.admin.manager.class.php:300
+#: class/psk_s2msfb.admin.manager.class.php:311
 msgid ""
 "You can define groups by setting this value to <code>1</code> for all "
 "shortcodes in the first group, <code>2</code> for all shortcodes in the "
@@ -485,7 +519,7 @@ msgstr ""
 "pour tous les shortcodes du premier groupe, <code>2</code> pour tous les "
 "shortcodes du second groupe, ..."
 
-#: class/psk_s2msfb.admin.manager.class.php:301
+#: class/psk_s2msfb.admin.manager.class.php:312
 msgid ""
 "The first shortcode of every group will display the search box and "
 "performing a search in a box will launch a search in all shortcodes of the "
@@ -494,32 +528,32 @@ msgstr ""
 "Le bloc de recherche sera affiché dans le premier shortcode de chaque groupe "
 "et une recherche déclanchera tous les shortcodes du même groupe."
 
-#: class/psk_s2msfb.admin.manager.class.php:305
+#: class/psk_s2msfb.admin.manager.class.php:316
 msgid "How to display search results"
 msgstr "Comment afficher le résultat de la recherche"
 
-#: class/psk_s2msfb.admin.manager.class.php:308
+#: class/psk_s2msfb.admin.manager.class.php:319
 msgid "Files are flat displayed with full path between parenthesis"
 msgstr "Les fichiers sont affiché avec leur chemin entre parenthère"
 
-#: class/psk_s2msfb.admin.manager.class.php:310
+#: class/psk_s2msfb.admin.manager.class.php:321
 msgid "Can be set to <code>1</code> to display files without path"
 msgstr ""
 "Mettre la valeur à <code>1</code> pour afficher les fichiers sans chemin"
 
-#: class/psk_s2msfb.admin.manager.class.php:311
+#: class/psk_s2msfb.admin.manager.class.php:322
 msgid "Can be set to <code>2</code> to display files group by path"
 msgstr ""
 "Mettre la valeur à <code>2</code> pour afficher les fichiers groupés par "
 "chemin"
 
-#: class/psk_s2msfb.admin.manager.class.php:312
+#: class/psk_s2msfb.admin.manager.class.php:323
 msgid "Can be set to <code>3</code> to display files group by extension"
 msgstr ""
 "Mettre la valeur à <code>3</code> pour afficher les fichiers groupés par "
 "extension"
 
-#: class/psk_s2msfb.admin.manager.class.php:313
+#: class/psk_s2msfb.admin.manager.class.php:324
 msgid ""
 "Can be set to <code>4</code> to display files group by extension with full "
 "path between parenthesis"
@@ -527,161 +561,185 @@ msgstr ""
 "Mettre la valeur à <code>4</code> pour afficher les fichiers groupés par "
 "extension avec le chemin entre parenthèse"
 
-#: class/psk_s2msfb.admin.manager.class.php:317
+#: class/psk_s2msfb.admin.manager.class.php:328
 msgid "Sort files in directories by a criteria"
 msgstr "Trier les fichiers dans les répertoires selon un critère"
 
-#: class/psk_s2msfb.admin.manager.class.php:320
+#: class/psk_s2msfb.admin.manager.class.php:331
 msgid "Files are sorted by name"
 msgstr "Trier les fichiers par le nom"
 
-#: class/psk_s2msfb.admin.manager.class.php:322
+#: class/psk_s2msfb.admin.manager.class.php:333
 msgid "Can be set to <code>0D</code> to sort files by name descendant"
 msgstr ""
 "Mettre la valeur à <code>0D</code> pour trier les fichiers par nom à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:323
+#: class/psk_s2msfb.admin.manager.class.php:334
 msgid "Can be set to <code>1</code> to sort files by extension"
 msgstr ""
 "Mettre la valeur à <code>1</code> pour trier les fichiers par extension"
 
-#: class/psk_s2msfb.admin.manager.class.php:324
+#: class/psk_s2msfb.admin.manager.class.php:335
 msgid "Can be set to <code>1D</code> to sort files by extension descendant"
 msgstr ""
 "Mettre la valeur à <code>1D</code> pour trier les fichiers par extension à "
 "l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:325
+#: class/psk_s2msfb.admin.manager.class.php:336
 msgid "Can be set to <code>2</code> to sort files by size"
 msgstr "Mettre la valeur à <code>2</code> pour trier les fichiers par taille"
 
-#: class/psk_s2msfb.admin.manager.class.php:326
+#: class/psk_s2msfb.admin.manager.class.php:337
 msgid "Can be set to <code>2D</code> to sort files by size descendant"
 msgstr ""
 "Mettre la valeur à <code>2D</code> pour trier les fichiers par taille à "
 "l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:327
+#: class/psk_s2msfb.admin.manager.class.php:338
 msgid "Can be set to <code>3</code> to sort files by modification date"
 msgstr ""
 "Mettre la valeur à <code>3</code> pour trier les fichiers par date de "
 "modification"
 
-#: class/psk_s2msfb.admin.manager.class.php:328
+#: class/psk_s2msfb.admin.manager.class.php:339
 msgid ""
 "Can be set to <code>3D</code> to sort files by modification date descendant"
 msgstr ""
 "Mettre la valeur à <code>3D</code> pour trier les fichiers par date de "
 "modification à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:329
+#: class/psk_s2msfb.admin.manager.class.php:340
 msgid "Can be set to <code>4</code> to sort files by birth date"
 msgstr ""
 "Mettre la valeur à <code>4</code> pour trier les fichiers par date d'ajout"
 
-#: class/psk_s2msfb.admin.manager.class.php:330
+#: class/psk_s2msfb.admin.manager.class.php:341
 msgid "Can be set to <code>4D</code> to sort files by birth date descendant"
 msgstr ""
 "Mettre la valeur à <code>4D</code> pour trier les fichiers par date d'ajout "
 "à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:344
+#: class/psk_s2msfb.admin.manager.class.php:355
 msgid ""
 "It seems you have xebug installed and try to delete a very deep directory."
 msgstr ""
 "Il semble que xdebug est installé et que le répertoire est trop profond."
 "Essayez d'augmenter la valeur de xdebug.max_nesting_level dans php.ini"
 
-#: class/psk_s2msfb.admin.manager.class.php:345
+#: class/psk_s2msfb.admin.manager.class.php:356
 #: class/psk_s2msfb.admin.settings.class.php:59
 #: class/psk_s2msfb.admin.stats.class.php:67
 msgid "An error occurs"
 msgstr "Un erreur est survenue"
 
-#: class/psk_s2msfb.admin.manager.class.php:346
+#: class/psk_s2msfb.admin.manager.class.php:357
 msgid "Please wait..."
 msgstr "Merci de patienter..."
 
-#: class/psk_s2msfb.admin.manager.class.php:347
+#: class/psk_s2msfb.admin.manager.class.php:358
 msgid "Rename Directory"
 msgstr "Renommer le répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:348
+#: class/psk_s2msfb.admin.manager.class.php:359
 msgid "Rename File"
 msgstr "Renommer le fichier"
 
-#: class/psk_s2msfb.admin.manager.class.php:349
+#: class/psk_s2msfb.admin.manager.class.php:360
 msgid "Rename"
 msgstr "Renommer"
 
-#: class/psk_s2msfb.admin.manager.class.php:350
+#: class/psk_s2msfb.admin.manager.class.php:361
 msgid "Comment Directory"
 msgstr "Commenter le répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:351
+#: class/psk_s2msfb.admin.manager.class.php:362
 msgid "Comment File"
 msgstr "Commenter le fichier"
 
-#: class/psk_s2msfb.admin.manager.class.php:352
-#: class/psk_s2msfb.admin.manager.class.php:582
+#: class/psk_s2msfb.admin.manager.class.php:363
+#: class/psk_s2msfb.admin.manager.class.php:601
 msgid "Comment"
 msgstr "Remarque"
 
-#: class/psk_s2msfb.admin.manager.class.php:353
+#: class/psk_s2msfb.admin.manager.class.php:364
 msgid "Enter a comment or leave blank to disable comment"
 msgstr "Renseigner un commentaire ou laisser vide pour enlever un commentaire"
 
-#: class/psk_s2msfb.admin.manager.class.php:354
+#: class/psk_s2msfb.admin.manager.class.php:365
+msgid "Change Directory Display Name"
+msgstr "Changer l'affichage du nom du répertoire"
+
+#: class/psk_s2msfb.admin.manager.class.php:366
+msgid "Change File Display Name"
+msgstr "Changer l'affichage du nom du fichier"
+
+#: class/psk_s2msfb.admin.manager.class.php:367
+msgid "Change Display Name"
+msgstr "Changer l'affichage du nom"
+
+#: class/psk_s2msfb.admin.manager.class.php:368
+msgid "Enter a displayed name or leave blank to disable the displayed name"
+msgstr "Renseigner un nom d'affichage ou laisser vide pour l'enlever"
+
+#: class/psk_s2msfb.admin.manager.class.php:370
 msgid ""
 "Directory and all children will be deleted.<br/>You can not undo this action."
 msgstr ""
 "Le répertoire et tout ce qu'il contient va être effacé.<br/>Vous ne pouvez "
 "pas annuler cette action."
 
-#: class/psk_s2msfb.admin.manager.class.php:355
+#: class/psk_s2msfb.admin.manager.class.php:371
 msgid "File will be deleted.<br/>You can not undo this action."
 msgstr ""
 "Le fichier va être supprimé.<br/>Vous ne pouvez pas annuler cette action."
 
-#: class/psk_s2msfb.admin.manager.class.php:356
+#: class/psk_s2msfb.admin.manager.class.php:372
 #: class/psk_s2msfb.admin.settings.class.php:191
 msgid "Delete"
 msgstr "Supprimer"
 
-#: class/psk_s2msfb.admin.manager.class.php:357
+#: class/psk_s2msfb.admin.manager.class.php:373
 msgid "Delete Directory"
 msgstr "Supprimer le répertoire"
 
-#: class/psk_s2msfb.admin.manager.class.php:358
+#: class/psk_s2msfb.admin.manager.class.php:374
 msgid "Delete File"
 msgstr "Supprime le fichier"
 
-#: class/psk_s2msfb.admin.manager.class.php:359
+#: class/psk_s2msfb.admin.manager.class.php:375
 msgid "File has been successfully renamed"
 msgstr "Le fichier a bien été renommé"
 
-#: class/psk_s2msfb.admin.manager.class.php:360
+#: class/psk_s2msfb.admin.manager.class.php:376
 msgid "Directory has been successfully renamed"
 msgstr "Le répertoire a bien été renommé"
 
-#: class/psk_s2msfb.admin.manager.class.php:361
+#: class/psk_s2msfb.admin.manager.class.php:377
 msgid "File has been successfully commented"
 msgstr "Le fichier a bien été commenté"
 
-#: class/psk_s2msfb.admin.manager.class.php:362
+#: class/psk_s2msfb.admin.manager.class.php:378
 msgid "Directory has been successfully commented"
 msgstr "Le répertoire a bien été commenté"
 
-#: class/psk_s2msfb.admin.manager.class.php:363
+#: class/psk_s2msfb.admin.manager.class.php:379
+msgid "File has been successfully virtually renamed"
+msgstr "Le fichier a bien été virtuellement renommé"
+
+#: class/psk_s2msfb.admin.manager.class.php:380
+msgid "Directory has been successfully virtually renamed"
+msgstr "Le répertoire a bien été virtuellement renommé"
+
+#: class/psk_s2msfb.admin.manager.class.php:381
 msgid "File has been successfully deleted"
 msgstr "Le fichier a bien été supprimé"
 
-#: class/psk_s2msfb.admin.manager.class.php:364
+#: class/psk_s2msfb.admin.manager.class.php:382
 msgid "Directory has been successfully deleted"
 msgstr "Le répertoire a bien été supprimé"
 
-#: class/psk_s2msfb.admin.manager.class.php:365
-#: class/psk_s2msfb.admin.manager.class.php:620
+#: class/psk_s2msfb.admin.manager.class.php:383
+#: class/psk_s2msfb.admin.manager.class.php:639
 #: class/psk_s2msfb.admin.settings.class.php:60
 #: class/psk_s2msfb.admin.settings.class.php:279
 #: class/psk_s2msfb.admin.settings.class.php:290
@@ -691,9 +749,9 @@ msgstr "Le répertoire a bien été supprimé"
 msgid "Error!"
 msgstr "Erreur !"
 
-#: class/psk_s2msfb.admin.manager.class.php:366
-#: class/psk_s2msfb.admin.manager.class.php:490
-#: class/psk_s2msfb.admin.manager.class.php:621
+#: class/psk_s2msfb.admin.manager.class.php:384
+#: class/psk_s2msfb.admin.manager.class.php:509
+#: class/psk_s2msfb.admin.manager.class.php:640
 #: class/psk_s2msfb.admin.settings.class.php:61
 #: class/psk_s2msfb.admin.settings.class.php:97
 #: class/psk_s2msfb.admin.settings.class.php:124
@@ -702,8 +760,8 @@ msgstr "Erreur !"
 msgid "Success!"
 msgstr "OK !"
 
-#: class/psk_s2msfb.admin.manager.class.php:367
-#: class/psk_s2msfb.admin.manager.class.php:622
+#: class/psk_s2msfb.admin.manager.class.php:385
+#: class/psk_s2msfb.admin.manager.class.php:641
 #: class/psk_s2msfb.admin.settings.class.php:62
 #: class/psk_s2msfb.admin.settings.class.php:135
 #: class/psk_s2msfb.admin.settings.class.php:137
@@ -711,19 +769,19 @@ msgstr "OK !"
 msgid "Info!"
 msgstr "Info !"
 
-#: class/psk_s2msfb.admin.manager.class.php:368
-#: class/psk_s2msfb.admin.manager.class.php:623
+#: class/psk_s2msfb.admin.manager.class.php:386
+#: class/psk_s2msfb.admin.manager.class.php:642
 #: class/psk_s2msfb.admin.settings.class.php:63
 #: class/psk_s2msfb.admin.settings.class.php:132
 #: class/psk_s2msfb.admin.stats.class.php:71
 msgid "Warning!"
 msgstr "Attention !"
 
-#: class/psk_s2msfb.admin.manager.class.php:375
+#: class/psk_s2msfb.admin.manager.class.php:393
 msgid "Please wait while loading..."
 msgstr "Chargement en cours, merci de patienter…"
 
-#: class/psk_s2msfb.admin.manager.class.php:400
+#: class/psk_s2msfb.admin.manager.class.php:419
 msgid ""
 "Files structure is cached to improve performance and to check which file has "
 "been added, modified or deleted. For example, the <em>s2memberSBF What's "
@@ -734,7 +792,7 @@ msgstr ""
 "Widget <em>s2memberSBF What's new ?</em> par exemple utilise le cache pour "
 "affiche les fichiers dernièrement ajoutés."
 
-#: class/psk_s2msfb.admin.manager.class.php:402
+#: class/psk_s2msfb.admin.manager.class.php:421
 msgid ""
 "The cache is refreshed every hour and it is automatically executed when you "
 "delete or rename files/directories from the dashboard but when you manage "
@@ -745,131 +803,131 @@ msgstr ""
 "administration de WordPress. Quand vous gérez vos fichiers par SSH, FTP, … "
 "vosu devez rafraichir le cache à la main !"
 
-#: class/psk_s2msfb.admin.manager.class.php:420
+#: class/psk_s2msfb.admin.manager.class.php:439
 msgid "The cache has been totally successfully re-computed !"
 msgstr "Le cache a été totalement recalculé !"
 
-#: class/psk_s2msfb.admin.manager.class.php:424
+#: class/psk_s2msfb.admin.manager.class.php:443
 msgid "The cache has been successfully refreshed !"
 msgstr "Le cache a bien été rafraichi !"
 
-#: class/psk_s2msfb.admin.manager.class.php:432
+#: class/psk_s2msfb.admin.manager.class.php:451
 msgid "1 new file"
 msgstr "1 nouveau fichier"
 
-#: class/psk_s2msfb.admin.manager.class.php:432
+#: class/psk_s2msfb.admin.manager.class.php:451
 #, php-format
 msgid "%s new files"
 msgstr "%s nouveaux fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:451
+#: class/psk_s2msfb.admin.manager.class.php:470
 msgid "1 modified file"
 msgstr "1 fichier modifié"
 
-#: class/psk_s2msfb.admin.manager.class.php:451
+#: class/psk_s2msfb.admin.manager.class.php:470
 #, php-format
 msgid "%s modified files"
 msgstr "%s fichiers modifiés"
 
-#: class/psk_s2msfb.admin.manager.class.php:470
+#: class/psk_s2msfb.admin.manager.class.php:489
 msgid "1 deleted file"
 msgstr "1 fichier supprimé"
 
-#: class/psk_s2msfb.admin.manager.class.php:470
+#: class/psk_s2msfb.admin.manager.class.php:489
 #, php-format
 msgid "%s deleted files"
 msgstr "%s fichiers supprimés"
 
-#: class/psk_s2msfb.admin.manager.class.php:502
-#: class/psk_s2msfb.admin.manager.class.php:505
+#: class/psk_s2msfb.admin.manager.class.php:521
+#: class/psk_s2msfb.admin.manager.class.php:524
 msgid "No file found"
 msgstr "Aucun fichier trouvé"
 
-#: class/psk_s2msfb.admin.manager.class.php:507
+#: class/psk_s2msfb.admin.manager.class.php:526
 msgid "1 directory found"
 msgstr "1 répertoire trouvé"
 
-#: class/psk_s2msfb.admin.manager.class.php:509
+#: class/psk_s2msfb.admin.manager.class.php:528
 #, php-format
 msgid "%s directories found"
 msgstr "%s répertoires trouvés"
 
-#: class/psk_s2msfb.admin.manager.class.php:513
+#: class/psk_s2msfb.admin.manager.class.php:532
 msgid "1 file found"
 msgstr "1 fichier trouvé"
 
-#: class/psk_s2msfb.admin.manager.class.php:515
+#: class/psk_s2msfb.admin.manager.class.php:534
 msgid "1 file and 1 directory found"
 msgstr "1 fichier et 1 répertoire trouvés"
 
-#: class/psk_s2msfb.admin.manager.class.php:517
+#: class/psk_s2msfb.admin.manager.class.php:536
 #, php-format
 msgid "1 file and %s directories found"
 msgstr "1 fichier et %s répertoires trouvés"
 
-#: class/psk_s2msfb.admin.manager.class.php:521
+#: class/psk_s2msfb.admin.manager.class.php:540
 #, php-format
 msgid "%s files found"
 msgstr "%s fichiers trouvés"
 
-#: class/psk_s2msfb.admin.manager.class.php:523
+#: class/psk_s2msfb.admin.manager.class.php:542
 #, php-format
 msgid "%s files and 1 directory found"
 msgstr "%s fichiers et 1 répertoire trouvés"
 
-#: class/psk_s2msfb.admin.manager.class.php:525
+#: class/psk_s2msfb.admin.manager.class.php:544
 #, php-format
 msgid "%s files and %s directories found"
 msgstr "%s fichiers et %s répertoires trouvés"
 
-#: class/psk_s2msfb.admin.manager.class.php:528
+#: class/psk_s2msfb.admin.manager.class.php:547
 #, php-format
 msgid "Last file scan on %s in %ss (%s)"
 msgstr "Dernier scan de fichier à %s en %ss (%s)"
 
-#: class/psk_s2msfb.admin.manager.class.php:534
+#: class/psk_s2msfb.admin.manager.class.php:553
 #, php-format
 msgid "Next file scan on %s"
 msgstr "Prochain scan de fichier le %s"
 
-#: class/psk_s2msfb.admin.manager.class.php:543
+#: class/psk_s2msfb.admin.manager.class.php:562
 msgid "Refresh cache now"
 msgstr "Rafraichir le cache"
 
-#: class/psk_s2msfb.admin.manager.class.php:544
+#: class/psk_s2msfb.admin.manager.class.php:563
 msgid "Can be very long..."
 msgstr "La procédure peut prendre du temps..."
 
-#: class/psk_s2msfb.admin.manager.class.php:579
-#: class/psk_s2msfb.admin.manager.class.php:632
+#: class/psk_s2msfb.admin.manager.class.php:598
+#: class/psk_s2msfb.admin.manager.class.php:651
 msgid "Tag"
 msgstr "Etiquette"
 
-#: class/psk_s2msfb.admin.manager.class.php:580
-#: class/psk_s2msfb.admin.manager.class.php:633
+#: class/psk_s2msfb.admin.manager.class.php:599
+#: class/psk_s2msfb.admin.manager.class.php:652
 msgid "Description"
 msgstr "Description"
 
-#: class/psk_s2msfb.admin.manager.class.php:581
+#: class/psk_s2msfb.admin.manager.class.php:600
 msgid "Default value"
 msgstr "Valeur par défaut"
 
-#: class/psk_s2msfb.admin.manager.class.php:634
+#: class/psk_s2msfb.admin.manager.class.php:653
 msgid "Value"
 msgstr "Valeur"
 
-#: class/psk_s2msfb.admin.manager.class.php:655
+#: class/psk_s2msfb.admin.manager.class.php:674
 msgid "Full"
 msgstr "Complet"
 
-#: class/psk_s2msfb.admin.manager.class.php:658
-#: class/psk_s2msfb.admin.manager.class.php:767
+#: class/psk_s2msfb.admin.manager.class.php:677
+#: class/psk_s2msfb.admin.manager.class.php:787
 msgid "Yes"
 msgstr "Oui"
 
-#: class/psk_s2msfb.admin.manager.class.php:661
-#: class/psk_s2msfb.admin.manager.class.php:718
-#: class/psk_s2msfb.admin.manager.class.php:770
+#: class/psk_s2msfb.admin.manager.class.php:680
+#: class/psk_s2msfb.admin.manager.class.php:738
+#: class/psk_s2msfb.admin.manager.class.php:790
 #: class/psk_s2msfb.widgets.class.php:53 class/psk_s2msfb.widgets.class.php:58
 #: class/psk_s2msfb.widgets.class.php:70
 #: class/psk_s2msfb.widgets.class.php:677
@@ -877,79 +935,79 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-#: class/psk_s2msfb.admin.manager.class.php:678
+#: class/psk_s2msfb.admin.manager.class.php:697
 msgid "Sort files by name"
 msgstr "Trier les fichiers par nom"
 
-#: class/psk_s2msfb.admin.manager.class.php:681
+#: class/psk_s2msfb.admin.manager.class.php:700
 msgid "Sort files by name descendant"
 msgstr "Trier les fichier par nom à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:684
+#: class/psk_s2msfb.admin.manager.class.php:703
 msgid "Sort files by extension"
 msgstr "Trier les fichiers par extension"
 
-#: class/psk_s2msfb.admin.manager.class.php:687
+#: class/psk_s2msfb.admin.manager.class.php:706
 msgid "Sort files by extension descendant"
 msgstr "Trier les fichiers par extension à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:690
+#: class/psk_s2msfb.admin.manager.class.php:709
 msgid "Sort files by size"
 msgstr "Trier les fichiers par taille"
 
-#: class/psk_s2msfb.admin.manager.class.php:693
+#: class/psk_s2msfb.admin.manager.class.php:712
 msgid "Sort files by size descendant"
 msgstr "Trier les fichiers par taille à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:696
+#: class/psk_s2msfb.admin.manager.class.php:715
 msgid "Sort files by modification date"
 msgstr "Trier les fichiers par date de modification"
 
-#: class/psk_s2msfb.admin.manager.class.php:699
+#: class/psk_s2msfb.admin.manager.class.php:718
 msgid "Sort files by modification date descendant"
 msgstr "Trier les fichiers par date de modification à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:702
+#: class/psk_s2msfb.admin.manager.class.php:721
 msgid "Sort files by birth date"
 msgstr "Trier les fichiers par date d'ajout"
 
-#: class/psk_s2msfb.admin.manager.class.php:705
+#: class/psk_s2msfb.admin.manager.class.php:724
 msgid "Sort files by birth date descendant"
 msgstr "Trier les fichiers par date d'ajout à l'envers"
 
-#: class/psk_s2msfb.admin.manager.class.php:721
+#: class/psk_s2msfb.admin.manager.class.php:741
 msgid "Only files"
 msgstr "Seulement les fichiers"
 
-#: class/psk_s2msfb.admin.manager.class.php:724
+#: class/psk_s2msfb.admin.manager.class.php:744
 msgid "Only directories"
 msgstr "Seulement les répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:727
+#: class/psk_s2msfb.admin.manager.class.php:747
 msgid "Files and directories"
 msgstr "Les fichiers et les répertoires"
 
-#: class/psk_s2msfb.admin.manager.class.php:739
+#: class/psk_s2msfb.admin.manager.class.php:759
 msgid "Flat with path"
 msgstr "Liste simple avec chemin"
 
-#: class/psk_s2msfb.admin.manager.class.php:742
+#: class/psk_s2msfb.admin.manager.class.php:762
 msgid "Flat without path"
 msgstr "Liste simple sans chemin"
 
-#: class/psk_s2msfb.admin.manager.class.php:745
+#: class/psk_s2msfb.admin.manager.class.php:765
 msgid "Group by path"
 msgstr "Grouper par chemin"
 
-#: class/psk_s2msfb.admin.manager.class.php:748
+#: class/psk_s2msfb.admin.manager.class.php:768
 msgid "Group by extension"
 msgstr "Grouper par extension"
 
-#: class/psk_s2msfb.admin.manager.class.php:751
+#: class/psk_s2msfb.admin.manager.class.php:771
 msgid "Group by extension with path"
 msgstr "Grouper par extension et avec le chemin"
 
-#: class/psk_s2msfb.admin.manager.class.php:830
+#: class/psk_s2msfb.admin.manager.class.php:850
 msgid "Copy paste this shortcode in pages :"
 msgstr "Copier-coller le shortcode suivant sur une page :"
 
@@ -1174,8 +1232,8 @@ msgstr "Prochain rapport : %s"
 
 #: class/psk_s2msfb.admin.stats.class.php:116
 #: class/psk_s2msfb.admin.stats.class.php:262
-#: class/psk_s2msfb.admin.stats.class.php:380 class/psk_s2msfb.class.php:1280
-#: class/psk_s2msfb.class.php:1304 class/psk_s2msfb.class.php:1325
+#: class/psk_s2msfb.admin.stats.class.php:380 class/psk_s2msfb.class.php:1416
+#: class/psk_s2msfb.class.php:1440 class/psk_s2msfb.class.php:1461
 #: class/psk_s2msfb.widgets.class.php:340
 #: class/psk_s2msfb.widgets.class.php:475
 #: class/psk_s2msfb.widgets.class.php:526
@@ -1281,13 +1339,13 @@ msgstr "Quand"
 
 #: class/psk_s2msfb.admin.stats.class.php:162
 #: class/psk_s2msfb.admin.stats.class.php:169
-#: class/psk_s2msfb.admin.stats.class.php:303 class/psk_s2msfb.class.php:1284
+#: class/psk_s2msfb.admin.stats.class.php:303 class/psk_s2msfb.class.php:1420
 msgid "File"
 msgstr "Fichier"
 
 #: class/psk_s2msfb.admin.stats.class.php:163
 #: class/psk_s2msfb.admin.stats.class.php:170
-#: class/psk_s2msfb.admin.stats.class.php:426 class/psk_s2msfb.class.php:1308
+#: class/psk_s2msfb.admin.stats.class.php:426 class/psk_s2msfb.class.php:1444
 msgid "User"
 msgstr "Utilisateur"
 
@@ -1297,8 +1355,8 @@ msgid "IP Address"
 msgstr "Adresse IP"
 
 #: class/psk_s2msfb.admin.stats.class.php:304
-#: class/psk_s2msfb.admin.stats.class.php:427 class/psk_s2msfb.class.php:1285
-#: class/psk_s2msfb.class.php:1309
+#: class/psk_s2msfb.admin.stats.class.php:427 class/psk_s2msfb.class.php:1421
+#: class/psk_s2msfb.class.php:1445
 msgid "Count"
 msgstr "Nombre"
 
@@ -1322,28 +1380,28 @@ msgstr "Quoi"
 msgid "Who"
 msgstr "Qui"
 
-#: class/psk_s2msfb.class.php:320
+#: class/psk_s2msfb.class.php:322
 msgid "Please type some words!"
 msgstr "Je n'ai rien à rechercher !"
 
-#: class/psk_s2msfb.class.php:402
+#: class/psk_s2msfb.class.php:415
 msgid "Please reload the page"
 msgstr "Recharger la page s'il vous plait"
 
-#: class/psk_s2msfb.class.php:482
+#: class/psk_s2msfb.class.php:496
 msgid "Permission denied"
 msgstr "Permission non accordée"
 
-#: class/psk_s2msfb.class.php:693 class/psk_s2msfb.class.php:852
+#: class/psk_s2msfb.class.php:715 class/psk_s2msfb.class.php:902
 msgid "Search..."
 msgstr "Recherche..."
 
-#: class/psk_s2msfb.class.php:745
+#: class/psk_s2msfb.class.php:778
 #, php-format
 msgid "Path <strong>%s</strong>"
 msgstr "Chemin <strong>%s</strong>"
 
-#: class/psk_s2msfb.class.php:789 class/psk_s2msfb.class.php:839
+#: class/psk_s2msfb.class.php:830 class/psk_s2msfb.class.php:888
 #: class/psk_s2msfb.widgets.class.php:462
 #: class/psk_s2msfb.widgets.class.php:645
 #: class/psk_s2msfb.widgets.class.php:1053
@@ -1351,61 +1409,61 @@ msgstr "Chemin <strong>%s</strong>"
 msgid "in %s"
 msgstr "dans %s"
 
-#: class/psk_s2msfb.class.php:798
+#: class/psk_s2msfb.class.php:839
 #, php-format
 msgid "Extension <strong>%s</strong>"
 msgstr "Extension <strong>%s</strong>"
 
-#: class/psk_s2msfb.class.php:850
+#: class/psk_s2msfb.class.php:900
 msgid "Click to reset"
 msgstr "Cliquer pour réinitialiser"
 
-#: class/psk_s2msfb.class.php:851
+#: class/psk_s2msfb.class.php:901
 msgid "Click to search"
 msgstr "Cliquer pour rechercher"
 
-#: class/psk_s2msfb.class.php:870
+#: class/psk_s2msfb.class.php:920
 msgid "No result"
 msgstr "Aucun résultat"
 
-#: class/psk_s2msfb.class.php:997
+#: class/psk_s2msfb.class.php:1105
 msgid "Download this directory as a zip file"
 msgstr "Télécharger ce répertoire en tant qu'archive zip"
 
-#: class/psk_s2msfb.class.php:997
+#: class/psk_s2msfb.class.php:1105
 msgid "Download"
 msgstr "Télécharger"
 
-#: class/psk_s2msfb.class.php:1011 class/psk_s2msfb.class.php:1072
+#: class/psk_s2msfb.class.php:1127 class/psk_s2msfb.class.php:1199
 #: class/psk_s2msfb.widgets.class.php:970
 #, php-format
 msgid "Modified on %s"
 msgstr "Modifié le %s"
 
-#: class/psk_s2msfb.class.php:1020 class/psk_s2msfb.class.php:1081
+#: class/psk_s2msfb.class.php:1136 class/psk_s2msfb.class.php:1208
 #: class/psk_s2msfb.widgets.class.php:968
 #, php-format
 msgid "Added on %s"
 msgstr "Ajouté le %s"
 
-#: class/psk_s2msfb.class.php:1046
+#: class/psk_s2msfb.class.php:1163
 msgid "You already have downloaded this directory"
 msgstr "Vous avez déjà téléchargé ce répertoire"
 
-#: class/psk_s2msfb.class.php:1115 inc/tools.class.php:253
+#: class/psk_s2msfb.class.php:1251 inc/tools.class.php:253
 #: inc/tools.class.php:255
 msgid "B"
 msgstr "O"
 
-#: class/psk_s2msfb.class.php:1126
+#: class/psk_s2msfb.class.php:1262
 msgid "Preview"
 msgstr "Prévisualisation"
 
-#: class/psk_s2msfb.class.php:1128
+#: class/psk_s2msfb.class.php:1264
 msgid "You already have downloaded this file"
 msgstr "Vous avez déjà téléchargé ce fichier"
 
-#: class/psk_s2msfb.class.php:1169
+#: class/psk_s2msfb.class.php:1305
 msgid ""
 "You already have downloaded this file.\\nAre you sure you want to download "
 "it again ?"
@@ -1413,100 +1471,100 @@ msgstr ""
 "Vous avez déjà téléchargé ce fichier.\\nEtes-vous sur de vouloir le "
 "télécharger à nouveau ?"
 
-#: class/psk_s2msfb.class.php:1179
+#: class/psk_s2msfb.class.php:1315
 msgid "— Confirm File Download —"
 msgstr "— Confirmation de téléchargement de fichier —"
 
-#: class/psk_s2msfb.class.php:1180
+#: class/psk_s2msfb.class.php:1316
 #, php-format
 msgid "You`ve downloaded %s protected %s in the last %s."
 msgstr "Vous avez téléchargé %s %s protégé(s) ces derniers %s."
 
-#: class/psk_s2msfb.class.php:1180
+#: class/psk_s2msfb.class.php:1316
 msgid "file"
 msgstr "fichier"
 
-#: class/psk_s2msfb.class.php:1180
+#: class/psk_s2msfb.class.php:1316
 msgid "files"
 msgstr "fichiers"
 
-#: class/psk_s2msfb.class.php:1180
+#: class/psk_s2msfb.class.php:1316
 msgid "24 hours"
 msgstr "24 heures"
 
-#: class/psk_s2msfb.class.php:1180
+#: class/psk_s2msfb.class.php:1316
 #, php-format
 msgid "%s days"
 msgstr "%s jours"
 
-#: class/psk_s2msfb.class.php:1181
+#: class/psk_s2msfb.class.php:1317
 msgid "You`re entitled to UNLIMITED downloads though ( so, no worries )."
 msgstr "Vous n'êtes pas limité en téléchargement (donc pas de soucis)."
 
-#: class/psk_s2msfb.class.php:1181
+#: class/psk_s2msfb.class.php:1317
 #, php-format
 msgid "You`re entitled to %s unique %s %s."
 msgstr "Vosu êtes limités à %s %s unique(s) %s."
 
-#: class/psk_s2msfb.class.php:1181
+#: class/psk_s2msfb.class.php:1317
 msgid "download"
 msgstr "téléchargement"
 
-#: class/psk_s2msfb.class.php:1181
+#: class/psk_s2msfb.class.php:1317
 msgid "downloads"
 msgstr "téléchargements"
 
-#: class/psk_s2msfb.class.php:1181
+#: class/psk_s2msfb.class.php:1317
 msgid "each day"
 msgstr "chaque jour"
 
-#: class/psk_s2msfb.class.php:1181
+#: class/psk_s2msfb.class.php:1317
 #, php-format
 msgid "every %s-day period"
 msgstr "chaque période de %s jour(s)"
 
-#: class/psk_s2msfb.class.php:1271
+#: class/psk_s2msfb.class.php:1407
 #, php-format
 msgid "Stats from %s to %s"
 msgstr "Stats du %s au %s"
 
-#: class/psk_s2msfb.class.php:1330
+#: class/psk_s2msfb.class.php:1466
 msgid "No data to report"
 msgstr "Aucune donnée à rapporter"
 
-#: class/psk_s2msfb.class.php:1407
+#: class/psk_s2msfb.class.php:1543
 msgid "A file has been downloaded"
 msgstr "Un fichier a été téléchargé"
 
-#: class/psk_s2msfb.class.php:1409
+#: class/psk_s2msfb.class.php:1545
 msgid "Download Time"
 msgstr "Heure de téléchargement"
 
-#: class/psk_s2msfb.class.php:1410
+#: class/psk_s2msfb.class.php:1546
 msgid "File downloaded"
 msgstr "Tous les téléchargements"
 
-#: class/psk_s2msfb.class.php:1411
+#: class/psk_s2msfb.class.php:1547
 msgid "User ID"
 msgstr "ID Utilisateur"
 
-#: class/psk_s2msfb.class.php:1412
+#: class/psk_s2msfb.class.php:1548
 msgid "User Login"
 msgstr "Login de l'utilisateur"
 
-#: class/psk_s2msfb.class.php:1413
+#: class/psk_s2msfb.class.php:1549
 msgid "User Email"
 msgstr "Courriel de l'utilisateur"
 
-#: class/psk_s2msfb.class.php:1414
+#: class/psk_s2msfb.class.php:1550
 msgid "User Nice name"
 msgstr "Nom commun de l'utilisateur"
 
-#: class/psk_s2msfb.class.php:1415
+#: class/psk_s2msfb.class.php:1551
 msgid "User Display name"
 msgstr "Nom de l'utilisateur"
 
-#: class/psk_s2msfb.class.php:1416
+#: class/psk_s2msfb.class.php:1552
 msgid "User IP"
 msgstr "Adresse IP de l'utilisateur"
 
@@ -1802,11 +1860,11 @@ msgstr "Décocher pour ne voir que les nouveaux fichiers"
 msgid "No files"
 msgstr "Pas de fichier"
 
-#: inc/define.php:104
+#: inc/define.php:107
 msgid "%blogname% : file downloaded"
 msgstr "%blogname% : téléchargement de fichier"
 
-#: inc/define.php:107
+#: inc/define.php:110
 msgid "%blogname% : report"
 msgstr "%blogname% : rapport"
 

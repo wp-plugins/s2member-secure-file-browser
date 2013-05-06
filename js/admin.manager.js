@@ -6,6 +6,10 @@ function psk_sfb_comment_file( f , c ) {
 	psk_sfb_comment_df( f , false , c );
 }
 
+function psk_sfb_displayname_file( f , c ) {
+	psk_sfb_displayname_df( f , false , c );
+}
+
 function psk_sfb_remove_file( f ) {
 	psk_sfb_remove_df( f , false );
 }
@@ -14,8 +18,8 @@ function psk_sfb_rename_dir( f ) {
 	psk_sfb_rename_df( f , true );
 }
 
-function psk_sfb_comment_dir( f , c ) {
-	psk_sfb_comment_df( f+"/." , true , c );
+function psk_sfb_displayname_dir( f , c ) {
+	psk_sfb_displayname_df( f+"/." , true , c );
 }
 
 function psk_sfb_remove_dir( f ) {
@@ -113,6 +117,52 @@ function psk_sfb_comment_df( f , d , c) {
 }
 
 
+var sk_sfb_displayname_df_lock = false;
+function psk_sfb_displayname_df( f , d , c) {
+	var title = (d === true) ? objectL10n.displaynamedirectory : objectL10n.displaynamefile;
+	jQuery( "#pskModalLabel" ).html( title );
+	var s = psk_sfb_basename( f );
+	var text = objectL10n.displayname + " <code>" + new psk_sfb_html( f ) + "</code><br/><br/><input class=\"span7\" placeholder=\"" + new psk_sfb_html( objectL10n.displaynameplaceholder ) +"\" id=\"pskModalInput\" type=\"text\" value=\"" + new psk_sfb_html( c ) + "\"/><br/><small>" + objectL10n.displaynameplacemore + "</small><br/>";
+	jQuery( "#pskModalBody" ).html( text );
+	jQuery( "#pskModalSave" ).html( objectL10n.displayname );
+	jQuery( "#pskModalSave" ).removeClass( "btn-danger" );
+	jQuery( "#pskModalSave" ).addClass( "btn-success" );
+
+	jQuery( "#pskModal" ).modal( "show" );
+
+	jQuery( '#pskModalInput' ).keypress( function ( event ) {
+		var keycode = (event.keyCode ? event.keyCode : event.which);
+		if ( keycode == '13' ) jQuery( '#pskModalSave' ).trigger( 'click' );
+	} );
+
+	jQuery( "#pskModalSave" ).click( function () {
+		if ( ! sk_sfb_displayname_df_lock ) {
+			sk_sfb_displayname_df_lock = true;
+			jQuery( "#pskModalSave" ).addClass( "disabled" );
+
+			//			var d = encodeURIComponent( jQuery( '#pskModalInput' ).attr( 'value' ) );
+			var c = jQuery( '#pskModalInput' ).attr( 'value' );
+			jQuery.post( PSK_S2MSFB.ajaxurl , { action: PSK_S2MSFB.action_nf , dir: '' , dirbase: '' , s: f , c: c , nonce: PSK_S2MSFB.nonce } , function ( data ) {
+				if ( data != "1" )
+					psk_sfb_alert( objectL10n.error , objectL10n.erroroccurs + "<br/>" + data , 'error' , 120000 );
+				else
+					psk_sfb_alert( objectL10n.success , (d === true) ? objectL10n.displaynamedirectoryok : objectL10n.displaynamefileok , 'success' );
+				jQuery( "#pskModalSave" ).unbind();
+				jQuery( '#pskModalInput' ).unbind();
+				jQuery( ".psk_jfiletree" ).each( function () {
+					jQuery( this ).fileTreeReload();
+				} );
+				jQuery( "#pskModal" ).modal( "hide" );
+				jQuery( "#pskModalSave" ).removeClass( "disabled" );
+				sk_sfb_displayname_df_lock = false;
+			} );
+		}
+		else {
+			alert( objectL10n.pleasewait );
+		}
+	} );
+}
+
 var sk_sfb_remove_df_lock = false;
 function psk_sfb_remove_df( f , d ) {
 	var title = (d === true) ? objectL10n.removedirectory : objectL10n.removefile;
@@ -185,6 +235,7 @@ function get_shortcode_val( tag ) {
 		case 'displaydownloaded'       :
 		case 'displaybirthdate'        :
 		case 'displaycomment'          :
+		case 'displaydisplayname'          :
 		case 'displaymodificationdate' :
 		case 'sortby'                  :
 		case 'search'                  :

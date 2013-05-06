@@ -52,9 +52,10 @@ class PSK_S2MSFB {
 	private static $filterdir = '';
 	private static $display_all_levels = '';
 	private static $displaysize = true;
-	private static $displaycomment = true;
-	private static $displaymodificationdate = true;
-	private static $displaybirthdate = true;
+	private static $displaycomment = 1;
+	private static $displayname = 0;
+	private static $displaymodificationdate = 0;
+	private static $displaybirthdate = 0;
 	private static $displaydownloaded = 0;
 	private static $search = 0;
 	private static $searchgroup = 0;
@@ -105,6 +106,7 @@ class PSK_S2MSFB {
 		add_action( 'wp_ajax_admin_' . PSK_S2MSFB_ID . '_df' , array( __CLASS__ , 'ajax_admin_delete_file' ) ); // dashboard
 		add_action( 'wp_ajax_admin_' . PSK_S2MSFB_ID . '_rf' , array( __CLASS__ , 'ajax_admin_rename_file' ) ); // dashboard
 		add_action( 'wp_ajax_admin_' . PSK_S2MSFB_ID . '_cf' , array( __CLASS__ , 'ajax_admin_comment_file' ) ); // dashboard
+		add_action( 'wp_ajax_admin_' . PSK_S2MSFB_ID . '_nf' , array( __CLASS__ , 'ajax_admin_displayname_file' ) ); // dashboard
 
 		add_action( 'widgets_init' , create_function( '' , 'register_widget( "' . PSK_S2MSFB_WIDGET_DOWNLOAD_ID . '" );' ) );
 		add_action( 'widgets_init' , create_function( '' , 'register_widget( "' . PSK_S2MSFB_WIDGET_FILES_ID . '" );' ) );
@@ -322,6 +324,7 @@ class PSK_S2MSFB {
 															 'action_df'      => $prefix . PSK_S2MSFB_ID . '_df' ,
 															 'action_cf'      => $prefix . PSK_S2MSFB_ID . '_cf' ,
 															 'action_rf'      => $prefix . PSK_S2MSFB_ID . '_rf' ,
+															 'action_nf'      => $prefix . PSK_S2MSFB_ID . '_nf' ,
 														) );
 
 	}
@@ -366,6 +369,16 @@ class PSK_S2MSFB {
 	public static function ajax_admin_comment_file() {
 		if ( PSK_S2MSFBAdmin::load_admin_class_file( 'manager_browser' ) )
 			PSK_S2MSFBAdminManager::ajax_admin_comment_file();
+		die( 'action not found' );
+	}
+
+
+	/**
+	 * Ajax call - Admin wrapper
+	 */
+	public static function ajax_admin_displayname_file() {
+		if ( PSK_S2MSFBAdmin::load_admin_class_file( 'manager_browser' ) )
+			PSK_S2MSFBAdminManager::ajax_admin_displayname_file();
 		die( 'action not found' );
 	}
 
@@ -417,6 +430,7 @@ class PSK_S2MSFB {
 		self::$displaysize             = ( @$_POST[ 'displaysize' ] == '0' ) ? false : true;
 		self::$dirzip                  = ( @$_POST[ 'dirzip' ] == '1' ) ? true : false;
 		self::$displaycomment          = (int) @$_POST[ 'displaycomment' ];
+		self::$displayname             = (int) @$_POST[ 'displayname' ];
 		self::$displaymodificationdate = (int) @$_POST[ 'displaymodificationdate' ];
 		self::$displaybirthdate        = (int) @$_POST[ 'displaybirthdate' ];
 		self::$displaydownloaded       = (int) @$_POST[ 'displaydownloaded' ];
@@ -481,28 +495,30 @@ class PSK_S2MSFB {
 			// Check if this directory is below PSK_S2MSFB_S2MEMBER_FILES_FOLDER
 			if ( ! PSK_Tools::is_directory_allowed( $dir ) ) return __( 'Permission denied' , PSK_S2MSFB_ID );
 
-			$hashes     = array();
-			$comments   = array();
-			$birthdates = array();
-			$alreadyd   = array();
-			$result     = array();
-			$resultf    = array();
-			$resultd    = array();
-			$ext_all    = array();
-			$mdate_all  = array();
-			$bdate_all  = array();
-			$size_all   = array();
+			$hashes       = array();
+			$comments     = array();
+			$displaynames = array();
+			$birthdates   = array();
+			$alreadyd     = array();
+			$result       = array();
+			$resultf      = array();
+			$resultd      = array();
+			$ext_all      = array();
+			$mdate_all    = array();
+			$bdate_all    = array();
+			$size_all     = array();
 
 			// Get hashes and already downloaded files
-			if ( ( self::$displaydownloaded > 0 ) || ( self::$displaybirthdate ) || ( self::$displaycomment ) ) {
+			if ( ( self::$displaydownloaded > 0 ) || ( self::$displaybirthdate > 0 ) || ( self::$displaycomment > 0 ) || ( self::$displayname > 0 ) ) {
 				$what = array( 'filepath' );
 				if ( self::$displaydownloaded > 0 )
-					$what[ ] = 'filemodificationdate';
-				$what[ ] = 'filesize';
-				if ( self::$displaybirthdate )
+					$what[ ] = 'filemodificationdate,filesize';
+				if ( self::$displaybirthdate > 0 )
 					$what[ ] = 'creationdate';
-				if ( self::$displaycomment )
+				if ( self::$displaycomment > 0 )
 					$what[ ] = 'comment';
+				if ( self::$displayname > 0 )
+					$what[ ] = 'displayname';
 				$what = implode( ',' , $what );
 			}
 
@@ -523,13 +539,17 @@ class PSK_S2MSFB {
 						foreach ( $sqlr as $row ) {
 							$hashes[ $row[ 'filepath' ] ] = $row[ 'filemodificationdate' ] . '-' . $row[ 'filesize' ];
 						}
-					if ( self::$displaybirthdate )
+					if ( self::$displaybirthdate > 0 )
 						foreach ( $sqlr as $row ) {
 							$birthdates[ $row[ 'filepath' ] ] = strtotime( $row[ 'creationdate' ] ) + $gmt_offset;
 						}
-					if ( self::$displaycomment )
+					if ( self::$displaycomment > 0 )
 						foreach ( $sqlr as $row ) {
 							$comments[ $row[ 'filepath' ] ] = $row[ 'comment' ];
+						}
+					if ( self::$displayname > 0 )
+						foreach ( $sqlr as $row ) {
+							$displaynames[ $row[ 'filepath' ] ] = $row[ 'displayname' ];
 						}
 
 					if ( self::$displaydownloaded > 0 ) {
@@ -598,7 +618,7 @@ class PSK_S2MSFB {
 					}
 
 					// Get the html fragment
-					list( $display_name , $li , $size , $mdate , $ext , $bdate ) = self::get_html_li_token( $isdir , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , '' , $birthdates , $comments );
+					list( $display_name , $li , $size , $mdate , $ext , $bdate ) = self::get_html_li_token( $isdir , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , '' , $birthdates , $comments , $displaynames );
 
 					if ( self::$display_directory_first ) {
 						if ( $isdir ) {
@@ -733,7 +753,7 @@ class PSK_S2MSFB {
 							foreach ( $sqlres as $row ) {
 								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
 							}
-							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $alreadyd );
+							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $displaynames , $alreadyd );
 						}
 
 						foreach ( $sqlres as $row ) {
@@ -746,7 +766,7 @@ class PSK_S2MSFB {
 							$filepathrel                            = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
 							$subdirectory                           = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
 							$subdirectory                           = ( $subdirectory == '' ) ? '/' : $subdirectory;
-							$a                                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
+							$a                                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments , $displaynames );
 							$group[ $subdirectory ][ $filepathrel ] = $a[ 1 ];
 						}
 
@@ -793,7 +813,7 @@ class PSK_S2MSFB {
 							foreach ( $sqlres as $row ) {
 								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
 							}
-							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $alreadyd );
+							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $displaynames , $alreadyd );
 						}
 
 						foreach ( $sqlres as $row ) {
@@ -808,7 +828,7 @@ class PSK_S2MSFB {
 							$subdirectory                        = ( $subdirectory == '' ) ? '/' : $subdirectory;
 							$extension                           = mb_strtolower( $row[ 'fileext' ] );
 							$extended                            = ( self::$searchdisplay == '4' ) ? ' <small><em>(' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , self::get_directories_name( $subdirectory ) ) . ')</em></small>' : '';
-							$a                                   = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
+							$a                                   = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments , $displaynames );
 							$group[ $extension ][ $filepathrel ] = $a[ 1 ];
 						}
 
@@ -852,7 +872,7 @@ class PSK_S2MSFB {
 							foreach ( $sqlres as $row ) {
 								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
 							}
-							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $alreadyd );
+							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $displaynames , $alreadyd );
 						}
 
 						foreach ( $sqlres as $row ) {
@@ -866,7 +886,7 @@ class PSK_S2MSFB {
 							$subdirectory           = mb_substr( $filepathrel , 0 , - mb_strlen( $file ) );
 							$subdirectory           = ( $subdirectory == '' ) ? '/' : $subdirectory;
 							$extended               = ( self::$searchdisplay == '0' ) ? ' <small><em>(' . sprintf( __( 'in %s' , PSK_S2MSFB_ID ) , self::get_directories_name( $subdirectory ) ) . ')</em></small>' : '';
-							$a                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments );
+							$a                      = self::get_html_li_token( false , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments , $displaynames );
 							$result[ $filepathrel ] = $a[ 1 ];
 						}
 						//uksort( $result, "strnatcasecmp" );
@@ -914,7 +934,7 @@ class PSK_S2MSFB {
 	 * @param $comments
 	 * @param $alreadyd
 	 */
-	private static function get_meta_for_search( $wheres , $what , &$hashes , &$birthdates , &$comments , &$alreadyd ) {
+	private static function get_meta_for_search( $wheres , $what , &$hashes , &$birthdates , &$comments , &$displaynames , &$alreadyd ) {
 
 		if ( count( $wheres ) > 0 ) {
 
@@ -930,13 +950,17 @@ class PSK_S2MSFB {
 				foreach ( $sqlr as $row ) {
 					$hashes[ $row[ 'filepath' ] ] = $row[ 'filemodificationdate' ] . '-' . $row[ 'filesize' ];
 				}
-			if ( self::$displaybirthdate )
+			if ( self::$displaybirthdate > 0 )
 				foreach ( $sqlr as $row ) {
 					$birthdates[ $row[ 'filepath' ] ] = strtotime( $row[ 'creationdate' ] ) + $gmt_offset;
 				}
-			if ( self::$displaycomment )
+			if ( self::$displaycomment > 0 )
 				foreach ( $sqlr as $row ) {
 					$comments[ $row[ 'filepath' ] ] = $row[ 'comment' ];
+				}
+			if ( self::$displayname > 0 )
+				foreach ( $sqlr as $row ) {
+					$displaynames[ $row[ 'filepath' ] ] = $row[ 'displayname' ];
 				}
 
 			if ( self::$displaydownloaded > 0 ) {
@@ -975,10 +999,11 @@ class PSK_S2MSFB {
 	 *
 	 * @param $isdir
 	 * @param $file
+	 * @param $override
 	 *
 	 * @return string
 	 */
-	private static function get_display_name( $isdir , $file ) {
+	private static function get_display_name( $isdir , $file , $override ) {
 		// Prepare dir/file name if cut
 		if ( $isdir )
 			if ( self::$cutdirnames > 0 )
@@ -995,7 +1020,12 @@ class PSK_S2MSFB {
 			}
 
 		// Set the displayed name according to user shortcode parameters and next s2level names
-		if ( isset( self::$displayed_directory_names[ $file ] ) )
+		if ( $override != '' )
+			if ( self::$is_admin === true )
+				$display_name = $cut_file . ' <span class="fn">(' . PSK_Tools::html_entities( $override ) . ')</span>';
+			else
+				$display_name = $override;
+		else if ( isset( self::$displayed_directory_names[ $file ] ) )
 			if ( self::$is_admin === true )
 				$display_name = $cut_file . ' <span class="fn">(' . PSK_Tools::html_entities( self::$displayed_directory_names[ $file ] ) . ')</span>';
 			else
@@ -1031,9 +1061,8 @@ class PSK_S2MSFB {
 	 *
 	 * @return array
 	 */
-	private static function get_html_li_token( $isdir , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments ) {
+	private static function get_html_li_token( $isdir , $file , $filepathrelbase , $filepathrel , $filepath , $current , $dirbase , $token , $alreadyd , $hashes , $extended , $birthdates , $comments , $displaynames ) {
 
-		$display_name     = self::get_display_name( $isdir , $file );
 		$filepathrelbase  = PSK_Tools::sanitize_directory_path( $filepathrelbase , true , false );
 		$size             = 0;
 		$msize            = '';
@@ -1049,7 +1078,8 @@ class PSK_S2MSFB {
 		$tbdate           = '';
 		$filepathrelbasej = PSK_Tools::js_literal( $filepathrelbase );
 		$comm             = '\'\'';
-		$licomm           = '';
+		$jdname           = '\'\'';
+		$dname            = '';
 
 		if ( $isdir ) {
 			$lizip               = '';
@@ -1076,7 +1106,13 @@ class PSK_S2MSFB {
 				}
 			}
 
-			if ( array_key_exists( $filepathrelbasefile , $comments ) && ( ( self::$displaycomment == 1 ) || ( self::$displaycomment == 3 ) ) ) {
+			if ( array_key_exists( $filepathrelbasefile , $displaynames ) && ( ( self::$displayname == 2 ) || ( self::$displayname == 3 ) ) ) {
+				$dname  = $displaynames[ $filepathrelbasefile ];
+				$jdname = PSK_Tools::js_literal( $dname );
+			}
+			$display_name = self::get_display_name( $isdir , $file , $dname );
+
+			if ( array_key_exists( $filepathrelbasefile , $comments ) && ( ( self::$displaycomment == 2 ) || ( self::$displaycomment == 3 ) ) ) {
 				$class  = ( $comments[ $filepathrelbasefile ] != '' ) ? ' ok' : '';
 				$licomm = '<span class="d comm' . $class . '" title="' . PSK_Tools::rel_literal( $comments[ $filepathrelbasefile ] ) . '"></span>';
 				$comm   = PSK_Tools::js_literal( str_replace( "\n" , "[[[BR]]]" , $comments[ $filepathrelbasefile ] ) );
@@ -1108,6 +1144,7 @@ class PSK_S2MSFB {
 			$li .= '" data-s="-1" data-already="' . $alreadya . '"><div class="jftctn" rel="' . PSK_Tools::rel_literal( $filepathrelbase ) . '">';
 			$li .= '<a href="#" class="link" rel="' . PSK_Tools::rel_literal( $filepathrel ) . '/">' . $display_name . $extended . '</a>';
 
+			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_displayname_dir(' . $filepathrelbasej . ',' . $jdname . ')"><i class="icon-edit"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_comment_dir(' . $filepathrelbasej . ',' . $comm . ')"><i class="icon-comment"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_rename_dir(' . $filepathrelbasej . ')"><i class="icon-pencil"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_remove_dir(' . $filepathrelbasej . ')"><i class="icon-remove"></i></a></span>' : '';
@@ -1133,9 +1170,19 @@ class PSK_S2MSFB {
 		} else {
 
 			$ext  = mb_strtolower( preg_replace( '/^.*\./' , '' , $file ) );
-			$winf = ( strtoupper( substr( PHP_OS , 0 , 3 ) ) === 'WIN' ) ? preg_replace( '/^\/*app_data/' , '' , $filepathrelbase ) : $filepathrelbase;
-			$link = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $winf ) ) . '&PSK_file=' . urlencode( $filepathrelbase ) );
-			$prev = PSK_Tools::rel_literal( s2member_file_download_url( array( 'file_download' => $winf , 'file_inline' => true ) ) . '&PSK_preview=1' );
+			$link = s2member_file_download_url( array( 'file_download' => $filepathrelbase ) );
+			if ( $link == '' )
+				$link = s2member_file_download_url( array( 'file_download' => '/app_data/' . $filepathrelbase ) );
+			if ( $link == '' )
+				$link = '#';
+			$link = PSK_Tools::rel_literal( $link );
+
+			$prev = s2member_file_download_url( array( 'file_download' => $filepathrelbase , 'file_inline' => true ) ) . '&PSK_preview=1';
+			if ( $prev == '' )
+				$prev = s2member_file_download_url( array( 'file_download' => '/app_data/' . $filepathrelbase , 'file_inline' => true ) ) . '&PSK_preview=1';
+			if ( $prev == '' )
+				$prev = '#';
+			$prev = PSK_Tools::rel_literal( $prev );
 
 			if ( ( 2 == (int) self::$sortby ) || ( self::$displaysize ) )
 				$size = filesize( $filepath );
@@ -1178,6 +1225,12 @@ class PSK_S2MSFB {
 				}
 			}
 
+			if ( array_key_exists( $filepathrelbase , $displaynames ) && ( ( self::$displayname == 1 ) || ( self::$displayname == 3 ) ) ) {
+				$dname  = $displaynames[ $filepathrelbase ];
+				$jdname = PSK_Tools::js_literal( $dname );
+			}
+			$display_name = self::get_display_name( $isdir , $file , $dname );
+
 			if ( array_key_exists( $filepathrelbase , $comments ) && ( ( self::$displaycomment == 1 ) || ( self::$displaycomment == 3 ) ) ) {
 				$class  = ( $comments[ $filepathrelbase ] != '' ) ? ' ok' : '';
 				$licomm = '<span class="d comm' . $class . '" title="' . PSK_Tools::rel_literal( $comments[ $filepathrelbase ] ) . '"></span>';
@@ -1186,8 +1239,9 @@ class PSK_S2MSFB {
 				$licomm = '<span class="d comm" title=""></span>';
 			}
 
-			$li = '<li data-n="' . $display_name . '" class="file' . $alreadys . ' ext_' . PSK_Tools::rel_literal( $ext ) . '" data-s="' . $msize . '" data-already="' . $alreadya . '" >';
+			$li = '<li data-n="' . PSK_Tools::rel_literal( $display_name ) . '" class="file' . $alreadys . ' ext_' . PSK_Tools::rel_literal( $ext ) . '" data-s="' . $msize . '" data-already="' . $alreadya . '" >';
 			$li .= '<div class="jftctn"><a href="#" class="link" rel="' . $link . '">' . $display_name . $extended . '</a>';
+			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_displayname_file(' . $filepathrelbasej . ',' . $jdname . ')"><i class="icon-edit"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_comment_file(' . $filepathrelbasej . ',' . $comm . ')"><i class="icon-comment"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_rename_file(' . $filepathrelbasej . ')"><i class="icon-pencil"></i></a></span>' : '';
 			$li .= ( self::$is_admin ) ? '<span class="d"><a href="javascript:psk_sfb_remove_file(' . $filepathrelbasej . ')"><i class="icon-remove"></i></a></span>' : '';
@@ -1212,7 +1266,7 @@ class PSK_S2MSFB {
 			$li .= '<div style="clear:both"></div></div></li>';
 		}
 
-		return array( $display_name , $li , $size , $mdate , $ext , $bdate );
+		return array( strip_tags( $display_name ) , $li , $size , $mdate , $ext , $bdate );
 	}
 
 
@@ -1449,7 +1503,7 @@ class PSK_S2MSFB {
 			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP31_ID );
 			delete_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_TOP365_ID );
 
-			$file    = stripslashes( $_GET[ "PSK_file" ] );
+			$file    = stripslashes( $_GET[ "s2member_file_download" ] );
 			$user_id = $vars[ "user_id" ];
 			$user    = new WP_User( $user_id );
 			$ip      = $_SERVER[ 'REMOTE_ADDR' ];
@@ -1610,6 +1664,7 @@ class PSK_S2MSFB {
 				modificationdate TIMESTAMP NOT NULL,
 				lastdate TIMESTAMP NOT NULL,
 				comment VARCHAR(4000) NOT NULL,
+				displayname VARCHAR(4000) NOT NULL,
 				PRIMARY KEY  (id),
 				FULLTEXT (filepath)
 			) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";

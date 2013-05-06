@@ -68,7 +68,8 @@
 				if ( o.cutdirnames === undefined ) o.cutdirnames = '0';
 				if ( o.cutfilenames === undefined ) o.cutfilenames = '0';
 				if ( o.displaysize === undefined ) o.displaysize = '1';
-				if ( o.displaycomment === undefined ) o.displaycomment = '1';
+				if ( o.displaycomment === undefined ) o.displaycomment = '0';
+				if ( o.displayname === undefined ) o.displayname = '0';
 				if ( o.displaymodificationdate === undefined ) o.displaymodificationdate = '0';
 				if ( o.displaybirthdate === undefined ) o.displaybirthdate = '0';
 				if ( o.sortby === undefined ) o.sortby = '0';
@@ -116,6 +117,7 @@
 						displaymodificationdate: o.displaymodificationdate ,
 						displaybirthdate       : o.displaybirthdate ,
 						displaycomment         : o.displaycomment ,
+						displayname            : o.displayname ,
 						sortby                 : o.sortby ,
 						nonce                  : PSK_S2MSFB.nonce
 					} , function ( data ) {
@@ -161,6 +163,7 @@
 						displaymodificationdate: o.displaymodificationdate ,
 						displaybirthdate       : o.displaybirthdate ,
 						displaycomment         : o.displaycomment ,
+						displayname            : o.displayname ,
 						sortby                 : o.sortby ,
 						nonce                  : PSK_S2MSFB.nonce,
 						token                  : s

@@ -16,10 +16,9 @@
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
 if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
-	if (function_exists('status_header')) {
+	if ( function_exists( 'status_header' ) ) {
 		status_header( 404 );
-	}
-	else {
+	} else {
 		header( 'HTTP/1.0 404 Not Found' );
 		echo "<h1>404 Not Found</h1>";
 		echo "The page that you have requested could not be found.";
@@ -135,7 +134,7 @@ class PSK_S2MSFBAdminManager {
 				'default'  => '0' ,
 				'defaultm' => '' ,
 				'more'     =>
-				__( 'Set to <code>0</code> to hide the date when files and directories have been added' , PSK_S2MSFB_ID ) ,
+				__( 'Set to <code>0</code> to hide the date when files and directories have been added' , PSK_S2MSFB_ID ) . '<br/>' .
 				__( 'Can be set to <code>1</code> to display files added date only' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>2</code> to display directories added date only' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>3</code> to display files and directories added date' , PSK_S2MSFB_ID )
@@ -147,7 +146,7 @@ class PSK_S2MSFBAdminManager {
 				'default'  => '1' ,
 				'defaultm' => '' ,
 				'more'     =>
-				__( 'Set to <code>0</code> to hide files and directories comments' , PSK_S2MSFB_ID ) ,
+				__( 'Set to <code>0</code> to hide files and directories comments' , PSK_S2MSFB_ID ) .'<br/>' .
 				__( 'Can be set to <code>1</code> to display files comments only' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>2</code> to display directories comments only' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>3</code> to display files and directories comments' , PSK_S2MSFB_ID )
@@ -160,6 +159,18 @@ class PSK_S2MSFBAdminManager {
 				'defaultm' => __( 'Do not show already downloaded files' , PSK_S2MSFB_ID ) ,
 				'more'     => __( 'Can be set to <code>1</code> to display a confirm box when user clicks to download an already downloaded file' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>2</code> to lowlight already downloaded files in the browser with a message' , PSK_S2MSFB_ID ) ,
+			) ,
+			array(
+				'name'     => 'displayname' ,
+				'desc'     => __( 'Display files name' , PSK_S2MSFB_ID ) ,
+				'descm'    => '' ,
+				'default'  => '3' ,
+				'defaultm' => '' ,
+				'more'     => __( 'Set to <code>0</code> to display regular files and directories name' , PSK_S2MSFB_ID ) . '<br/>' .
+				__( 'Can be set to <code>1</code> to display files displayname only' , PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>2</code> to display directories displayname only' , PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'Can be set to <code>3</code> to display files and directories displayname' , PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'You can use these HTML tags : em strong u style' , PSK_S2MSFB_ID )
 			) ,
 			array(
 				'name'     => 'displaysize' ,
@@ -176,7 +187,7 @@ class PSK_S2MSFBAdminManager {
 				'default'  => '0' ,
 				'defaultm' => '' ,
 				'more'     =>
-				__( 'Set to <code>0</code> to hide the date when files and directories have been modified' , PSK_S2MSFB_ID ) ,
+				__( 'Set to <code>0</code> to hide the date when files and directories have been modified' , PSK_S2MSFB_ID ) . '<br/>' .
 				__( 'Can be set to <code>1</code> to display files modification date only' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>2</code> to display directories modification date only' , PSK_S2MSFB_ID ) . '<br/>' .
 					__( 'Can be set to <code>3</code> to display files and directories modification date' , PSK_S2MSFB_ID )
@@ -297,8 +308,8 @@ class PSK_S2MSFBAdminManager {
 				'descm'    => '' ,
 				'default'  => '0' ,
 				'defaultm' => __( 'There is no group. Every shortcode has it own search box' , PSK_S2MSFB_ID ) ,
-				'more'     => __( 'You can define groups by setting this value to <code>1</code> for all shortcodes in the first group, <code>2</code> for all shortcodes in the second group, ...' , PSK_S2MSFB_ID) . '<br/>' .
-							__( 'The first shortcode of every group will display the search box and performing a search in a box will launch a search in all shortcodes of the same group.' , PSK_S2MSFB_ID ) ,
+				'more'     => __( 'You can define groups by setting this value to <code>1</code> for all shortcodes in the first group, <code>2</code> for all shortcodes in the second group, ...' , PSK_S2MSFB_ID ) . '<br/>' .
+					__( 'The first shortcode of every group will display the search box and performing a search in a box will launch a search in all shortcodes of the same group.' , PSK_S2MSFB_ID ) ,
 			) ,
 			array(
 				'name'     => 'searchdisplay' ,
@@ -351,6 +362,11 @@ class PSK_S2MSFBAdminManager {
 				 'commentfile'            => __( 'Comment File' , PSK_S2MSFB_ID ) ,
 				 'comment'                => __( 'Comment' , PSK_S2MSFB_ID ) ,
 				 'commentplaceholder'     => __( 'Enter a comment or leave blank to disable comment' , PSK_S2MSFB_ID ) ,
+				 'displaynamedirectory'   => __( 'Change Directory Display Name' , PSK_S2MSFB_ID ) ,
+				 'displaynamefile'        => __( 'Change File Display Name' , PSK_S2MSFB_ID ) ,
+				 'displayname'            => __( 'Change Display Name' , PSK_S2MSFB_ID ) ,
+				 'displaynameplaceholder' => __( 'Enter a displayed name or leave blank to disable the displayed name' , PSK_S2MSFB_ID ) ,
+				 'displaynameplacemore'   => __( 'You can use these HTML tags : em strong u style' , PSK_S2MSFB_ID ),
 				 'removedirectorywarning' => __( 'Directory and all children will be deleted.<br/>You can not undo this action.' , PSK_S2MSFB_ID ) ,
 				 'removefilewarning'      => __( 'File will be deleted.<br/>You can not undo this action.' , PSK_S2MSFB_ID ) ,
 				 'remove'                 => __( 'Delete' , PSK_S2MSFB_ID ) ,
@@ -360,6 +376,8 @@ class PSK_S2MSFBAdminManager {
 				 'renamedirectoryok'      => __( 'Directory has been successfully renamed' , PSK_S2MSFB_ID ) ,
 				 'commentfileok'          => __( 'File has been successfully commented' , PSK_S2MSFB_ID ) ,
 				 'commentdirectoryok'     => __( 'Directory has been successfully commented' , PSK_S2MSFB_ID ) ,
+				 'displaynamefileok'      => __( 'File has been successfully virtually renamed' , PSK_S2MSFB_ID ) ,
+				 'displaynamedirectoryok' => __( 'Directory has been successfully virtually renamed' , PSK_S2MSFB_ID ) ,
 				 'removefileok'           => __( 'File has been successfully deleted' , PSK_S2MSFB_ID ) ,
 				 'removedirectoryok'      => __( 'Directory has been successfully deleted' , PSK_S2MSFB_ID ) ,
 				 'error'                  => _x( 'Error!' , 'alertbox' , PSK_S2MSFB_ID ) ,
@@ -379,6 +397,7 @@ class PSK_S2MSFBAdminManager {
 				 "searchdisplay"           => "4" ,
 				 "displaybirthdate"        => "3" ,
 				 "displaycomment"          => "3" ,
+				 "displayname"             => "3" ,
 				 "displaymodificationdate" => "3" ,
 			)
 		);
@@ -709,6 +728,7 @@ class PSK_S2MSFBAdminManager {
 				case 'displaybirthdate'        :
 				case 'displaymodificationdate' :
 				case 'displaycomment'          :
+				case 'displayname'          :
 					$checked0 = ( $default == "0" ) ? ' checked="checked"' : '';
 					$checked1 = ( $default == "1" ) ? ' checked="checked"' : '';
 					$checked2 = ( $default == "2" ) ? ' checked="checked"' : '';
@@ -923,6 +943,38 @@ class PSK_S2MSFBAdminManager {
 		die( '1' );
 	}
 
+
+	/**
+	 * Ajax call - Change display name of a file or directory
+	 */
+	public static function ajax_admin_displayname_file() {
+
+		if ( ! isset( $_POST[ 'nonce' ] ) || ! check_ajax_referer( PSK_S2MSFB_ID . '-nonce' , 'nonce' , false ) )
+			die ( 'Invalid nonce' );
+
+		if ( ! isset( $_POST[ 's' ] ) )
+			die ( 'Invalid parameters' );
+
+		if ( ! isset( $_POST[ 'c' ] ) )
+			die ( 'Invalid parameters' );
+
+		$source  = stripslashes( rawurldecode( @$_POST[ 's' ] ) );
+		$current = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $source;
+		if ( ! PSK_Tools::is_directory_allowed( $current ) )
+			die( 'Forbidden' );
+
+		/** @var $wpdb WPDB */
+		global $wpdb;
+		$wpdb->update(
+			$wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME ,
+			array( 'displayname' => strip_tags( stripslashes( $_POST[ 'c' ] ) , '<em><strong><u><style>' ) ) ,
+			array( 'filepath' => $source ) ,
+			array( '%s' ) ,
+			array( '%s' )
+		);
+
+		die( '1' );
+	}
 
 }
 
