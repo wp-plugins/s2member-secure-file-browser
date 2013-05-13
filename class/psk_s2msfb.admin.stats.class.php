@@ -163,31 +163,6 @@ class PSK_S2MSFBAdminStats {
 			echo '  <th class="filter-select filter-exact" data-placeholder="Select user">' . __( 'User' , PSK_S2MSFB_ID ) . '</th>';
 			echo '  <th>' . __( 'IP Address' , PSK_S2MSFB_ID ) . '</th>';
 			echo '</tr></thead>';
-			echo '<tfoot>';
-			echo '  <tr>';
-			echo '    <th>' . __( 'When' , PSK_S2MSFB_ID ) . '</th>';
-			echo '    <th>' . __( 'File' , PSK_S2MSFB_ID ) . '</th>';
-			echo '    <th>' . __( 'User' , PSK_S2MSFB_ID ) . '</th>';
-			echo '    <th>' . __( 'IP Address' , PSK_S2MSFB_ID ) . '</th>';
-			echo '  </tr>';
-			echo '  <tr><th colspan="4" class="pager form-horizontal">';
-			echo '    <button class="reset btn btn-mini btn-primary" data-column="0" data-filter=""><i class="icon-white icon-refresh"></i> Reset filters</button>';
-			echo '    <div class="pull-right">';
-			echo '      <button class="btn btn-mini first"><i class="icon-step-backward"></i></button>';
-			echo '      <button class="btn btn-mini prev"><i class="icon-arrow-left"></i></button>';
-			echo '      <span class="pagedisplay"></span> <!-- this can be any element, including an input -->';
-			echo '      <button class="btn btn-mini next"><i class="icon-arrow-right"></i></button>';
-			echo '      <button class="btn btn-mini last"><i class="icon-step-forward"></i></button>';
-			echo '      <select class="pagesize" title="Select page size">';
-			echo '      	<option selected="selected" value="10">10</option>';
-			echo '      	<option value="20">20</option>';
-			echo '      	<option value="50">50</option>';
-			echo '      	<option value="100">100</option>';
-			echo '      </select>';
-			echo '      <select class="pagenum input-mini" title="Select page number"></select>';
-			echo '    </div>';
-			echo '  </th></tr>';
-			echo '</tfoot>';
 			echo '<tbody>';
 
 			foreach ( $result as $row ) {
@@ -213,6 +188,31 @@ class PSK_S2MSFBAdminStats {
 			}
 
 			echo '</tbody>';
+			echo '<tfoot>';
+			echo '  <tr>';
+			echo '    <th>' . __( 'When' , PSK_S2MSFB_ID ) . '</th>';
+			echo '    <th>' . __( 'File' , PSK_S2MSFB_ID ) . '</th>';
+			echo '    <th>' . __( 'User' , PSK_S2MSFB_ID ) . '</th>';
+			echo '    <th>' . __( 'IP Address' , PSK_S2MSFB_ID ) . '</th>';
+			echo '  </tr>';
+			echo '  <tr><th colspan="4" class="pager form-horizontal">';
+			echo '    <button class="reset btn btn-mini btn-primary" data-column="0" data-filter=""><i class="icon-white icon-refresh"></i> Reset filters</button>';
+			echo '    <div class="pull-right">';
+			echo '      <button class="btn btn-mini first"><i class="icon-step-backward"></i></button>';
+			echo '      <button class="btn btn-mini prev"><i class="icon-arrow-left"></i></button>';
+			echo '      <span class="pagedisplay"></span> <!-- this can be any element, including an input -->';
+			echo '      <button class="btn btn-mini next"><i class="icon-arrow-right"></i></button>';
+			echo '      <button class="btn btn-mini last"><i class="icon-step-forward"></i></button>';
+			echo '      <select class="pagesize" title="Select page size">';
+			echo '      	<option selected="selected" value="10">10</option>';
+			echo '      	<option value="20">20</option>';
+			echo '      	<option value="50">50</option>';
+			echo '      	<option value="100">100</option>';
+			echo '      </select>';
+			echo '      <select class="pagenum input-mini" title="Select page number"></select>';
+			echo '    </div>';
+			echo '  </th></tr>';
+			echo '</tfoot>';
 			echo '</table>';
 		}
 

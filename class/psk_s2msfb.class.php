@@ -66,7 +66,14 @@ class PSK_S2MSFB {
 	private static $cutdirnames = 0;
 	private static $cutfilenames = 0;
 	private static $previewext = array();
-	private static $previewext_available = array( 'mp3' );
+	private static $previewext_available = array( 'mp3' , 'jpg' , 'jpeg' , 'gif' , 'png' );
+	private static $previewext_match = array(
+		'mp3'  => 'mp3' ,
+		'jpg'  => 'pic' ,
+		'jpeg' => 'pic' ,
+		'gif'  => 'pic' ,
+		'png'  => 'pic'
+	);
 
 	private static $debug_howmany_dirs = 0;
 	private static $debug_howmany_files = 0;
@@ -291,22 +298,31 @@ class PSK_S2MSFB {
 	 * WP wp_enqueue_scripts
 	 * Load javascript and css for Public and Admin part
 	 *
-	 * @param       array $atts        the arguments from the editor
-	 * @wp_action 		wp_enqueue_scripts
-	 * @return          void
-	 */
-	/**
-	 * @param $atts
+	 * @param  array $atts        the arguments from the editor
+	 *
+	 * @return void
 	 */
 	public static function init_shortcode_assets( $atts ) {
 
 		if ( isset( $atts[ 'previewext' ] ) ) {
 			foreach ( explode( ',' , $atts[ 'previewext' ] ) as $ext ) {
-				/** @var $ext string */
-				if ( 'mp3' == trim( strtolower( $ext ) ) )
-					wp_register_script( 'jquery.jplayer' , PSK_S2MSFB_JS_URL . 'jquery.jplayer.min.js' , array( 'jquery' ) , '2.2.0' , true );
-				@
-				wp_enqueue_script( 'jquery.jplayer' );
+				switch ( trim( strtolower( $ext ) ) ) {
+					case 'mp3':
+						wp_register_script( 'jquery.jplayer' , PSK_S2MSFB_JS_URL . 'jquery.jplayer.min.js' , array( 'jquery' ) , '2.2.0' , true );
+						wp_enqueue_script( 'jquery.jplayer' );
+						break;
+					case 'jpg':
+					case 'jpeg':
+					case 'gif':
+					case 'png':
+						wp_register_script( 'jquery.prettyPhoto' , PSK_S2MSFB_JS_URL . 'jquery.prettyPhoto.js' , array( 'jquery' ) , '3.1.5' , true );
+						wp_enqueue_script( 'jquery.prettyPhoto' );
+						wp_register_style( 'jquery.prettyPhoto' , PSK_S2MSFB_CSS_URL . 'prettyPhoto.css' );
+						wp_enqueue_style( 'jquery.prettyPhoto' );
+						break;
+					default:
+						break;
+				}
 			}
 		}
 
@@ -317,6 +333,7 @@ class PSK_S2MSFB {
 		// Set localize javascript
 		$prefix = ( is_admin() ) ? 'admin_' : '';
 		wp_localize_script( PSK_S2MSFB_ID , __CLASS__ , array(
+															 'imgurl'         => PSK_S2MSFB_IMG_URL ,
 															 'ajaxurl'        => admin_url( 'admin-ajax.php' ) ,
 															 'nonce'          => wp_create_nonce( PSK_S2MSFB_ID . '-nonce' ) ,
 															 'errorsearch'    => __( 'Please type some words!' , PSK_S2MSFB_ID ) ,
@@ -1098,6 +1115,7 @@ class PSK_S2MSFB {
 									$already  = '';
 									$alreadys = ' already';
 								}
+
 								$alreadya = '1';
 							}
 						}
@@ -1258,8 +1276,9 @@ class PSK_S2MSFB {
 
 			$li .= $licomm;
 
-			if ( in_array( $ext , self::$previewext ) )
-				$li .= '<span title="' . __( 'Preview' , PSK_S2MSFB_ID ) . '" class="prev d" data-e="' . $ext . '" rel="' . $prev . '"></span>';
+			if ( in_array( $ext , self::$previewext ) ) {
+				$li .= '<span title="' . __( 'Preview' , PSK_S2MSFB_ID ) . '" class="prev d" data-e="' . self::$previewext_match[$ext] . '" rel="' . $prev . '"></span>';
+			}
 
 			$li .= '<span class="d already"' . $already . '>' . __( 'You already have downloaded this file' , PSK_S2MSFB_ID ) . '&nbsp;&nbsp;&nbsp;</span>';
 
@@ -1277,7 +1296,8 @@ class PSK_S2MSFB {
 	 *
 	 * @return      string               the shortcode html code
 	 */
-	public static function shortcode_s2member_secure_files_browser( $atts ) {
+	public
+	static function shortcode_s2member_secure_files_browser( $atts ) {
 		self::init_shortcode_assets( $atts );
 
 		$i = self::$shortcode_instance;

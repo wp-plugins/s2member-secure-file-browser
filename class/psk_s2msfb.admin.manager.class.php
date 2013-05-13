@@ -282,8 +282,8 @@ class PSK_S2MSFBAdminManager {
 				'desc'     => __( 'Display file preview button for these extensions' , PSK_S2MSFB_ID ) ,
 				'descm'    => __( 'Define file types by extensions seperated by coma' , PSK_S2MSFB_ID ) ,
 				'default'  => '' ,
-				'defaultm' => __( 'Supported values are : <code>mp3</code>' , PSK_S2MSFB_ID ) ,
-				'more'     => __( 'eg: <code>mp3,jpg,png</code>' , PSK_S2MSFB_ID ) ,
+				'defaultm' => __( 'Supported values are : <code>mp3</code>, <code>jpg</code>, <code>jpeg</code>, <code>gif</code>, <code>png</code>' , PSK_S2MSFB_ID ) ,
+				'more'     => __( 'eg: <code>mp3,jpg,jpeg,gif,png</code>' , PSK_S2MSFB_ID ) ,
 			) ,
 			array(
 				'name'     => 's2alertbox' ,

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: s2member Secure File Browser\n"
-"POT-Creation-Date: 2013-05-06 14:01+0100\n"
-"PO-Revision-Date: 2013-05-06 14:01+0100\n"
+"POT-Creation-Date: 2013-05-13 16:19+0100\n"
+"PO-Revision-Date: 2013-05-13 16:19+0100\n"
 "Last-Translator: potsky <potsky@me.com>\n"
 "Language-Team: potsky <potsky@me.com>\n"
 "MIME-Version: 1.0\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "All downloads"
 msgstr ""
 
-#: class/psk_s2msfb.admin.class.php:152 class/psk_s2msfb.class.php:1411
+#: class/psk_s2msfb.admin.class.php:152 class/psk_s2msfb.class.php:1431
 msgid "Top files"
 msgstr ""
 
-#: class/psk_s2msfb.admin.class.php:153 class/psk_s2msfb.class.php:1435
+#: class/psk_s2msfb.admin.class.php:153 class/psk_s2msfb.class.php:1455
 msgid "Top downloaders"
 msgstr ""
 
@@ -390,11 +390,13 @@ msgid "Define file types by extensions seperated by coma"
 msgstr ""
 
 #: class/psk_s2msfb.admin.manager.class.php:285
-msgid "Supported values are : <code>mp3</code>"
+msgid ""
+"Supported values are : <code>mp3</code>, <code>jpg</code>, <code>jpeg</"
+"code>, <code>gif</code>, <code>png</code>"
 msgstr ""
 
 #: class/psk_s2msfb.admin.manager.class.php:286
-msgid "eg: <code>mp3,jpg,png</code>"
+msgid "eg: <code>mp3,jpg,jpeg,gif,png</code>"
 msgstr ""
 
 #: class/psk_s2msfb.admin.manager.class.php:290
@@ -677,7 +679,7 @@ msgid "Warning!"
 msgstr ""
 
 #: class/psk_s2msfb.admin.manager.class.php:393
-#: class/psk_s2msfb.class.php:1291
+#: class/psk_s2msfb.class.php:1311
 msgid "Please wait while loading..."
 msgstr ""
 
@@ -1122,8 +1124,8 @@ msgstr ""
 
 #: class/psk_s2msfb.admin.stats.class.php:116
 #: class/psk_s2msfb.admin.stats.class.php:262
-#: class/psk_s2msfb.admin.stats.class.php:380 class/psk_s2msfb.class.php:1416
-#: class/psk_s2msfb.class.php:1440 class/psk_s2msfb.class.php:1461
+#: class/psk_s2msfb.admin.stats.class.php:380 class/psk_s2msfb.class.php:1436
+#: class/psk_s2msfb.class.php:1460 class/psk_s2msfb.class.php:1481
 #: class/psk_s2msfb.widgets.class.php:340
 #: class/psk_s2msfb.widgets.class.php:475
 #: class/psk_s2msfb.widgets.class.php:526
@@ -1211,32 +1213,32 @@ msgid "%1$s distinct file(s) downloaded %2$s time(s) by %3$s distinct user(s)"
 msgstr ""
 
 #: class/psk_s2msfb.admin.stats.class.php:161
-#: class/psk_s2msfb.admin.stats.class.php:168
+#: class/psk_s2msfb.admin.stats.class.php:193
 #: class/psk_s2msfb.admin.stats.class.php:519
 #: class/psk_s2msfb.admin.stats.class.php:525
 msgid "When"
 msgstr ""
 
 #: class/psk_s2msfb.admin.stats.class.php:162
-#: class/psk_s2msfb.admin.stats.class.php:169
-#: class/psk_s2msfb.admin.stats.class.php:303 class/psk_s2msfb.class.php:1420
+#: class/psk_s2msfb.admin.stats.class.php:194
+#: class/psk_s2msfb.admin.stats.class.php:303 class/psk_s2msfb.class.php:1440
 msgid "File"
 msgstr ""
 
 #: class/psk_s2msfb.admin.stats.class.php:163
-#: class/psk_s2msfb.admin.stats.class.php:170
-#: class/psk_s2msfb.admin.stats.class.php:426 class/psk_s2msfb.class.php:1444
+#: class/psk_s2msfb.admin.stats.class.php:195
+#: class/psk_s2msfb.admin.stats.class.php:426 class/psk_s2msfb.class.php:1464
 msgid "User"
 msgstr ""
 
 #: class/psk_s2msfb.admin.stats.class.php:164
-#: class/psk_s2msfb.admin.stats.class.php:171
+#: class/psk_s2msfb.admin.stats.class.php:196
 msgid "IP Address"
 msgstr ""
 
 #: class/psk_s2msfb.admin.stats.class.php:304
-#: class/psk_s2msfb.admin.stats.class.php:427 class/psk_s2msfb.class.php:1421
-#: class/psk_s2msfb.class.php:1445
+#: class/psk_s2msfb.admin.stats.class.php:427 class/psk_s2msfb.class.php:1441
+#: class/psk_s2msfb.class.php:1465
 msgid "Count"
 msgstr ""
 
@@ -1260,28 +1262,28 @@ msgstr ""
 msgid "Who"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:322
+#: class/psk_s2msfb.class.php:339
 msgid "Please type some words!"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:415
+#: class/psk_s2msfb.class.php:432
 msgid "Please reload the page"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:496
+#: class/psk_s2msfb.class.php:513
 msgid "Permission denied"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:715 class/psk_s2msfb.class.php:902
+#: class/psk_s2msfb.class.php:732 class/psk_s2msfb.class.php:919
 msgid "Search..."
 msgstr ""
 
-#: class/psk_s2msfb.class.php:778
+#: class/psk_s2msfb.class.php:795
 #, php-format
 msgid "Path <strong>%s</strong>"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:830 class/psk_s2msfb.class.php:888
+#: class/psk_s2msfb.class.php:847 class/psk_s2msfb.class.php:905
 #: class/psk_s2msfb.widgets.class.php:462
 #: class/psk_s2msfb.widgets.class.php:645
 #: class/psk_s2msfb.widgets.class.php:1053
@@ -1289,160 +1291,160 @@ msgstr ""
 msgid "in %s"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:839
+#: class/psk_s2msfb.class.php:856
 #, php-format
 msgid "Extension <strong>%s</strong>"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:900
+#: class/psk_s2msfb.class.php:917
 msgid "Click to reset"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:901
+#: class/psk_s2msfb.class.php:918
 msgid "Click to search"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:920
+#: class/psk_s2msfb.class.php:937
 msgid "No result"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1105
+#: class/psk_s2msfb.class.php:1123
 msgid "Download this directory as a zip file"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1105
+#: class/psk_s2msfb.class.php:1123
 msgid "Download"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1127 class/psk_s2msfb.class.php:1199
+#: class/psk_s2msfb.class.php:1145 class/psk_s2msfb.class.php:1217
 #: class/psk_s2msfb.widgets.class.php:970
 #, php-format
 msgid "Modified on %s"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1136 class/psk_s2msfb.class.php:1208
+#: class/psk_s2msfb.class.php:1154 class/psk_s2msfb.class.php:1226
 #: class/psk_s2msfb.widgets.class.php:968
 #, php-format
 msgid "Added on %s"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1163
+#: class/psk_s2msfb.class.php:1181
 msgid "You already have downloaded this directory"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1251 inc/tools.class.php:253
+#: class/psk_s2msfb.class.php:1269 inc/tools.class.php:253
 #: inc/tools.class.php:255
 msgid "B"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1262
+#: class/psk_s2msfb.class.php:1280
 msgid "Preview"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1264
+#: class/psk_s2msfb.class.php:1283
 msgid "You already have downloaded this file"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1305
+#: class/psk_s2msfb.class.php:1325
 msgid ""
 "You already have downloaded this file.\\nAre you sure you want to download "
 "it again ?"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1315
+#: class/psk_s2msfb.class.php:1335
 msgid "— Confirm File Download —"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1316
+#: class/psk_s2msfb.class.php:1336
 #, php-format
 msgid "You`ve downloaded %s protected %s in the last %s."
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1316
+#: class/psk_s2msfb.class.php:1336
 msgid "file"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1316
+#: class/psk_s2msfb.class.php:1336
 msgid "files"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1316
+#: class/psk_s2msfb.class.php:1336
 msgid "24 hours"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1316
+#: class/psk_s2msfb.class.php:1336
 #, php-format
 msgid "%s days"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1317
+#: class/psk_s2msfb.class.php:1337
 msgid "You`re entitled to UNLIMITED downloads though ( so, no worries )."
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1317
+#: class/psk_s2msfb.class.php:1337
 #, php-format
 msgid "You`re entitled to %s unique %s %s."
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1317
+#: class/psk_s2msfb.class.php:1337
 msgid "download"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1317
+#: class/psk_s2msfb.class.php:1337
 msgid "downloads"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1317
+#: class/psk_s2msfb.class.php:1337
 msgid "each day"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1317
+#: class/psk_s2msfb.class.php:1337
 #, php-format
 msgid "every %s-day period"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1407
+#: class/psk_s2msfb.class.php:1427
 #, php-format
 msgid "Stats from %s to %s"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1466
+#: class/psk_s2msfb.class.php:1486
 msgid "No data to report"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1543
+#: class/psk_s2msfb.class.php:1563
 msgid "A file has been downloaded"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1545
+#: class/psk_s2msfb.class.php:1565
 msgid "Download Time"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1546
+#: class/psk_s2msfb.class.php:1566
 msgid "File downloaded"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1547
+#: class/psk_s2msfb.class.php:1567
 msgid "User ID"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1548
+#: class/psk_s2msfb.class.php:1568
 msgid "User Login"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1549
+#: class/psk_s2msfb.class.php:1569
 msgid "User Email"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1550
+#: class/psk_s2msfb.class.php:1570
 msgid "User Nice name"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1551
+#: class/psk_s2msfb.class.php:1571
 msgid "User Display name"
 msgstr ""
 
-#: class/psk_s2msfb.class.php:1552
+#: class/psk_s2msfb.class.php:1572
 msgid "User IP"
 msgstr ""
 
@@ -1733,11 +1735,11 @@ msgstr ""
 msgid "No files"
 msgstr ""
 
-#: inc/define.php:107
+#: inc/define.php:112
 msgid "%blogname% : file downloaded"
 msgstr ""
 
-#: inc/define.php:110
+#: inc/define.php:115
 msgid "%blogname% : report"
 msgstr ""
 

@@ -165,7 +165,7 @@
 						displaycomment         : o.displaycomment ,
 						displayname            : o.displayname ,
 						sortby                 : o.sortby ,
-						nonce                  : PSK_S2MSFB.nonce,
+						nonce                  : PSK_S2MSFB.nonce ,
 						token                  : s
 					} , function ( data ) {
 						$( c ).removeClass( 'wait' ).append( data );
@@ -219,10 +219,11 @@
 								else {
 									if ( searchgroup >= 1 ) {
 										var thisval = $( this ).val();
-										$("li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "] .PSK_S2MSFB_searchinp" ).each(function() {
+										$( "li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "] .PSK_S2MSFB_searchinp" ).each( function () {
 											searchTree( $( this ).parent().parent().parent().parent() , thisval );
-										});
-									} else {
+										} );
+									}
+									else {
 										searchTree( $( this ).parent().parent().parent().parent() , $( this ).val() );
 									}
 								}
@@ -239,10 +240,11 @@
 					$( t ).find( '.PSK_S2MSFB_reloadbtn' )
 						.click( function () {
 							if ( searchgroup >= 1 ) {
-								$("li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "] .PSK_S2MSFB_searchinp" ).each(function() {
+								$( "li.PSK_S2MSFB_searchli[data-group=" + searchgroup + "] .PSK_S2MSFB_searchinp" ).each( function () {
 									searchTree( $( this ).parent().parent().parent().parent() , '' );
-								});
-							} else {
+								} );
+							}
+							else {
 								searchTree( $( this ).parent().parent().parent().parent() , '' );
 							}
 						} )
@@ -257,7 +259,6 @@
 					if ( document.getElementById( 'psk_jquery_jplayer' ) == null ) {
 						$( t ).append( '<div id="psk_jquery_jplayer" style="width:1px!important;height:1px!important;"></div>' );
 					}
-
 					$( t ).find( 'LI SPAN.prev[data-e=mp3]' ).each( function () {
 						PSK_S2MSFB_jplayer_id ++;
 						var thisdesign = "PSK_S2MSFB_jdesign" + PSK_S2MSFB_jplayer_id;
@@ -312,6 +313,18 @@
 
 							} );
 					} );
+
+					// Preview for images
+					var ext_pic_loaded = false;
+					$( t ).find( 'LI SPAN.prev[data-e=pic]' ).each( function () {
+						ext_pic_loaded = true;
+						$( this )
+							.html( '<div class="play"><a title="' + $( this ).parent().parent().attr( 'data-n' ) + '" href="' + $( this ).attr( 'rel' ) + '" rel="PSKprettyPhoto[pp_gal]"><img src="' + PSK_S2MSFB.imgurl + '/blank.png" width="16" height="16" alt=""/></a></div>' );
+					} );
+					if ( ext_pic_loaded ) {
+						$( t ).find( "a[rel^='PSKprettyPhoto']" ).prettyPhoto( {social_tools: false , overlay_gallery: false , deeplinking: false} );
+					}
+
 
 					$( t ).find( 'LI DIV A.link,LI DIV A.linko' ).bind( o.folderevent , function ( e ) {
 						if ( $( this ).parent().parent().hasClass( 'directory' ) ) {
