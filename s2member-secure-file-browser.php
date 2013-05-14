@@ -5,8 +5,8 @@ Plugin URI: http://www.potsky.com/code/wordpress-plugins/s2member-secure-file-br
 Description:	A plugin for browsing files from the secure-files location of the s2member WordPress Membership plugin.
 				You can display the file browser via the shortcode [s2member_secure_files_browser /].
 				You can manage files and get statistics in the Dashboard > s2Member > Secure File Browser
-Version: 0.4.7
-Date: 2013-04-28
+Version: 0.4.8
+Date: 2013-05-11
 Author: Potsky
 Author URI: http://www.potsky.com/about/
 Licence:
@@ -49,6 +49,12 @@ if ( is_plugin_active( 's2member/s2member.php' ) ) {
 	} else if ( ! version_compare( get_bloginfo( "version" ) , PSK_S2MSFB_MIN_WP_VERSION , ">=" ) ) {
 		add_action( "all_admin_notices" , create_function( '' , 'echo \'<div class="error fade"><p>You need WordPress® v\' . PSK_S2MSFB_MIN_WP_VERSION . \'+ to use \' . PSK_S2MSFB_NAME . \'.</p></div>\';' ) );
 	} else {
+		/*
+		 * Trick to unload my plugin when debugging remotely on wordpress installations
+		 * - Just set a GET parameter to psk_s2msfb_unload to 1 to unload
+		 * - fix the bug in the dashboard
+		 * - Reactivate by setting GET parameter psk_s2msfb_unload to 0
+		 */
 		if ( isset( $_GET[ 'psk_s2msfb_unload' ] ) ) {
 			if ( $_GET[ 'psk_s2msfb_unload' ] == '0' ) {
 				setcookie( 'psk_s2msfb_unload' , '1' , 1 );

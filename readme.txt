@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.4.7
+Stable tag: 0.4.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -191,6 +191,11 @@ Available in upcoming version 0.5 :
 10. Widget
 
 == Changelog ==
+
+= 0.4.8 =
+* New feature : preview for pictures
+* New feature : configuration paths in config.php
+* Bug fix     : navigator in all statistics panel fix
 
 = 0.4.7 =
 * New feature : change files display name in admin
