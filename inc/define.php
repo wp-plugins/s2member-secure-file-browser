@@ -1,5 +1,5 @@
 <?php
-define( 'PSK_S2MSFB_VERSION' , '0.4.8' );
+define( 'PSK_S2MSFB_VERSION' , '0.4.9' );
 define( 'PSK_S2MSFB_MIN_PHP_VERSION' , '5.2' );
 define( 'PSK_S2MSFB_MIN_WP_VERSION' , '3.3' );
 define( 'PSK_S2MSFB_EXT_JS' , 'min.js' );
@@ -122,7 +122,7 @@ define( 'PSK_S2MSFB_DEFAULT_EMAIL_REPORT_TO' , get_option( 'admin_email' ) );
  */
 define( 'PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME' , PSK_S2MSFB_ID . '_downloads' );
 define( 'PSK_S2MSFB_DB_DOWNLOAD_TABLE_VERSION_OPT' , PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME . '_version' );
-define( 'PSK_S2MSFB_DB_DOWNLOAD_TABLE_VERSION' , 5 );
+define( 'PSK_S2MSFB_DB_DOWNLOAD_TABLE_VERSION' , 8 );
 
 define( 'PSK_S2MSFB_DB_FILES_TABLE_NAME' , PSK_S2MSFB_ID . '_files' );
 define( 'PSK_S2MSFB_DB_FILES_TABLE_VERSION_OPT' , PSK_S2MSFB_DB_FILES_TABLE_NAME . '_version' );

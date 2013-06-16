@@ -1277,7 +1277,7 @@ class PSK_S2MSFB {
 			$li .= $licomm;
 
 			if ( in_array( $ext , self::$previewext ) ) {
-				$li .= '<span title="' . __( 'Preview' , PSK_S2MSFB_ID ) . '" class="prev d" data-e="' . self::$previewext_match[$ext] . '" rel="' . $prev . '"></span>';
+				$li .= '<span title="' . __( 'Preview' , PSK_S2MSFB_ID ) . '" class="prev d" data-e="' . self::$previewext_match[ $ext ] . '" rel="' . $prev . '"></span>';
 			}
 
 			$li .= '<span class="d already"' . $already . '>' . __( 'You already have downloaded this file' , PSK_S2MSFB_ID ) . '&nbsp;&nbsp;&nbsp;</span>';
@@ -1610,10 +1610,12 @@ class PSK_S2MSFB {
 				filemd5 VARCHAR(32) NOT NULL,
 				notified TIMESTAMP,
 				PRIMARY KEY  (id)
-			) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
+			) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
 			require( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
+
+			$wpdb->query( 'ALTER TABLE ' . $tablename . ' ENGINE = MyISAM' );
 
 			update_option( $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_VERSION_OPT , PSK_S2MSFB_DB_DOWNLOAD_TABLE_VERSION );
 		}

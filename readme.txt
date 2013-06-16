@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.4.8
+Stable tag: 0.4.9
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -191,6 +191,10 @@ Available in upcoming version 0.5 :
 10. Widget
 
 == Changelog ==
+
+= 0.4.9 =
+* Bug fix     : remove debug messages in the music player
+* Bug fix     : change database mysql engine to reduce overhead
 
 = 0.4.8 =
 * New feature : preview for pictures

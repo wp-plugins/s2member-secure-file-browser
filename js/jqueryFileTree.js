@@ -298,7 +298,7 @@
 											preload      : 'auto' ,
 											volume       : 1 ,
 											muted        : false ,
-											errorAlerts  : true ,
+											errorAlerts  : false ,
 											warningAlerts: false ,
 											wmode        : "window"
 										} );
