@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.4.9
+Stable tag: 0.4.10
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -192,13 +192,16 @@ Available in upcoming version 0.5 :
 
 == Changelog ==
 
+= 0.4.10 =
+* Enhancement : plugin now checks by itself the wordpress upgrade include (problem with some customers)
+
 = 0.4.9 =
 * Bug fix     : remove debug messages in the music player
 * Bug fix     : change database mysql engine to reduce overhead
 
 = 0.4.8 =
 * New feature : preview for pictures
-* New feature : configuration paths in config.php
+* New feature : configuration paths in inc/define.php
 * Bug fix     : navigator in all statistics panel fix
 
 = 0.4.7 =

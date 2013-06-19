@@ -1612,7 +1612,9 @@ class PSK_S2MSFB {
 				PRIMARY KEY  (id)
 			) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
-			require( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			if (! function_exists('dbDelta')) {
+				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			}
 			dbDelta( $sql );
 
 			$wpdb->query( 'ALTER TABLE ' . $tablename . ' ENGINE = MyISAM' );
@@ -1691,7 +1693,9 @@ class PSK_S2MSFB {
 				FULLTEXT (filepath)
 			) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			if (! function_exists('dbDelta')) {
+				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			}
 			dbDelta( $sql );
 
 			update_option( $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_VERSION_OPT , PSK_S2MSFB_DB_FILES_TABLE_VERSION );
