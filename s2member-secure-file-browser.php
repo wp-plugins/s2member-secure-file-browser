@@ -6,7 +6,7 @@ Description:	A plugin for browsing files from the secure-files location of the s
 				You can display the file browser via the shortcode [s2member_secure_files_browser /].
 				You can manage files and get statistics in the Dashboard > s2Member > Secure File Browser
 Version: 0.4.10
-Date: 2013-06-19
+Date: 2013-12-16
 Author: Potsky
 Author URI: http://www.potsky.com/about/
 Licence:
