@@ -26,6 +26,10 @@ if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || (
  */
 class PSK_Tools {
 
+	public static function log( $message ) {
+		file_put_contents( dirname( __FILE__ ) . '/../log.txt' , date('Y/m/d H:i:s') . ' | ' . $_SERVER['REMOTE_ADDR'] . ' | ' . $message . "\n" , FILE_APPEND );
+	}
+
 	/**
 	 * Return the avatar url of a user
 	 *

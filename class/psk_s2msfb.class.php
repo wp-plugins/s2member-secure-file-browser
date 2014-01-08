@@ -278,72 +278,39 @@ class PSK_S2MSFB {
 	}
 
 
-	/*
+	/**
 	 * Load javascript and css for Public and Admin part
-	 * Called from the shortcode only !
 	 *
 	 * @return          void
 	 */
-	/**
-	 *
-	 */
 	public static function init_assets() {
-		wp_deregister_script( 'jquery' );
-		wp_register_script( 'jquery' , PSK_S2MSFB_JS_URL . 'jquery-1.8.3.min.js' , false );
 		wp_enqueue_script( 'jquery' );
-	}
-
-
-	/*
-	 * WP wp_enqueue_scripts
-	 * Load javascript and css for Public and Admin part
-	 *
-	 * @param  array $atts        the arguments from the editor
-	 *
-	 * @return void
-	 */
-	public static function init_shortcode_assets( $atts ) {
-
-		if ( isset( $atts[ 'previewext' ] ) ) {
-			foreach ( explode( ',' , $atts[ 'previewext' ] ) as $ext ) {
-				switch ( trim( strtolower( $ext ) ) ) {
-					case 'mp3':
-						wp_register_script( 'jquery.jplayer' , PSK_S2MSFB_JS_URL . 'jquery.jplayer.min.js' , array( 'jquery' ) , '2.2.0' , true );
-						wp_enqueue_script( 'jquery.jplayer' );
-						break;
-					case 'jpg':
-					case 'jpeg':
-					case 'gif':
-					case 'png':
-						wp_register_script( 'jquery.prettyPhoto' , PSK_S2MSFB_JS_URL . 'jquery.prettyPhoto.js' , array( 'jquery' ) , '3.1.5' , true );
-						wp_enqueue_script( 'jquery.prettyPhoto' );
-						wp_register_style( 'jquery.prettyPhoto' , PSK_S2MSFB_CSS_URL . 'prettyPhoto.css' );
-						wp_enqueue_style( 'jquery.prettyPhoto' );
-						break;
-					default:
-						break;
-				}
-			}
-		}
-
-		wp_enqueue_script( PSK_S2MSFB_ID , PSK_S2MSFB_JS_URL . 'jqueryFileTree.' . PSK_S2MSFB_EXT_JS , array( 'jquery' ) , false , true );
-		wp_register_style( PSK_S2MSFB_ID , PSK_S2MSFB_CSS_URL . 'jqueryFileTree.' . PSK_S2MSFB_EXT_CSS );
-		wp_enqueue_style( PSK_S2MSFB_ID );
+		wp_enqueue_script( PSK_S2MSFB_ID , PSK_S2MSFB_JS_URL . 'jqueryFileTree.' . PSK_S2MSFB_EXT_JS , array( 'jquery' ) , false , false );
+		wp_enqueue_style( PSK_S2MSFB_ID , PSK_S2MSFB_CSS_URL . 'jqueryFileTree.' . PSK_S2MSFB_EXT_CSS );
 
 		// Set localize javascript
 		$prefix = ( is_admin() ) ? 'admin_' : '';
 		wp_localize_script( PSK_S2MSFB_ID , __CLASS__ , array(
-															 'imgurl'         => PSK_S2MSFB_IMG_URL ,
-															 'ajaxurl'        => admin_url( 'admin-ajax.php' ) ,
-															 'nonce'          => wp_create_nonce( PSK_S2MSFB_ID . '-nonce' ) ,
-															 'errorsearch'    => __( 'Please type some words!' , PSK_S2MSFB_ID ) ,
-															 'action_get_dir' => $prefix . PSK_S2MSFB_ID . '_get_dir' ,
-															 'action_df'      => $prefix . PSK_S2MSFB_ID . '_df' ,
-															 'action_cf'      => $prefix . PSK_S2MSFB_ID . '_cf' ,
-															 'action_rf'      => $prefix . PSK_S2MSFB_ID . '_rf' ,
-															 'action_nf'      => $prefix . PSK_S2MSFB_ID . '_nf' ,
-														) );
+			 'imgurl'         => PSK_S2MSFB_IMG_URL ,
+			 'ajaxurl'        => admin_url( 'admin-ajax.php' ) ,
+			 'nonce'          => wp_create_nonce( PSK_S2MSFB_ID . '-nonce' ) ,
+			 'errorsearch'    => __( 'Please type some words!' , PSK_S2MSFB_ID ) ,
+			 'action_get_dir' => $prefix . PSK_S2MSFB_ID . '_get_dir' ,
+			 'action_df'      => $prefix . PSK_S2MSFB_ID . '_df' ,
+			 'action_cf'      => $prefix . PSK_S2MSFB_ID . '_cf' ,
+			 'action_rf'      => $prefix . PSK_S2MSFB_ID . '_rf' ,
+			 'action_nf'      => $prefix . PSK_S2MSFB_ID . '_nf' ,
+		) );
 
+		/*
+		 * Load these assets here and not on demand when the shortcode is used because some themes load the content in ajax requests !
+		 */
+		wp_register_script( 'jquery.jplayer' , PSK_S2MSFB_JS_URL . 'jquery.jplayer.min.js' , array( 'jquery' ) , '2.2.0' , true );
+		wp_enqueue_script( 'jquery.jplayer' );
+		wp_register_script( 'jquery.prettyPhoto' , PSK_S2MSFB_JS_URL . 'jquery.prettyPhoto.js' , array( 'jquery' ) , '3.1.5' , true );
+		wp_enqueue_script( 'jquery.prettyPhoto' );
+		wp_register_style( 'jquery.prettyPhoto' , PSK_S2MSFB_CSS_URL . 'prettyPhoto.css' );
+		wp_enqueue_style( 'jquery.prettyPhoto' );
 	}
 
 
@@ -1298,8 +1265,6 @@ class PSK_S2MSFB {
 	 */
 	public
 	static function shortcode_s2member_secure_files_browser( $atts ) {
-		self::init_shortcode_assets( $atts );
-
 		$i = self::$shortcode_instance;
 		self::$shortcode_instance ++;
 
