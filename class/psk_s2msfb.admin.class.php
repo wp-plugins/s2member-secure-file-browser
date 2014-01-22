@@ -195,9 +195,8 @@ class PSK_S2MSFBAdmin {
 	 */
 	public static function init_assets() {
 		if ( self::get_admin_my_plugin_page() != '' ) {
-			wp_deregister_script( 'jquery' );
-			wp_register_script( 'jquery' , PSK_S2MSFB_JS_URL . 'jquery-1.8.3.min.js' , false );
-			wp_enqueue_script( 'jquery' );
+
+			PSK_S2MSFB::init_assets();
 
 			wp_register_script( 'bootstrap' , PSK_S2MSFB_JS_URL . 'bootstrap.psk.min.js' , array( 'jquery' ) , false , true );
 			wp_enqueue_script( 'bootstrap' );

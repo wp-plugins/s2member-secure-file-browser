@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 3.8
-Stable tag: 0.4.11
+Stable tag: 0.4.12
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -191,6 +191,9 @@ Available in upcoming version 0.5 :
 10. Widget
 
 == Changelog ==
+
+= 0.4.12 =
+* Bug fix : dashboard navigator was broken in last version
 
 = 0.4.11 =
 * Enhancement : plugin now always loads assets at the beginning even if the shortcode is not used on a page. It handles by this way some themes which load page content next to the assets.
