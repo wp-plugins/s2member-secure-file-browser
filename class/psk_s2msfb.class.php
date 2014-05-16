@@ -515,7 +515,7 @@ class PSK_S2MSFB {
 					/** @var $wpdb WPDB */
 					global $wpdb;
 					$tablename  = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;
-					$sql        = "SELECT " . $what . " FROM " . $tablename . " WHERE filedir='" . mysql_real_escape_string( $dirfile ) . "'";
+					$sql        = "SELECT " . $what . " FROM " . $tablename . " WHERE filedir='" . esc_sql( $dirfile ) . "'";
 					$sqlr       = $wpdb->get_results( $sql , ARRAY_A );
 					$gmt_offset = get_option( 'gmt_offset' ) * 3600;
 
@@ -721,21 +721,21 @@ class PSK_S2MSFB {
 						if ( trim( $word ) == '' )
 							continue;
 						$wordz[ ]   = $word;
-						$clauses[ ] = "filepath LIKE '%" . mysql_real_escape_string( $word ) . "%' ";
+						$clauses[ ] = "filepath LIKE '%" . esc_sql( $word ) . "%' ";
 					}
 					if ( count( $clauses ) > 0 ) {
 						$clause = ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ';
 						$worda  = implode( ' ' , $wordz );
-						$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+						$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . esc_sql( $worda ) . ' ' . esc_sql( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
 						$sql .= " FROM " . $tablename . " ";
-						$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+						$sql .= " WHERE filepath LIKE '" . esc_sql( $dirfile ) . "%' " . $clause;
 						$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
 						$sqlres = $wpdb->get_results( $sql , ARRAY_A );
 
 						if ( isset( $what ) ) {
 							$wheres = array();
 							foreach ( $sqlres as $row ) {
-								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
+								$wheres[ ] = "filepath='" . esc_sql( $row[ 'filepath' ] ) . "'";
 							}
 							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $displaynames , $alreadyd );
 						}
@@ -782,20 +782,20 @@ class PSK_S2MSFB {
 						if ( trim( $word ) == '' )
 							continue;
 						$wordz[ ]   = $word;
-						$clauses[ ] = "filepath LIKE '%" . mysql_real_escape_string( $word ) . "%' ";
+						$clauses[ ] = "filepath LIKE '%" . esc_sql( $word ) . "%' ";
 					}
 					if ( count( $clauses ) > 0 ) {
 						$clause = ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ';
 						$worda  = implode( ' ' , $wordz );
-						$sql    = " SELECT filename, filepath, fileext, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+						$sql    = " SELECT filename, filepath, fileext, MATCH(filename) AGAINST('" . esc_sql( $worda ) . ' ' . esc_sql( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
 						$sql .= " FROM " . $tablename . " ";
-						$sql .= " WHERE fileext != '' AND filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+						$sql .= " WHERE fileext != '' AND filepath LIKE '" . esc_sql( $dirfile ) . "%' " . $clause;
 						$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
 						$sqlres = $wpdb->get_results( $sql , ARRAY_A );
 						if ( isset( $what ) ) {
 							$wheres = array();
 							foreach ( $sqlres as $row ) {
-								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
+								$wheres[ ] = "filepath='" . esc_sql( $row[ 'filepath' ] ) . "'";
 							}
 							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $displaynames , $alreadyd );
 						}
@@ -841,20 +841,20 @@ class PSK_S2MSFB {
 						if ( trim( $word ) == '' )
 							continue;
 						$wordz[ ]   = $word;
-						$clauses[ ] = "filepath LIKE '%" . mysql_real_escape_string( $word ) . "%' ";
+						$clauses[ ] = "filepath LIKE '%" . esc_sql( $word ) . "%' ";
 					}
 					if ( count( $clauses ) > 0 ) {
 						$clause = ' AND ( ' . implode( ' OR ' , $clauses ) . ' ) ';
 						$worda  = implode( ' ' , $wordz );
-						$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . mysql_real_escape_string( $worda ) . ' ' . mysql_real_escape_string( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
+						$sql    = " SELECT filename, filepath, MATCH(filename) AGAINST('" . esc_sql( $worda ) . ' ' . esc_sql( str_replace( ' ' , '* ' , $worda . '*' ) ) . "' IN BOOLEAN MODE) AS score ";
 						$sql .= " FROM " . $tablename . " ";
-						$sql .= " WHERE filepath LIKE '" . mysql_real_escape_string( $dirfile ) . "%' " . $clause;
+						$sql .= " WHERE filepath LIKE '" . esc_sql( $dirfile ) . "%' " . $clause;
 						$sql .= " ORDER BY score DESC, filename LIMIT 0,100";
 						$sqlres = $wpdb->get_results( $sql , ARRAY_A );
 						if ( isset( $what ) ) {
 							$wheres = array();
 							foreach ( $sqlres as $row ) {
-								$wheres[ ] = "filepath='" . mysql_real_escape_string( $row[ 'filepath' ] ) . "'";
+								$wheres[ ] = "filepath='" . esc_sql( $row[ 'filepath' ] ) . "'";
 							}
 							self::get_meta_for_search( $wheres , $what , $hashes , $birthdates , $comments , $displaynames , $alreadyd );
 						}
@@ -1263,8 +1263,8 @@ class PSK_S2MSFB {
 	 *
 	 * @return      string               the shortcode html code
 	 */
-	public
-	static function shortcode_s2member_secure_files_browser( $atts ) {
+	public static function shortcode_s2member_secure_files_browser( $atts ) {
+
 		$i = self::$shortcode_instance;
 		self::$shortcode_instance ++;
 
