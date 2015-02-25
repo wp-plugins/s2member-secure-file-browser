@@ -3,8 +3,8 @@ Contributors: Potsky
 Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
-Tested up to: 4.0
-Stable tag: 0.4.13
+Tested up to: 4.1.1
+Stable tag: 0.4.14
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,12 +170,10 @@ In windows installations, put all files in `s2member-files\app_data` instead of 
 
 All futures requests are handled on [GitHub](https://github.com/potsky/WordPressS2MemberFileBrowser/issues?sort=comments&state=open "GitHub")
 
-Available in upcoming version 0.5 :
+== Translators ==
 
-* Upload any file in the `s2member-files` directory
-* Move, copy files and folders
-* Create directories
-
+* Serbo-Croatian : Borisa Djuraskovic at http://www.webhostinghub.com
+* French : Potsky
 
 == Screenshots ==
 
@@ -191,6 +189,9 @@ Available in upcoming version 0.5 :
 10. Widget
 
 == Changelog ==
+
+= 0.4.14 =
+* Enhancement : Add Serbo-Croatian language (by Borisa Djuraskovic at http://www.webhostinghub.com)
 
 = 0.4.13 =
 * Enhancement : PHP 5.5 warning removed
