@@ -712,7 +712,6 @@ class PSK_S2MSFB {
 
 				// Search group by path
 				if ( self::$searchdisplay == '2' ) {
-
 					$group   = array();
 					$words   = explode( ' ' , trim( $token ) );
 					$wordz   = array();
@@ -773,7 +772,6 @@ class PSK_S2MSFB {
 					}
 					// Search group by extension
 				} else if ( ( self::$searchdisplay == '3' ) || ( self::$searchdisplay == '4' ) ) {
-
 					$group   = array();
 					$words   = explode( ' ' , trim( $token ) );
 					$wordz   = array();
@@ -862,8 +860,10 @@ class PSK_S2MSFB {
 						foreach ( $sqlres as $row ) {
 							$filepathrelbase = $row[ 'filepath' ];
 							$filepath        = PSK_S2MSFB_S2MEMBER_FILES_FOLDER . $filepathrelbase;
-							if ( ! file_exists( $filepath ) )
+							if ( ! file_exists( $filepath ) ) {
 								continue;
+							}
+
 							$file                   = $row[ 'filename' ];
 							$dirbase                = PSK_Tools::sanitize_directory_path( $dirbase , true , false );
 							$filepathrel            = mb_substr( $filepathrelbase , mb_strlen( $dirfile ) );
@@ -987,7 +987,7 @@ class PSK_S2MSFB {
 	 *
 	 * @return string
 	 */
-	private static function get_display_name( $isdir , $file , $override ) {
+	private static function get_display_name( $isdir , $file , $override = '' ) {
 		// Prepare dir/file name if cut
 		if ( $isdir )
 			if ( self::$cutdirnames > 0 )
@@ -1694,7 +1694,14 @@ class PSK_S2MSFB {
 		$hd_files = self::scan_directory( PSK_S2MSFB_S2MEMBER_FILES_FOLDER );
 
 		// Find deleted and modified files
-		$mysqli = new mysqli( DB_HOST , DB_USER , DB_PASSWORD , DB_NAME );
+		@list( $url , $port ) = @explode( ':' , DB_HOST );
+		$port = (int)$port;
+		if ( $port <= 0 ) {
+			$mysqli = new mysqli( DB_HOST , DB_USER , DB_PASSWORD , DB_NAME );
+		}
+		else {
+			$mysqli = new mysqli( $url , DB_USER , DB_PASSWORD , DB_NAME , $port );
+		}
 		if ( mysqli_connect_errno() )
 			return "Connect failed: " . mysqli_connect_error();
 		$mysqli->set_charset( "utf8" );
