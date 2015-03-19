@@ -26,6 +26,7 @@ if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || (
 	exit;
 }
 
+
 /**
  * Class PSK_S2MSFBAdminStats
  */

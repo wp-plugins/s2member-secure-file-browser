@@ -4,7 +4,7 @@ Donate link: http://www.potsky.com/donate/
 Tags: s2member, file, browser, shortcode, upload, manager, files
 Requires at least: 3.3
 Tested up to: 4.1.1
-Stable tag: 0.4.15
+Stable tag: 0.4.16
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -189,6 +189,9 @@ All futures requests are handled on [GitHub](https://github.com/potsky/WordPress
 10. Widget
 
 == Changelog ==
+
+= 0.4.16 =
+* Bug fix : in some cases, downloading the CSV file could not work
 
 = 0.4.15 =
 * Enhancement : Support for non standard mysql port

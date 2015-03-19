@@ -16,7 +16,13 @@
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
 if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
-	status_header( 404 );
+	if ( function_exists( 'status_header' ) ) {
+		status_header( 404 );
+	} else {
+		header( 'HTTP/1.0 404 Not Found' );
+		echo "<h1>404 Not Found</h1>";
+		echo "The page that you have requested could not be found.";
+	}
 	exit;
 }
 
@@ -1694,17 +1700,8 @@ class PSK_S2MSFB {
 		$hd_files = self::scan_directory( PSK_S2MSFB_S2MEMBER_FILES_FOLDER );
 
 		// Find deleted and modified files
-		@list( $url , $port ) = @explode( ':' , DB_HOST );
-		$port = (int)$port;
-		if ( $port <= 0 ) {
-			$mysqli = new mysqli( DB_HOST , DB_USER , DB_PASSWORD , DB_NAME );
-		}
-		else {
-			$mysqli = new mysqli( $url , DB_USER , DB_PASSWORD , DB_NAME , $port );
-		}
-		if ( mysqli_connect_errno() )
-			return "Connect failed: " . mysqli_connect_error();
-		$mysqli->set_charset( "utf8" );
+		$mysqli = PSK_Tools::get_mysqli_cx();
+		if ( is_string( $mysqli ) ) return $mysqli;
 
 		/** @var $tablename $string */
 		$tablename = $wpdb->prefix . PSK_S2MSFB_DB_FILES_TABLE_NAME;

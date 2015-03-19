@@ -132,11 +132,11 @@ class PSK_S2MSFBAdminDownload {
 
 		/** @var $wpdb WPDB */
 		global $wpdb;
-		$mysqli = new mysqli( DB_HOST , DB_USER , DB_PASSWORD , DB_NAME );
-		if ( mysqli_connect_errno() ) {
+		$mysqli = PSK_Tools::get_mysqli_cx();
+		if ( is_string( $mysqli ) ) {
 			$error = $xml->addChild( 'error' );
 			$error->addChild( 'num' , '1' );
-			$error->addChild( 'msg' , "Connect failed: " . mysqli_connect_error() );
+			$error->addChild( 'msg' , $mysqli );
 			return;
 		}
 
@@ -179,9 +179,9 @@ class PSK_S2MSFBAdminDownload {
 
 		/** @var $wpdb WPDB */
 		global $wpdb;
-		$mysqli = new mysqli( DB_HOST , DB_USER , DB_PASSWORD , DB_NAME );
-		if ( mysqli_connect_errno() ) {
-			echo "Connect failed: " . mysqli_connect_error();
+		$mysqli = PSK_Tools::get_mysqli_cx();
+		if ( is_string( $mysqli ) ) {
+			echo $mysqli;
 			return;
 		}
 

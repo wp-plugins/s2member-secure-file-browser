@@ -26,6 +26,36 @@ if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || (
  */
 class PSK_Tools {
 
+	/**
+	 * Get a MYSQLi connector
+	 *
+	 * @return  mysqli  a new mysqli
+	 */
+	public static function get_mysqli_cx() {
+		@list( $url , $port ) = @explode( ':' , DB_HOST );
+		$port = (int)$port;
+		if ( $port <= 0 ) {
+			$mysqli = new mysqli( DB_HOST , DB_USER , DB_PASSWORD , DB_NAME );
+		}
+		else {
+			$mysqli = new mysqli( $url , DB_USER , DB_PASSWORD , DB_NAME , $port );
+		}
+
+		if ( mysqli_connect_errno() )
+			return "Connect failed: " . mysqli_connect_error();
+
+		$mysqli->set_charset( "utf8" );
+
+		return $mysqli;
+	}
+
+	/**
+	 * Log in a text for remote debug
+	 *
+	 * @param   string  $message  the message to log
+	 *
+	 * @return  void
+	 */
 	public static function log( $message ) {
 		file_put_contents( dirname( __FILE__ ) . '/../log.txt' , date('Y/m/d H:i:s') . ' | ' . $_SERVER['REMOTE_ADDR'] . ' | ' . $message . "\n" , FILE_APPEND );
 	}

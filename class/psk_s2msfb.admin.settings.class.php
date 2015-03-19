@@ -15,11 +15,10 @@
 	You should have received a copy of the GNU General Public License
 	along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
-if ( ( realpath( __FILE__ ) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
-	if (function_exists('status_header')) {
+if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
+	if ( function_exists( 'status_header' ) ) {
 		status_header( 404 );
-	}
-	else {
+	} else {
 		header( 'HTTP/1.0 404 Not Found' );
 		echo "<h1>404 Not Found</h1>";
 		echo "The page that you have requested could not be found.";
@@ -28,6 +27,9 @@ if ( ( realpath( __FILE__ ) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( !
 }
 
 
+/**
+ * Class PSK_S2MSFBAdminSettings
+ */
 class PSK_S2MSFBAdminSettings {
 	/**
 	 * Initialization

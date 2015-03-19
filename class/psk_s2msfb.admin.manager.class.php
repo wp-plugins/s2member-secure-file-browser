@@ -27,6 +27,9 @@ if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || (
 }
 
 
+/**
+ * Class PSK_S2MSFBAdminManager
+ */
 class PSK_S2MSFBAdminManager {
 
 	public static $shortcode_options = array();

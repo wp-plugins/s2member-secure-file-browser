@@ -15,11 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with s2member Secure File Browser.  If not, see <http://www.gnu.org/licenses/>.
 */
-if ( ( realpath( __FILE__ ) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
-	if (function_exists('status_header')) {
+if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
+	if ( function_exists( 'status_header' ) ) {
 		status_header( 404 );
-	}
-	else {
+	} else {
 		header( 'HTTP/1.0 404 Not Found' );
 		echo "<h1>404 Not Found</h1>";
 		echo "The page that you have requested could not be found.";
@@ -29,6 +28,7 @@ if ( ( realpath( __FILE__ ) === realpath( $_SERVER["SCRIPT_FILENAME"] ) ) || ( !
 
 
 /**
+ * Class PSK_S2MSFB_wdgt_download
  * Widget to display latest download or top downloads
  */
 class PSK_S2MSFB_wdgt_download extends WP_Widget {
@@ -327,13 +327,12 @@ class PSK_S2MSFB_wdgt_download extends WP_Widget {
 		$limit = ( (int) $limit > 0 ) ? (int) $limit : 10;
 
 		if ( false === ( $result = get_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_LATEST_ID ) ) ) {
-
 			/** @var $wpdb WPDB */
 			global $wpdb;
 			$tablename = $wpdb->prefix . PSK_S2MSFB_DB_DOWNLOAD_TABLE_NAME;
 			$sql       = 'SELECT filepath, userid, created FROM ' . $tablename . ' ORDER BY created DESC LIMIT 0, 100';
 			$result    = $wpdb->get_results( $sql, ARRAY_A );
-			set_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_LATEST_ID, $result );
+			set_transient( PSK_S2MSFB_WIDGET_DOWNLOAD_LATEST_ID , $result );
 		}
 
 		if ( count( $result ) == 0 ) {
@@ -537,6 +536,9 @@ class PSK_S2MSFB_wdgt_download extends WP_Widget {
 
 				if ( $show_count ) {
 					switch ( strval( $types ) ) {
+						case '0':
+							$count = ( (int) $count == 1 ) ? sprintf( __( '%s time', PSK_S2MSFB_ID ), $count ) : sprintf( __( '%s times', PSK_S2MSFB_ID ), $count );
+							break;
 						case '1':
 							$count = ( (int) $count == 1 ) ? sprintf( __( '%s time for a day', PSK_S2MSFB_ID ), $count ) : sprintf( __( '%s times for a day', PSK_S2MSFB_ID ), $count );
 							break;
@@ -912,7 +914,6 @@ class PSK_S2MSFB_wdgt_files extends WP_Widget {
 		$r     = '';
 		$limit = ( (int) $limit > 0 ) ? (int) $limit : 10;
 
-
 		delete_transient( PSK_S2MSFB_WIDGET_FILES_LATEST_ID );
 		if ( false === ( $result = get_transient( PSK_S2MSFB_WIDGET_FILES_LATEST_ID ) ) ) {
 
@@ -927,7 +928,6 @@ class PSK_S2MSFB_wdgt_files extends WP_Widget {
 		if ( count( $result ) == 0 ) {
 			$r .= __( "No files", PSK_S2MSFB_ID );
 		} else {
-
 			$r          = '<ul>';
 			$i          = 0;
 			$gmt_offset = get_option( 'gmt_offset' ) * 3600;
